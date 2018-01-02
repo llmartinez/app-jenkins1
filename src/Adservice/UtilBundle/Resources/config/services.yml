@@ -24,7 +24,7 @@ services:
         scope: request
         strict: false
         public: true
-        arguments: [@request, @doctrine.orm.entity_manager, @security.context]
+        arguments: ["@request", "@doctrine.orm.entity_manager", "@security.token_storage"]
 
 #    my.listener:
 #        class: Adservice\UtilBundle\Listener\EntityUtilListener

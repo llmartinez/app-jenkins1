@@ -3,13 +3,13 @@
 namespace Adservice\UserBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Security\Core\SecurityContext;
 
 class EditUserWorkshopType extends AbstractType {
 
 
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
 
@@ -27,8 +27,8 @@ class EditUserWorkshopType extends AbstractType {
             ->add('partner', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\PartnerBundle\Entity\Partner',
-                  'property' => 'name',
-                  'empty_value' => '',
+                  'choice_label' => 'name',
+                  'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_partner) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
@@ -38,7 +38,7 @@ class EditUserWorkshopType extends AbstractType {
             ->add('country', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
-                  'property' => 'country',
+                  'choice_label' => 'country',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC');}))
@@ -59,7 +59,7 @@ class EditUserWorkshopType extends AbstractType {
         return $builder;
     }
 
-    public function getName() {
+    public function getBlockPrefix() {
 //        return 'adservice_userbundle_usertype';
         return 'workshop_type';
     }

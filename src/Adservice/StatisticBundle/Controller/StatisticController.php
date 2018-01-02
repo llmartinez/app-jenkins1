@@ -3,6 +3,7 @@
 namespace Adservice\StatisticBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Adservice\StatisticBundle\Entity\Statistic;
 use Adservice\StatisticBundle\Form\DateType;
@@ -12,20 +13,19 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Doctrine\ORM\Query\ResultSetMapping;
 class StatisticController extends Controller {
 
-    public function listAction($type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0', $to_y   ='0', $to_m  ='0', $to_d   ='0', $partner='0', $shop='0', $workshop='0', $typology='0', $status='0', $country='0', $assessor='0', $created_by='0', $raport='0') {
+    public function listAction(Request $request, $type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0', $to_y   ='0', $to_m  ='0', $to_d   ='0', $partner='0', $shop='0', $workshop='0', $typology='0', $status='0', $country='0', $assessor='0', $created_by='0', $raport='0') {
 
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
-        $em = $this->getDoctrine()->getEntityManager();
-        $security = $this->get('security.context');
-        $request  = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+
         $statistic = new Statistic();
         $pagination = new Pagination($page);
         $params = array();
         $joins  = array();
 
-        if($security->isGranted('ROLE_SUPER_ADMIN')){
+        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')){
             $category_service = '0';
             $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.active = 1 ");
             $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.active = 1 ");
@@ -38,10 +38,10 @@ class StatisticController extends Controller {
             $assessors  = $qa->getResult();
             $typologies = $qt->getResult();
         }else{
-            $category_service = $security->getToken()->getUser()->getCategoryService();
+            $category_service = $this->getUser()->getCategoryService();
             if($category_service != null )$catserv = $category_service->getId();
             else $catserv = '0';
-            $country = $security->getToken()->getUser()->getCountry()->getId();
+            $country = $this->getUser()->getCountry()->getId();
             $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.category_service = ".$catserv." AND p.active = 1 ");
             $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.category_service = ".$catserv." AND s.active = 1 ");
             $qw = $em->createQuery("select partial w.{id,name, code_partner, code_workshop} from WorkshopBundle:Workshop w WHERE w.category_service = ".$catserv." AND w.active = 1 ");
@@ -54,15 +54,15 @@ class StatisticController extends Controller {
             $typologies = $qt->getResult();
         }
         //Estadísticas generales de Ad-service
-        $statistic->setNumUsers        ($statistic->getNumUsersInAdservice    ($em, $security));
-        $statistic->setNumPartners     ($statistic->getNumPartnersInAdservice ($em, $security));
-        $statistic->setNumShops        ($statistic->getNumShopsInAdservice    ($em, $security)-1); //Tienda por defecto '...' no cuenta.
-        $statistic->setNumWorkshops    ($statistic->getNumWorkshopsInAdservice($em, $security));
-        $statistic->setNumTickets      ($statistic->getTicketsInAdservice     ($em, $security));
-        $statistic->setNumTicketsTel   ($statistic->getNumTicketsByTel        ($em, $security));
-        $statistic->setNumTicketsApp   ($statistic->getNumTicketsByApp        ($em, $security));
-        $statistic->setNumOpenTickets  ($statistic->getNumTicketsByStatus($em, 'open' , $security));
-        $statistic->setNumClosedTickets($statistic->getNumTicketsByStatus($em, 'close', $security));
+        $statistic->setNumUsers        ($statistic->getNumUsersInAdservice    ($em, $this->get('security.authorization_checker')));
+        $statistic->setNumPartners     ($statistic->getNumPartnersInAdservice ($em, $this->get('security.authorization_checker')));
+        $statistic->setNumShops        ($statistic->getNumShopsInAdservice    ($em, $this->get('security.authorization_checker'))-1); //Tienda por defecto '...' no cuenta.
+        $statistic->setNumWorkshops    ($statistic->getNumWorkshopsInAdservice($em, $this->get('security.authorization_checker')));
+        $statistic->setNumTickets      ($statistic->getTicketsInAdservice     ($em, $this->get('security.authorization_checker')));
+        $statistic->setNumTicketsTel   ($statistic->getNumTicketsByTel        ($em, $this->get('security.authorization_checker')));
+        $statistic->setNumTicketsApp   ($statistic->getNumTicketsByApp        ($em, $this->get('security.authorization_checker')));
+        $statistic->setNumOpenTickets  ($statistic->getNumTicketsByStatus($em, 'open' , $this->get('security.authorization_checker')));
+        $statistic->setNumClosedTickets($statistic->getNumTicketsByStatus($em, 'close', $this->get('security.authorization_checker')));
         $countries = $em->getRepository('UtilBundle:Country')->findAll();
         $catservices = $em->getRepository('UserBundle:CategoryService')->findAll();
 
@@ -96,20 +96,19 @@ class StatisticController extends Controller {
                                                                             ));
     }
 
-    public function listTopAction($type='0', $from_y ='0', $from_m='0', $from_d ='0', $to_y   ='0', $to_m  ='0', $to_d   ='0', $partner='0', $shop='0', $workshop='0', $typology='0', $status='0', $country='0', $assessor='0', $created_by='0', $raport='0') {
+    public function listTopAction(Request $request, $type='0', $from_y ='0', $from_m='0', $from_d ='0', $to_y   ='0', $to_m  ='0', $to_d   ='0', $partner='0', $shop='0', $workshop='0', $typology='0', $status='0', $country='0', $assessor='0', $created_by='0', $raport='0') {
 
-        if ($this->get('security.context')->isGranted('ROLE_AD') === false){
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_AD') === false){
             throw new AccessDeniedException();
         }
 
-        $em = $this->getDoctrine()->getEntityManager();
-        $security = $this->get('security.context');
-        $request  = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+
         $statistic = new Statistic();
         $params = array();
         $joins  = array();
 
-        if($security->isGranted('ROLE_SUPER_ADMIN'))
+        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN'))
         {
             $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.active = 1 ");
             $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.active = 1 ");
@@ -124,9 +123,9 @@ class StatisticController extends Controller {
         }
         else
         { 
-            if($security->isGranted('ROLE_AD') && !$security->isGranted('ROLE_SUPER_AD')) $partner = $security->getToken()->getUser()->getPartner()->getId();
+            if($this->get('security.authorization_checker')->isGranted('ROLE_AD') && !$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) $partner = $this->getUser()->getPartner()->getId();
 
-            $catserv = $security->getToken()->getUser()->getCategoryService()->getId();
+            $catserv = $this->getUser()->getCategoryService()->getId();
             $qp = $em->createQuery("select partial p.{id,name, code_partner} from PartnerBundle:Partner p WHERE p.category_service = ".$catserv." AND p.active = 1 ");
             $qs = $em->createQuery("select partial s.{id,name} from PartnerBundle:Shop s WHERE s.category_service = ".$catserv." AND s.active = 1 ");
             $qw = $em->createQuery("select partial w.{id,name, code_workshop} from WorkshopBundle:Workshop w WHERE w.category_service = ".$catserv." AND w.active = 1 ");
@@ -166,16 +165,16 @@ class StatisticController extends Controller {
                                                                             ));
     }
 
-    public function doExcelAction($type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0', $to_y   ='0', $to_m  ='0', $to_d   ='0', $partner='0', $shop='0', $workshop='0', $typology='0', $status='0', $country='0', $catserv='0', $assessor='0', $created_by='0', $raport='0', $code_zone='0'){
+    public function doExcelAction(Request $request, $type='0', $page=1, $from_y ='0', $from_m='0', $from_d ='0', $to_y   ='0', $to_m  ='0', $to_d   ='0', $partner='0', $shop='0', $workshop='0', $typology='0', $status='0', $country='0', $catserv='0', $assessor='0', $created_by='0', $raport='0', $code_zone='0'){
 
-        $em = $this->getDoctrine()->getEntityManager();
-        $security = $this->get('security.context');
-        $user = $security->getToken()->getUser();
+        $em = $this->getDoctrine()->getManager();
+
+        $user = $this->getUser();
         $statistic = new Statistic();
         $pagination = new Pagination($page);
         $where = 'e.id != 0 ';
         $join  = '';        
-        if($user == 'anon.')
+        if(!$user)
         { 
             return $this->redirect($this->generateUrl('user_login'));
         }
@@ -225,9 +224,9 @@ class StatisticController extends Controller {
                 elseif($created_by == 'app') $qb = $qb->leftJoin('e.created_by', 'u')->leftJoin('u.user_role', 'ur')->andWhere('ur.id = :role' )->setParameter('role', 4);
             }
 
-            if(!$security->isGranted('ROLE_SUPER_ADMIN'))
+            if(!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN'))
             {
-                $qb = $qb->andWhere('w.country = :country') ->setParameter('country', $security->getToken()->getUser()->getCountry()->getId());
+                $qb = $qb->andWhere('w.country = :country') ->setParameter('country', $this->getUser()->getCountry()->getId());
             }
             elseif ($country != "0") $qb = $qb->andWhere('w.country = :country') ->setParameter('country', $country);
 
@@ -614,10 +613,10 @@ class StatisticController extends Controller {
                       }
                   }
 
-                  if(!$security->isGranted('ROLE_SUPER_ADMIN'))
+                  if(!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN'))
                   {
-                      $qb = $qb->andWhere('w.country = :country')->setParameter('country', $security->getToken()->getUser()->getCountry()->getId());
-                      $qb2 = $qb2->andWhere('w.country = :country')->setParameter('country', $security->getToken()->getUser()->getCountry()->getId());
+                      $qb = $qb->andWhere('w.country = :country')->setParameter('country', $this->getUser()->getCountry()->getId());
+                      $qb2 = $qb2->andWhere('w.country = :country')->setParameter('country', $this->getUser()->getCountry()->getId());
                   }
                   else
                   {
@@ -654,7 +653,7 @@ class StatisticController extends Controller {
                   $resultsDehydratedNumPosts = $qb2->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);       
                                   
                   $response->headers->set('Content-Disposition', 'attachment;filename="informeTickets_'.date("dmY").'.csv"');
-                  $excel = $this->createExcelTicket($resultsDehydrated, $resultsDehydratedNumPosts);
+                  $excel = $this->createExcelTicket($resultsDehydrated, $resultsDehydratedNumPosts, $request->getLocale());
               }
               elseif ($type == 'workshop')
               {
@@ -899,10 +898,10 @@ class StatisticController extends Controller {
                           break;
                   }
 
-                  if(!$security->isGranted('ROLE_SUPER_ADMIN')){
+                  if(!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')){
 
                       $qb = $qb->andWhere('w.country = :country')
-                          ->setParameter('country', $security->getToken()->getUser()->getCountry()->getId());
+                          ->setParameter('country', $this->getUser()->getCountry()->getId());
                   }else{
 
                       if ($country != "0") {
@@ -974,15 +973,15 @@ class StatisticController extends Controller {
                                                   $where .= 'AND tp.id = e.typology ';
                                                   $where .= 'AND tp.id = '.$typology.' ';
                   }
-                  if(!$security->isGranted('ROLE_SUPER_ADMIN')){
-                      $where .= 'AND e.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+                  if(!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')){
+                      $where .= 'AND e.country = '.$this->getUser()->getCountry()->getId().' ';
                   }else{
                       if    ($country != "0"  ) { $where .= 'AND e.country = '.$country.' '; }
                   }
 
                   $sql = $select.$join." WHERE ".$where.' ';
 
-                  if(!$security->isGranted('ROLE_ADMIN')) $sql .= ' AND e.category_service = '.$security->getToken()->getUser()->getCategoryService()->getId().' ';
+                  if(!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) $sql .= ' AND e.category_service = '.$this->getUser()->getCategoryService()->getId().' ';
 
                   elseif ($catserv != "0") $sql .= ' AND e.category_service = '.$catserv.' ';
 
@@ -1041,8 +1040,8 @@ class StatisticController extends Controller {
                                                   $where .= 'AND tp.id = w.typology ';
                                                   $where .= 'AND tp.id = '.$typology.' ';
                   }
-                  if(!$security->isGranted('ROLE_SUPER_ADMIN')){
-                      $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+                  if(!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')){
+                      $where .= 'AND w.country = '.$this->getUser()->getCountry()->getId().' ';
                   }else{
                       if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                   }
@@ -1088,8 +1087,8 @@ class StatisticController extends Controller {
                                                       $where .= 'AND ur.id = 4';
                                                   }
                   }
-                  if(!$security->isGranted('ROLE_SUPER_ADMIN')){
-                      $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+                  if(!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')){
+                      $where .= 'AND w.country = '.$this->getUser()->getCountry()->getId().' ';
                   }else{
                       if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                   }
@@ -1154,8 +1153,8 @@ class StatisticController extends Controller {
                                                   $where .= 'AND tp.id = w.typology ';
                                                   $where .= 'AND tp.id = '.$typology.' ';
                   }
-                  if(!$security->isGranted('ROLE_SUPER_ADMIN')){
-                      $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+                  if(!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')){
+                      $where .= 'AND w.country = '.$this->getUser()->getCountry()->getId().' ';
                   }else{
                       if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                   }
@@ -1228,8 +1227,8 @@ class StatisticController extends Controller {
                                                   $where .= 'AND tp.id = w.typology ';
                                                   $where .= 'AND tp.id = '.$typology.' ';
                   }
-                  if(!$security->isGranted('ROLE_SUPER_ADMIN')){
-                      $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+                  if(!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')){
+                      $where .= 'AND w.country = '.$this->getUser()->getCountry()->getId().' ';
                   }else{
                       if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                   }
@@ -1293,8 +1292,8 @@ class StatisticController extends Controller {
                                                   $where .= 'AND tp.id = w.typology ';
                                                   $where .= 'AND tp.id = '.$typology.' ';
                   }
-                  if(!$security->isGranted('ROLE_SUPER_ADMIN')){
-                      $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+                  if(!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')){
+                      $where .= 'AND w.country = '.$this->getUser()->getCountry()->getId().' ';
                   }else{
                       if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                   }
@@ -1311,13 +1310,12 @@ class StatisticController extends Controller {
               }
               elseif ($type == 'numticketsbyfabyear'){
 
-                  $locale = $this->getRequest()->getLocale();
+                  $locale = $request->getLocale();
 
                   $trans     = $this->get('translator');
 
                   if ($locale == 'es') $year = 'Year';
                   else $year =  UtilController::sinAcentos($trans->trans('year'));
-                  $locale = $this->getRequest()->getLocale();
 
                   $informe   = UtilController::sinAcentos($trans->trans('numticketsbyfabyear'));
                   $nTickets  = UtilController::sinAcentos($trans->trans('tickets'));
@@ -1365,8 +1363,8 @@ class StatisticController extends Controller {
                                                   $where .= 'AND tp.id = w.typology ';
                                                   $where .= 'AND tp.id = '.$typology.' ';
                   }
-                  if(!$security->isGranted('ROLE_SUPER_ADMIN')){
-                      $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+                  if(!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')){
+                      $where .= 'AND w.country = '.$this->getUser()->getCountry()->getId().' ';
                   }else{
                       if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                   }
@@ -1390,7 +1388,7 @@ class StatisticController extends Controller {
                   }
 
                   $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
-                  $excel = $this->createExcelFabYear($years);
+                  $excel = $this->createExcelFabYear($years, $request->getLocale());
               }
               elseif ($type == 'numticketsbymonth'){
 
@@ -1452,8 +1450,8 @@ class StatisticController extends Controller {
                                                   $where .= 'AND tp.id = w.typology ';
                                                   $where .= 'AND tp.id = '.$typology.' ';
                   }
-                  if(!$security->isGranted('ROLE_SUPER_ADMIN')){
-                      $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+                  if(!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')){
+                      $where .= 'AND w.country = '.$this->getUser()->getCountry()->getId().' ';
                   }else{
                       if    ($country != "0"  ) { $where .= 'AND w.country = '.$country.' '; }
                   }
@@ -1474,10 +1472,10 @@ class StatisticController extends Controller {
                   $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
                   $excel = $this->createExcelByMonth($results, $resultsF);
               }
-              elseif ($type == 'undefined' AND !$security->isGranted('ROLE_ADMIN'))
+              elseif ($type == 'undefined' AND !$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
               {                  
                   $trans  = $this->get('translator');
-                  $catserv = $security->getToken()->getUser()->getCategoryService();
+                  $catserv = $this->getUser()->getCategoryService();
 
                   if($catserv->getId() != null) $catserv = $catserv->getId();
                   else $catserv = 0;
@@ -1556,7 +1554,7 @@ class StatisticController extends Controller {
                       ->groupBy('e.id')
                       ->orderBy('e.id');
 
-                  if ($security->isGranted('ROLE_AD') AND $catserv == 3) // 3 - Assistance Diag 24 FR
+                  if ($this->get('security.authorization_checker')->isGranted('ROLE_AD') AND $catserv == 3) // 3 - Assistance Diag 24 FR
                   {       
                       $qb = $qb->leftJoin('e.tickets', 't')
                                ->addSelect('count(t.id) as '.$nTickets.'');
@@ -1564,7 +1562,7 @@ class StatisticController extends Controller {
                       if($code_zone != '0') $qb = $qb->andWhere('e.code_partner = '.$code_zone.'');
                   }
 
-                  if ($security->isGranted('ROLE_AD') AND ($catserv == 2 OR $catserv == 4)) // 2 - ADService ES, 4 - ADService PT
+                  if ($this->get('security.authorization_checker')->isGranted('ROLE_AD') AND ($catserv == 2 OR $catserv == 4)) // 2 - ADService ES, 4 - ADService PT
                   {
                       $qb = $qb->addSelect('u.token as '.$token.'');
                       if($user->getPartner() != null){
@@ -1716,7 +1714,7 @@ class StatisticController extends Controller {
 
                   $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
 
-                  // $this->exportarExcelAction($resultsDehydrated);
+                  // $this->exportarExcelAction($request, $resultsDehydrated);
                   $excel = $this->createExcelStatistics($resultsDehydrated, $workshopdiagnosismachine);
               }
           }
@@ -1730,10 +1728,10 @@ class StatisticController extends Controller {
                                               $where .= 'AND tp.id = w.typology ';
                                               $where .= 'AND tp.id = '.$typology.' ';
               }
-              if($security->isGranted('ROLE_SUPER_ADMIN')){
+              if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')){
                   if    ($country != '0'     ) { $where .= 'AND e.country = '.$country.' '; }
               }else{
-                  $where .= 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId().' ';
+                  $where .= 'AND w.country = '.$this->getUser()->getCountry()->getId().' ';
               }
 
 
@@ -1768,7 +1766,6 @@ class StatisticController extends Controller {
 
     public function createExcelBilling($results, $raport){
 
-        $locale = $this->getRequest()->getLocale();
         $trans  = $this->get('translator');
 
         $buscar     = array(';', '"', chr(13).chr(10), "\r\n", "\n", "\r");
@@ -1867,9 +1864,8 @@ class StatisticController extends Controller {
         return($excel);
     }
 
-    public function createExcelTicket($results, $resultsNumPosts){
+    public function createExcelTicket($results, $resultsNumPosts, $locale){
 
-        $locale = $this->getRequest()->getLocale();
         $trans = $this->get('translator');
         //Creación de cabecera
         $excel =
@@ -2161,7 +2157,7 @@ class StatisticController extends Controller {
                 $trans->trans('date').';';
         $excel.="\n";
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         foreach ($results as $row) {
 
@@ -2229,7 +2225,7 @@ class StatisticController extends Controller {
             }
 
             if($workshopdiagnosismachine != null) {
-                $em = $this->getDoctrine()->getEntityManager();
+                $em = $this->getDoctrine()->getManager();
                 $diagmachines = $em->getRepository('WorkshopBundle:DiagnosisMachine')->findAll();
             }
 
@@ -2301,10 +2297,9 @@ class StatisticController extends Controller {
         return($excel);
     }
 
-    public function createExcelFabYear($results){
+    public function createExcelFabYear($results, $locale){
         $excel = '';
 
-        $locale = $this->getRequest()->getLocale();
         $trans  = $this->get('translator');
 
         $nTickets = UtilController::sinAcentos($trans->trans('tickets'));
@@ -2331,7 +2326,6 @@ class StatisticController extends Controller {
     public function createExcelByMonth($results, $resultsF){
         $excel = '';
 
-        $locale = $this->getRequest()->getLocale();
         $trans  = $this->get('translator');
 
         $nTickets  = UtilController::sinAcentos($trans->trans('tickets'));

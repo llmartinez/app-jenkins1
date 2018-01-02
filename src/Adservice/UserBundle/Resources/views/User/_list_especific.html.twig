@@ -4,14 +4,14 @@
         <td>{{ user.id }}</td>
         <td><a id="list_username">{{ user.username|length > 15 ? user.username|slice(0, 15) ~ '...' : user.username  }}</a></td>
         <td>
-            {% if role == 'super_admin' %} <span class="label label-primary">{% trans %} super_admin {% endtrans %}</span> {% endif %}
-            {% if role == 'admin'       %} <span class="label label-primary">{% trans %} admin       {% endtrans %}</span> {% endif %}
-            {% if role == 'assessor'    %} <span class="label label-success">{% trans %} assessor    {% endtrans %}</span> {% endif %}
-            {% if role == 'top_ad'      %} <span class="label label-warning">{% trans %} ROLE_TOP_AD {% endtrans %}</span> {% endif %}
-            {% if role == 'super_ad'    %} <span class="label label-warning">{% trans %} super_ad    {% endtrans %}</span> {% endif %}
-            {% if role == 'ad'          %} <span class="label label-warning">{% trans %} ad          {% endtrans %}</span> {% endif %}
-            {% if role == 'commercial'  %} <span class="label label-warning">{% trans %} commercial  {% endtrans %}</span> {% endif %}
-            {% if user.active == false  %} <span class="label label-danger"> {% trans %} inactive    {% endtrans %}</span> {% endif %}</td>
+            {% if role == 'super_admin' %} <span class="label label-primary">{{ 'super_admin'|trans }}</span> {% endif %}
+            {% if role == 'admin'       %} <span class="label label-primary">{{ 'admin'|trans }}</span> {% endif %}
+            {% if role == 'assessor'    %} <span class="label label-success">{{ 'assessor'|trans }}</span> {% endif %}
+            {% if role == 'top_ad'      %} <span class="label label-warning">{{ 'ROLE_TOP_AD'|trans }}</span> {% endif %}
+            {% if role == 'super_ad'    %} <span class="label label-warning">{{ 'super_ad'|trans }}</span> {% endif %}
+            {% if role == 'ad'          %} <span class="label label-warning">{{ 'ad'|trans }}</span> {% endif %}
+            {% if role == 'commercial'  %} <span class="label label-warning">{{ 'commercial'|trans }}</span> {% endif %}
+            {% if user.active == false  %} <span class="label label-danger"> {{ 'inactive'|trans }}</span> {% endif %}</td>
         <td>{{ user.name|length > 15 ? user.name|slice(0, 15) ~ '...' : user.name  }}</td>
         <td>{{ user.surname|length > 15 ? user.surname|slice(0, 15) ~ '...' : user.surname  }}</td>
         <td>{{ user.email1       }}</td>

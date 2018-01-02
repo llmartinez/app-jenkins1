@@ -4,20 +4,22 @@
     {# Definicion de la ruta al listado para usar en paginacion #}
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('insert_cif', { 'workshop_id' : workshop_id, 'country' : country }) }}">{% trans %} home {% endtrans %}</a></li>
+      <li><a href="{{ path('insert_cif', { 'workshop_id' : workshop_id, 'country' : country }) }}">{{ 'home'|trans }}</a></li>
     </ol>
 
     <div style="width: 90%; margin-left: 5%;">
 
-            <legend>{% trans %} workshop.insert_cif {% endtrans %}</legend>
+            <legend>{{ 'workshop.insert_cif'|trans }}</legend>
 
-            <label style="width: 100%;">{% trans %} workshop.cif {% endtrans %}</label>
-            {% if app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
+            <label style="width: 100%;">{{ 'workshop.cif'|trans }}</label>
+            {% for flashMessage in app.session.flashbag.get('error') %}
+                <p style="color:red">{{ flashMessage }}</p>
+            {% endfor %}
             <form action="{{ path('insert_cif', { 'workshop_id' : workshop_id, 'country' : country }) }}" method="post" >
                 <div class="grid w10">
                     <input type="text" id="new_car_form_CIF" name="new_car_form_CIF" class="form-control asr_form-control">
                 </div>
-                <button class="btn btn-primary pull-left ml15" >{% trans %} accept {% endtrans %}</button>
+                <button class="btn btn-primary pull-left ml15" >{{ 'accept'|trans }}</button>
             </form>
     </div>
 

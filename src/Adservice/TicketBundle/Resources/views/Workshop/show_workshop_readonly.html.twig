@@ -1,17 +1,19 @@
-<legend>{% trans %} workshop {% endtrans %}
+<legend>{{ 'workshop'|trans }}
 
 			{% if workshop.test == 1 %}
 				<img class='img_icon' src='{{ asset('bundles/util/images/icon/test.png') }}'
-					 title="{% trans %} testing {% endtrans %}" alt="{% trans %} testing {% endtrans %}">{% endif %}
+					 title="{{ 'testing'|trans }}" alt="{{ 'testing'|trans }}">{% endif %}
 
 			{% if adsplus.id is defined %}
 				<img class='img_icon' src='{{ asset('bundles/util/images/icon/adsplus.png') }}'
-					 title="{% trans %} adsplus {% endtrans %}" alt="{% trans %} adsplus {% endtrans %}">{% endif %}
+					 title="{{ 'adsplus'|trans }}" alt="{{ 'adsplus'|trans }}">{% endif %}
 </legend>
 
 	<input type="hidden" id="id_workshop" name="id_workshop" value="{{ workshop.id }}">
 
-	{% if app.session.hasFlash('error' ) %} <p class="error">{{ app.session.getFlash('error' ) }}</p> {% endif %}
+	{% for flashMessage in app.session.flashbag.get('error') %}
+		<p class="error">{{ flashMessage }}</p>
+	{% endfor %}
 
 	{# WORKSHOP #}
 	<div class="form-group">
@@ -20,14 +22,14 @@
 
 	{# CIF #}
 	<div class="form-group">
-		{% if workshop.cif      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/cif.png') }}'> <b>{% trans %} cif {% endtrans %}</b>: {{ workshop.cif      }} {% endif %}
+		{% if workshop.cif      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/cif.png') }}'> <b>{{ 'cif'|trans }}</b>: {{ workshop.cif      }} {% endif %}
 	</div>
 	<div class="form-group">
-		{% if workshop.contact      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/user.png') }}'> <b>{% trans %} contact {% endtrans %}:  </b>{{ workshop.contact|length > 15 ? workshop.contact|slice(0, 15) ~ '...' : workshop.contact  }}  {% endif %}
+		{% if workshop.contact      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/user.png') }}'> <b>{{ 'contact'|trans }}:  </b>{{ workshop.contact|length > 15 ? workshop.contact|slice(0, 15) ~ '...' : workshop.contact  }}  {% endif %}
 	</div>
 	{# PARTNER #}
 	<div class="form-group">
-		{% if workshop.partner      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/partner_.png') }}'> <b>{% trans %} partner {% endtrans %}</b>: {{ workshop.partner      }} {% endif %}
+		{% if workshop.partner      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/partner_.png') }}'> <b>{{ 'partner'|trans }}</b>: {{ workshop.partner      }} {% endif %}
 	</div>
 
 	{# LOCATION #}
@@ -73,18 +75,18 @@
 	<div class="form-group" title="{{observation}}">
 		{% if is_granted('ROLE_ASSESSOR') and workshop.conflictive == 1 %}
 
-			<img class='img_icon' src='{{ asset('bundles/util/images/icon/exclamation.png') }}' title="{% trans %} conflictive {% endtrans %}" alt="{% trans %} conflictive {% endtrans %}">
+			<img class='img_icon' src='{{ asset('bundles/util/images/icon/exclamation.png') }}' title="{{ 'conflictive'|trans }}" alt="{{ 'conflictive'|trans }}">
 
 		{% else %}
 
-			<img class='img_icon' src='{{ asset('bundles/util/images/icon/info_.png') }}' title="{% trans %} observations {% endtrans %}" alt="{% trans %} observations {% endtrans %}">
+			<img class='img_icon' src='{{ asset('bundles/util/images/icon/info_.png') }}' title="{{ 'observations'|trans }}" alt="{{ 'observations'|trans }}">
 
 		{% endif %}
 
 		{% if observation != "" %}
-			<b>{% trans %} observations {% endtrans %}</b>: {{ observation|length > 15 ? observation|slice(0, 15) ~ '...' : observation  }}
+			<b>{{ 'observations'|trans }}</b>: {{ observation|length > 15 ? observation|slice(0, 15) ~ '...' : observation  }}
 		{% else %}
-			{% trans %} any_observation {% endtrans %}
+			{{ 'any_observation'|trans }}
 		{% endif %}
 	</div>
 </div>

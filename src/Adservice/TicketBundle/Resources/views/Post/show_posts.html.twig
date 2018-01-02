@@ -1,6 +1,6 @@
 
 {# mensajes del TICKET #}
-    <legend>{% trans %} tracing {% endtrans %}</legend>
+    <legend>{{ 'tracing'|trans }}</legend>
 
 	{% if ticket.posts | length > 0 %}
 
@@ -13,5 +13,5 @@
 
 		{% endfor %}
 	{% else %}
-		<p> {% trans %} any.response {% endtrans %} </p>
+		<p> {{ 'any.response'|trans }} </p>
 	{% endif %}

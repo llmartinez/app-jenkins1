@@ -3,10 +3,10 @@
 {% block breadcrumb %}
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
       <li><a href="{% if is_granted('ROLE_ASSESSOR') and not is_granted('ROLE_ADMIN') %}{{ path("listTicket", { 'option': 'assessor_pending'}) }}
-                   {% else %}{{ path('listTicket') }}{% endif %}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
-      <li class="active"><a href="{{ path('showTicket', {'id': ticket.id}) }}">#{{ ticket.id }}</a> {% trans %} edit.car {% endtrans %}</li>
+                   {% else %}{{ path('listTicket') }}{% endif %}">{{ 'menu.list_tickets'|trans }}</a></li>
+      <li class="active"><a href="{{ path('showTicket', {'id': ticket.id}) }}">#{{ ticket.id }}</a> {{ 'edit.car'|trans }}</li>
     </ol>
 
 {% endblock  %}
@@ -23,14 +23,14 @@
 {% endblock  %}
 
 {% block content %}
-    <input type="hidden" id="msg_bad_cif_length" name="msg_bad_cif_length" value=" {% trans %} ticket_vin_error_length {% endtrans %}">
-    <input type="hidden" id="msg_bad_cif_o" name="msg_bad_cif_o" value="{% trans %} ticket_vin_error_o {% endtrans %}">
+    <input type="hidden" id="msg_bad_cif_length" name="msg_bad_cif_length" value=" {{ 'ticket_vin_error_length'|trans }}">
+    <input type="hidden" id="msg_bad_cif_o" name="msg_bad_cif_o" value="{{ 'ticket_vin_error_o'|trans }}">
     <div class="form-group">
         <form action="{{ path('editCar', { 'id': ticket.id }) }}" id="contact" class="form" role="form" method="post">
 
-            <legend> {% trans %} edit.car {% endtrans %} </legend>
+            <legend> {{ 'edit.car'|trans }} </legend>
             {% include 'TicketBundle:Car:edit_car.html.twig'  %}
-            <button id="btn_create" class="btn btn-primary pull-right" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.send {% endtrans %}</button>
+            <button id="btn_create" class="btn btn-primary pull-right" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {{ 'btn.send'|trans }}</button>
         </form>
     </div>
 

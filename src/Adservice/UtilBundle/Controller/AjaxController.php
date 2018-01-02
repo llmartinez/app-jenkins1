@@ -4,6 +4,7 @@ namespace Adservice\UtilBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
@@ -28,10 +29,9 @@ class AjaxController extends Controller
      * Funcion Ajax para obtener las regiones de un país
      * @return json
      */
-    public function regionsFromCountryAction() {
-        $em = $this->getDoctrine()->getEntityManager();
-        $petition = $this->getRequest();
-        $id_country = $petition->request->get('id_country');
+    public function regionsFromCountryAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $id_country = $request->request->get('id_country');
 
         $regions = $em->getRepository("UtilBundle:Region")->findBy(array('country' => $id_country));
         $size = sizeOf($regions);
@@ -55,10 +55,9 @@ class AjaxController extends Controller
      * Funcion Ajax para obtener las ciudades de una region
      * @return json
      */
-    public function citiesFromRegionAction() {
-        $em = $this->getDoctrine()->getEntityManager();
-        $petition = $this->getRequest();
-        $id_region = $petition->request->get('id_region');
+    public function citiesFromRegionAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $id_region = $request->request->get('id_region');
 
         $cities = $em->getRepository("UtilBundle:City")->findBy(array('region' => $id_region));
         $size = sizeOf($cities);
@@ -83,11 +82,10 @@ class AjaxController extends Controller
      * Funcion Ajax para obtener los socios de una Cateogria de Servicio
      * @return json
      */
-    public function partnersFromCatServAction() {
+    public function partnersFromCatServAction(Request $request) {
 
-        $em = $this->getDoctrine()->getEntityManager();
-        $petition   = $this->getRequest();
-        $id_catserv = $petition->request->get('id_catserv');
+        $em = $this->getDoctrine()->getManager();
+        $id_catserv = $request->request->get('id_catserv');
 
         $query = "SELECT p FROM PartnerBundle:partner p WHERE p.id != 0 ";
         if($id_catserv != '') $query .= "AND p.category_service = ".$id_catserv." ORDER by p.name";
@@ -109,10 +107,9 @@ class AjaxController extends Controller
      * Funcion Ajax para obtener las tipologias de una Cateogria de Servicio
      * @return json
      */
-    public function typologiesFromCatServAction() {
-        $em = $this->getDoctrine()->getEntityManager();
-        $petition   = $this->getRequest();
-        $id_catserv = $petition->request->get('id_catserv');
+    public function typologiesFromCatServAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $id_catserv = $request->request->get('id_catserv');
 
         $query = "SELECT t FROM WorkshopBundle:Typology t WHERE t.id != 0 ";
         if($id_catserv != '') $query .= "AND t.category_service = ".$id_catserv." AND t.active = 1";
@@ -134,10 +131,9 @@ class AjaxController extends Controller
      * Funcion Ajax para obtener las maquinas de diagnosis de una Cateogria de Servicio
      * @return json
      */
-    public function diagMachinesFromCatServAction() {
-        $em = $this->getDoctrine()->getEntityManager();
-        $petition   = $this->getRequest();
-        $id_catserv = $petition->request->get('id_catserv');
+    public function diagMachinesFromCatServAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $id_catserv = $request->request->get('id_catserv');
 
         $query = "SELECT d FROM WorkshopBundle:DiagnosisMachine d WHERE d.id != 0 and d.active = 1 ";
         if($id_catserv != '') $query .= "AND d.category_service = ".$id_catserv." OR d.id = 1 ";
@@ -166,11 +162,10 @@ class AjaxController extends Controller
      * Funcion Ajax para obtener las tiendas de un socio
      * @return json
      */
-    public function codePartnerFromPartnerAction()
+    public function codePartnerFromPartnerAction(Request $request)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-        $petition = $this->getRequest();
-        $id_partner = $petition->request->get('id_partner');
+        $em = $this->getDoctrine()->getManager();
+        $id_partner = $request->request->get('id_partner');
 
         $partner = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
         $size = sizeOf($partner);
@@ -182,12 +177,11 @@ class AjaxController extends Controller
         return new Response(json_encode($json), $status = 200);
     }
 
-    public function codeWorkshopFromPartnerAction()
+    public function codeWorkshopFromPartnerAction(Request $request)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-        $petition = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
 
-        $id_partner = $petition->request->get('id_partner');
+        $id_partner = $request->request->get('id_partner');
         $partner = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
         $workshop = UtilController::getCodeWorkshopUnused($em,$partner->getCodePartner());
 
@@ -196,11 +190,10 @@ class AjaxController extends Controller
         return new Response(json_encode($json), $status = 200);
     }
 
-    public function getIdFromCodePartnerAction($code)
+    public function getIdFromCodePartnerAction(Request $request, $code)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-        $petition = $this->getRequest();
-        $code = $petition->request->get('code');
+        $em = $this->getDoctrine()->getManager();
+        $code = $request->request->get('code');
 
         $partner = $em->getRepository("PartnerBundle:Partner")->findOneBy(array('code_partner' => $code));
 
@@ -215,9 +208,9 @@ class AjaxController extends Controller
         return new Response(json_encode($json), $status = 200);
     }
 
-    public function getCountryPartnerAction($id_partner)
+    public function getCountryPartnerAction(Request $request, $id_partner)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $partner = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
 
@@ -244,10 +237,9 @@ class AjaxController extends Controller
      * Funcion Ajax para obtener las tiendas de un socio
      * @return json
      */
-    public function shopsFromPartnerAction() {
-        $em = $this->getDoctrine()->getEntityManager();
-        $petition = $this->getRequest();
-        $id_partner = $petition->request->get('id_partner');
+    public function shopsFromPartnerAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $id_partner = $request->request->get('id_partner');
 
         $query = "SELECT s FROM PartnerBundle:Shop s WHERE s.id = 1 and s.active = 1 ";
         if($id_partner != '') $query .= "OR s.partner = ".$id_partner." and s.active = 1 ";
@@ -276,10 +268,9 @@ class AjaxController extends Controller
      * Funcion Ajax para obtener los talleres de un socio
      * @return json
      */
-    public function workshopsFromPartnerAction() {
-        $em = $this->getDoctrine()->getEntityManager();
-        $petition = $this->getRequest();
-        $id_partner = $petition->request->get('id_partner');
+    public function workshopsFromPartnerAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $id_partner = $request->request->get('id_partner');
 
         $query = "SELECT w FROM WorkshopBundle:Workshop w WHERE w.id = 0 ";
         if($id_partner != '') $query .= "OR w.partner = ".$id_partner." ";
@@ -308,10 +299,9 @@ class AjaxController extends Controller
      * Funcion Ajax que devuelve un listado de modelos filtrados a partir de la marca ($brand)
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function carModelAction($id_brand, $filter='') {
-        $em = $this->getDoctrine()->getEntityManager();
-        $petition = $this->getRequest();
-        $filter_value = $petition->request->get('filter_value');
+    public function carModelAction(Request $request, $id_brand, $filter='') {
+        $em = $this->getDoctrine()->getManager();
+        $filter_value = $request->request->get('filter_value');
         // $id_mts = '';
         if($filter != '') {
             if($filter == 'motor')
@@ -332,7 +322,7 @@ class AjaxController extends Controller
             // $size = sizeOf($models);
             // if($size == 0) {
 
-            //     $id_mts = $petition->request->get('id_mts');
+            //     $id_mts = $request->request->get('id_mts');
 
             //     if($id_mts == '')
             //     {
@@ -340,7 +330,7 @@ class AjaxController extends Controller
             //         $consulta = $em->createQuery($query);
             //         $motors   = $consulta->getResult();
 
-            //         $motor = $petition->request->get('motor');
+            //         $motor = $request->request->get('motor');
             //         $motor = UtilController::getSlug($motor, '');
 
             //         $id_mts = $this->getMotorsId($motors, $motor);
@@ -379,10 +369,9 @@ class AjaxController extends Controller
      * Funcion Ajax que devuelve un listado de versiones filtrados a partir del modelo ($model)
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function carVersionAction($id_model, $filter='') {
-        $em = $this->getDoctrine()->getEntityManager();
-        $petition = $this->getRequest();
-        $filter_value = $petition->request->get('filter_value');
+    public function carVersionAction(Request $request, $id_model, $filter='') {
+        $em = $this->getDoctrine()->getManager();
+        $filter_value = $request->request->get('filter_value');
         // $id_mts = '';
         if($filter != '') {
             if($filter == 'motor')
@@ -401,7 +390,7 @@ class AjaxController extends Controller
             // $size = sizeOf($versions);
             // if($size == 0) {
 
-            //     $id_mts = $petition->request->get('id_mts');
+            //     $id_mts = $request->request->get('id_mts');
 
             //     if($id_mts == '')
             //     {
@@ -409,7 +398,7 @@ class AjaxController extends Controller
             //         $consulta = $em->createQuery($query);
             //         $motors   = $consulta->getResult();
 
-            //         $motor = $petition->request->get('motor');
+            //         $motor = $request->request->get('motor');
             //         $motor = UtilController::getSlug($motor, '');
 
             //         $id_mts = $this->getMotorsId($motors, $motor);
@@ -466,24 +455,23 @@ class AjaxController extends Controller
      * Funcion Ajax que devuelve los datos del coche introducido a partir de la version ($version)
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function carDataAction() {
-        $em = $this->getDoctrine()->getEntityManager();
-        $petition = $this->getRequest();
+    public function carDataAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
 
-        $id_version    = $petition->request->get('id_version');
-        $version_motor = $petition->request->get('version_motor');
-        $motor = $petition->request->get('motor');
-        $year = $petition->request->get('year');
+        $id_version    = $request->request->get('id_version');
+        $version_motor = $request->request->get('version_motor');
+        $motor = $request->request->get('motor');
+        $year = $request->request->get('year');
 
         if(isset($motor)){
-            $motor = $petition->request->get('motor');
+            $motor = $request->request->get('motor');
             $query = $em->createQuery("SELECT v FROM CarBundle:Version v, CarBundle:Motor mt
                                         WHERE mt.id = v.motor AND v.id = ".$id_version." AND mt.name LIKE '%".$motor."%'");
             $version = $query->getResult();
             $version = $version[0];
         }
         elseif($year != null){
-            $year = $petition->request->get('year');
+            $year = $request->request->get('year');
             $query = $em->createQuery("SELECT v FROM CarBundle:Version v
                                         WHERE v.id = ".$id_version."
                                         AND (v.inicio <= '".$year."99' AND v.inicio != '')
@@ -515,11 +503,10 @@ class AjaxController extends Controller
      * Funcion Ajax que devuelve los datos del coche introducido a partir de la version ($version)
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function carByYearAction() {
-        $em = $this->getDoctrine()->getEntityManager();
-        $petition = $this->getRequest();
+    public function carByYearAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
 
-        $year = $petition->request->get('year');
+        $year = $request->request->get('year');
 
         if(strlen($year) == 4)
         {
@@ -549,11 +536,10 @@ class AjaxController extends Controller
      * Funcion Ajax que devuelve los datos del coche introducido a partir de la version ($version)
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function carByMotorAction() {
-        $em = $this->getDoctrine()->getEntityManager();
-        $petition = $this->getRequest();
+    public function carByMotorAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
 
-        $motor = $petition->request->get('motor');
+        $motor = $request->request->get('motor');
         
         $query = "SELECT b FROM CarBundle:Brand b, CarBundle:Model m, CarBundle:Version v, CarBundle:Motor mt
                     WHERE b.id = m.brand AND m.id = v.model AND mt.id = v.motor
@@ -602,8 +588,8 @@ class AjaxController extends Controller
      * Funcion Ajax que devuelve los datos del coche introducido a partir de la version ($version)
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function carMotorsAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+    public function carMotorsAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
         $qb = $em->getRepository('CarBundle:Motor')
                 ->createQueryBuilder('m')
                 ->select('m.name')
@@ -616,7 +602,7 @@ class AjaxController extends Controller
         return new Response(json_encode($motors), $status = 200);
     }
     
-    public function getCarFromPlateNumberAction($idPlateNumber){
+    public function getCarFromPlateNumberAction(Request $request, $idPlateNumber){
         $em = $this->getDoctrine();
 
         $car = $em->getRepository('CarBundle:Car')->findOneBy(array('plateNumber' => $idPlateNumber));
@@ -634,7 +620,7 @@ class AjaxController extends Controller
         return new Response(json_encode($json), $status = 200);
     }
     
-    public function getCarFromVinAction($vin){
+    public function getCarFromVinAction(Request $request, $vin){
         $em = $this->getDoctrine();
 
         $car = $em->getRepository('CarBundle:Car')->findOneBy(array('vin' => $vin));
@@ -685,9 +671,9 @@ class AjaxController extends Controller
      * @ParamConverter("ticket", class="TicketBundle:Ticket")
      * @return url
      */
-    public function showTicketReadonlyAction($ticket) {
+    public function showTicketReadonlyAction(Request $request, $ticket) {
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $systems  = $em->getRepository('TicketBundle:System')->findAll();
         $adsplus  = $em->getRepository('WorkshopBundle:ADSPlus'  )->findOneBy(array('idTallerADS'  => $ticket->getWorkshop()->getId() ));
@@ -701,11 +687,10 @@ class AjaxController extends Controller
      * Funcion Ajax que devuelve un listado de subsistemas filtrados a partir del sistema ($system)
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function ticketSystemAction() {
-        $em = $this->getDoctrine()->getEntityManager();
-        $petition = $this->getRequest();
+    public function ticketSystemAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
 
-        $id_system = $petition->request->get('id_system');
+        $id_system = $request->request->get('id_system');
 
         if (sizeOf($id_system) == 1 and $id_system != "" and $id_system != "0") {
 
@@ -733,13 +718,12 @@ class AjaxController extends Controller
      * Funcion Ajax que devuelve un listado de tickets filtrados a partir del subsistemas ($subsystem)
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function tblSimilarAction() {
-        $em = $this->getDoctrine()->getEntityManager();
-        $petition = $this->getRequest();
+    public function tblSimilarAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
 
-        $id_model     = $petition->request->get('id_model');
-        $id_subsystem = $petition->request->get('id_subsystem');
-        $id_country  = $petition->request->get('id_country');
+        $id_model     = $request->request->get('id_model');
+        $id_subsystem = $request->request->get('id_subsystem');
+        $id_country  = $request->request->get('id_country');
 
         $status       = $em->getRepository('TicketBundle:Status')->findOneByName('closed');
         
@@ -749,7 +733,7 @@ class AjaxController extends Controller
             if($id_model     != null) { $model     = $em->getRepository('CarBundle:Model'       )->find($id_model);     } else { $model     = null; }
             if($id_subsystem != null) { $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem); } else { $subsystem = null; }
 
-            $catserv = $this->get('security.context')->getToken()->getUser()->getCategoryService();
+            $catserv = $this->getUser()->getCategoryService();
             if($catserv != null) $catserv_id = $catserv->getId().' '; else $catserv_id = 0;
 
             $tickets = $em->getRepository('TicketBundle:Ticket')->findSimilar($status, $model, $subsystem, $id_country, $catserv_id);
@@ -777,12 +761,11 @@ class AjaxController extends Controller
      * Funcion Ajax que devuelve un listado de tickets filtrados a partir del subsistemas ($subsystem)
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function tblRepeatedAction() {
-    //     $em = $this->getDoctrine()->getEntityManager();
-    //     $petition = $this->getRequest();
+    public function tblRepeatedAction(Request $request) {
+    //     $em = $this->getDoctrine()->getManager();
 
-    //     $id_model     = $petition->request->get('id_model');
-    //     $id_subsystem = $petition->request->get('id_subsystem');
+    //     $id_model     = $request->request->get('id_model');
+    //     $id_subsystem = $request->request->get('id_subsystem');
 
     //     $status       = $em->getRepository('TicketBundle:Status')->findOneByName('open');
 
@@ -810,39 +793,37 @@ class AjaxController extends Controller
      * Funcion Ajax que devuelve un listado de tickets filtrados a partir de una opcion de un combo ($option)
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function fill_ticketsFromWorkshopAction() {
-        $em = $this->getDoctrine()->getEntityManager();
-        $petition = $this->getRequest();
+    public function fill_ticketsFromWorkshopAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
 
-        $id_workshop = $petition->request->get('id_workshop');
-        $check_id = $petition->request->get('filter_id');
+        $id_workshop = $request->request->get('id_workshop');
+        $check_id = $request->request->get('filter_id');
         $repoTicket  = $em->getRepository('TicketBundle:Ticket');
 
+        if($check_id == 'all'){
 
-            if($check_id == 'all'){
+            $check_status = $request->request->get('status');
 
-                $check_status = $petition->request->get('status');
-
-                if     ($check_status == 'all'   ) {
-                                                    $array  = array('workshop' => $id_workshop);
-                                                   }
-                elseif ($check_status == 'open'  ) {
-                                                    $open   = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'  ));
-                                                    $array  = array('workshop' => $id_workshop,
-                                                                    'status'   => $open->getId());
-                                                   }
-                elseif ($check_status == 'closed') {
-                                                    $closed = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'closed'  ));
-                                                    $array  = array('workshop' => $id_workshop,
-                                                                    'status'   => $closed->getId());
-                                                   }
+            if     ($check_status == 'all'   ) {
+                                                $array  = array('workshop' => $id_workshop);
+                                               }
+            elseif ($check_status == 'open'  ) {
+                                                $open   = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'open'  ));
+                                                $array  = array('workshop' => $id_workshop,
+                                                                'status'   => $open->getId());
+                                               }
+            elseif ($check_status == 'closed') {
+                                                $closed = $em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'closed'  ));
+                                                $array  = array('workshop' => $id_workshop,
+                                                                'status'   => $closed->getId());
+                                               }
+        }else{
+            if($id_workshop == 'all'){ $array  = array('id' => $check_id);
             }else{
-                if($id_workshop == 'all'){ $array  = array('id' => $check_id);
-                }else{
-                    $array  = array('id'       => $check_id,
-                                    'workshop' => $id_workshop,);
-                }
+                $array  = array('id'       => $check_id,
+                                'workshop' => $id_workshop,);
             }
+        }
 
         $tickets = $repoTicket->findBy($array);
 

@@ -3,11 +3,11 @@
 namespace Adservice\UserBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class CategoryServiceType extends AbstractType
 {
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('category_service')
@@ -18,7 +18,7 @@ class CategoryServiceType extends AbstractType
         ;
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'adservice_userbundle_categoryservicetype';
     }

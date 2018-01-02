@@ -6,45 +6,45 @@
             {% set today = "now"|date('l')  %}
             {% if (today != "Saturday" and today != "Sunday") or env == "demo"  %}
                 {% if workshop.haschecks == true and workshop.numchecks < 1 %}
-                    <button class="btn btn-disabled pull-right mb15" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</button>
+                    <button class="btn btn-disabled pull-right mb15" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {{ 'new.ticket'|trans }}</button>
                 {% elseif is_granted('ROLE_SUPER_ADMIN')%}
-                    <a class="btn btn-primary mb15" id="newTicket" href="{{ path('newTicket', { 'id_workshop' : workshop.id, 'einatech' : 0 }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a>
+                    <a class="btn btn-primary mb15" id="newTicket" href="{{ path('newTicket', { 'id_workshop' : workshop.id, 'einatech' : 0 }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {{ 'new.ticket'|trans }}</a>
                     {% if id_catserv == 2 or id_catserv == 4 %}
-                        <a class="btn btn-primary mb15" id="newTicketEinatech" href="{{ path('newTicket', { 'id_workshop' : workshop.id, 'einatech' : 1 }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} einatech {% endtrans %}</a>
+                        <a class="btn btn-primary mb15" id="newTicketEinatech" href="{{ path('newTicket', { 'id_workshop' : workshop.id, 'einatech' : 1 }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {{ 'einatech'|trans }}</a>
                     {% endif %}
-                {% elseif workshop.country == app.security.getToken().getUser().getCountry() %}
-                    <a class="btn btn-primary mb15" id="newTicket" href="{{ path('newTicket', { 'id_workshop' : workshop.id, 'einatech' : 0 }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a>
+                {% elseif workshop.country == app.user.getCountry() %}
+                    <a class="btn btn-primary mb15" id="newTicket" href="{{ path('newTicket', { 'id_workshop' : workshop.id, 'einatech' : 0 }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {{ 'new.ticket'|trans }}</a>
                     {% if id_catserv == 2 or id_catserv == 4 %}
-                        <a class="btn btn-primary mb15" id="newTicketEinatech" href="{{ path('newTicket', { 'id_workshop' : workshop.id, 'einatech' : 1 }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} einatech {% endtrans %}</a>
+                        <a class="btn btn-primary mb15" id="newTicketEinatech" href="{{ path('newTicket', { 'id_workshop' : workshop.id, 'einatech' : 1 }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {{ 'einatech'|trans }}</a>
                     {% endif %}
                 {% endif %}
 
                 {% if workshop.haschecks == true %}
                 <div class="grid w15 pull-right {% if workshop.numchecks <= 1 %}error{% endif %} ">
-                    {% trans %}numchecks{% endtrans %}: {{ workshop.numchecks }}
+                    {{ 'numchecks'|trans }}: {{ workshop.numchecks }}
                 </div>
                 {% endif %}
             {% else %}
-                <p class="alert">{% trans %} ticket.weekend_closed {% endtrans %}</p>
+                <p class="alert">{{ 'ticket.weekend_closed'|trans }}</p>
             {% endif %}
         {% else %}
             {% if is_granted('ROLE_ADMIN') %}
-                 <a class="btn btn-primary mb15" id="newTicketEinatech" href="{{ path('newTicket', { 'id_workshop' : workshop.id, 'einatech' : 1 }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} einatech {% endtrans %}</a>
+                 <a class="btn btn-primary mb15" id="newTicketEinatech" href="{{ path('newTicket', { 'id_workshop' : workshop.id, 'einatech' : 1 }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {{ 'einatech'|trans }}</a>
             {% endif %}
-            {# <a class="btn" id="newTicket" title="{% trans %} workshop.inactive {% endtrans %}" alt="{% trans %} workshop.inactive {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {% trans %} new.ticket {% endtrans %}</a> #}
+            {# <a class="btn" id="newTicket" title="{{ 'workshop.inactive'|trans }}" alt="{{ 'workshop.inactive'|trans }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_new.png') }}"> {{ 'new.ticket'|trans }}</a> #}
         {% endif %}
             <input type="hidden" id="id_workshop" name="id_workshop" value="{{ workshop.id }}">
     {% else  %}
 
         <form action="{{ path('findTicketById') }}" id="findTicketById" class="form grid-33" role="form" method="post" enctype="multipart/form-data">
 
-            <p>{% trans %} ticket.flt.searchBy.id {% endtrans %}:</p>
+            <p>{{ 'ticket.flt.searchBy.id'|trans }}:</p>
             <div class="col-xs-8 col-md-8 form-group pdl0">
-                <input type='text' class="form-control" id='flt_id' name='flt_id' placeholder='{% trans %} id {% endtrans %}'>
+                <input type='text' class="form-control" id='flt_id' name='flt_id' placeholder='{{ 'id'|trans }}'>
             </div>
             <div class="col-xs-4 col-md-4 form-group pdl0">
                     <button type="submit" class="btn btn-primary" id="btn_search" name="btn_search">
-                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}">  {% trans %} btn.search {% endtrans %}</button>
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}">  {{ 'btn.search'|trans }}</button>
             </div>
         </form>
 
@@ -53,12 +53,12 @@
     {% endif %}
     {###  HISTORICO  ###}
     {% if is_granted('ROLE_ASSESSOR') %}
-        <p>{% trans %} ticket.history.check {% endtrans %}:</p>
+        <p>{{ 'ticket.history.check'|trans }}:</p>
         <div class="grid-33">
         {% if workshop.id is defined and workshop.id != "" %}
-            <button class="btn btn-primary" onclick="window.open('{{ path('list_incidences', { 'page' : 1, 'id_taller' : workshop.codeWorkshop, 'id_socio' : workshop.codePartner }) }}')"><img class="img_icon" src="{{ asset('bundles/util/images/icon/historico.png') }}"> {% trans %} lock.list_incidences {% endtrans %}</button>
+            <button class="btn btn-primary" onclick="window.open('{{ path('list_incidences', { 'page' : 1, 'id_taller' : workshop.codeWorkshop, 'id_socio' : workshop.codePartner }) }}')"><img class="img_icon" src="{{ asset('bundles/util/images/icon/historico.png') }}"> {{ 'lock.list_incidences'|trans }}</button>
         {% else %}
-            <button class="btn btn-primary" onclick="window.open('{{ path('list_incidences', { 'page' : 1, 'id_taller' : 'none', 'id_socio' : 'none' }) }}')"><img class="img_icon" src="{{ asset('bundles/util/images/icon/historico.png') }}"> {% trans %} lock.list_incidences {% endtrans %}</button>
+            <button class="btn btn-primary" onclick="window.open('{{ path('list_incidences', { 'page' : 1, 'id_taller' : 'none', 'id_socio' : 'none' }) }}')"><img class="img_icon" src="{{ asset('bundles/util/images/icon/historico.png') }}"> {{ 'lock.list_incidences'|trans }}</button>
         {% endif %}
         </div>
     {% endif %}

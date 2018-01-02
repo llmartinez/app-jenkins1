@@ -4,11 +4,11 @@ namespace Adservice\WorkshopBundle\Form;
 
 use Adservice\WorkshopBundle\Form\DiagnosisMachineType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class WorkshopType extends AbstractType
 {
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
         if (isset($_SESSION['id_partner'])) { $id_partner = $_SESSION['id_partner'];unset($_SESSION['id_partner']);} else { $id_partner = ' != 0';}
@@ -21,8 +21,8 @@ class WorkshopType extends AbstractType
             ->add('category_service', 'entity', array(
                   'required' => false,
                   'class' => 'Adservice\UserBundle\Entity\CategoryService',
-                  'property' => 'category_service',
-                  'empty_value' => '',
+                  'choice_label' => 'category_service',
+                  'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use($id_catserv) {
                                                 return $er->createQueryBuilder('cs')
                                                           ->orderBy('cs.category_service', 'ASC')
@@ -31,8 +31,8 @@ class WorkshopType extends AbstractType
             ->add('partner', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\PartnerBundle\Entity\Partner',
-                  'property' => 'name',
-                  'empty_value' => '',
+                  'choice_label' => 'name',
+                  'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use (/*$id_country,*/ $id_catserv) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
@@ -42,8 +42,8 @@ class WorkshopType extends AbstractType
             ->add('shop', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\PartnerBundle\Entity\Shop',
-                  'property' => 'name',
-                  'empty_value' => false,
+                  'choice_label' => 'name',
+                  'placeholder' => false,
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use (/*$id_country,*/ $id_catserv, $id_partner) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
@@ -54,8 +54,8 @@ class WorkshopType extends AbstractType
             ->add('typology', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\WorkshopBundle\Entity\Typology',
-                  'property' => 'name',
-                  'empty_value' => '',
+                  'choice_label' => 'name',
+                  'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use (/*$id_country,*/ $id_catserv) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
@@ -67,8 +67,8 @@ class WorkshopType extends AbstractType
                   'required' => false,
                   'multiple' => true,
                   'class' => 'Adservice\WorkshopBundle\Entity\DiagnosisMachine',
-                  'property' => 'name',
-                  'empty_value' => '',
+                  'choice_label' => 'name',
+                  'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use (/*$id_country,*/ $id_catserv) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
@@ -94,8 +94,8 @@ class WorkshopType extends AbstractType
             ->add('country', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
-                  'property' => 'country',
-                  'empty_value' => '',
+                  'choice_label' => 'country',
+                  'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er)  {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC'); }))
@@ -115,7 +115,7 @@ class WorkshopType extends AbstractType
         if (isset($_SESSION['code_billing'])) $builder->add('code_billing', 'text', array('required' => false));
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'adservice_workshopbundle_workshoptype';
     }

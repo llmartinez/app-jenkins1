@@ -2,8 +2,8 @@
 
 {% block breadcrumb %}
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
-      <li class="active">{% trans %} workshop_observation {% endtrans %}</li>
+      <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
+      <li class="active">{{ 'workshop_observation'|trans }}</li>
     </ol>
 {% endblock  %}
 
@@ -15,23 +15,22 @@
 
 {% block content %}
 
-    <form action="{{ path("workshop_observation", { 'id':workshop.id, 'id_ticket':id_ticket }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
-
+    {{ form_start(form, {'action': path("workshop_observation", { 'id':workshop.id, 'id_ticket':id_ticket })}) }}
         <div class="container">
 
-        <legend>{% trans %} workshop_observation {% endtrans %}</legend>
+        <legend>{{ 'workshop_observation'|trans }}</legend>
             <div class="col-xs-8 col-md-8 form-group">
-                {% if app.session.hasFlash('error') %}
-                    <p class="error">{{ app.session.getFlash('error') }}</p>
-                {% endif %}
+                {% for flashMessage in app.session.flashbag.get('error') %}
+                    <p class="error">{{ flashMessage }}</p>
+                {% endfor %}
 
                 {{ form_widget(form.observationAssessor, { 'attr': {'class': 'form-control', 'rows': '10'} }) }}
 
-                <button class="btn btn-primary pull-right" id="btn_create" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.send {% endtrans %}</button>
+                <button class="btn btn-primary pull-right" id="btn_create" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {{ 'btn.send'|trans }}</button>
 
                 {{ form_rest(form) }}
             </div>
         </div>
-    </form>
+    {{ form_end(form) }}
 
 {% endblock %}

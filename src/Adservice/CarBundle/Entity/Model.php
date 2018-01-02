@@ -29,7 +29,7 @@ class Model {
     /**
      * @var integer $brand
      *
-     * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Brand")
+     * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Brand", inversedBy="models")
      * @ORM\JoinColumn(name="marca", referencedColumnName="Marca")
      */
     private $brand;

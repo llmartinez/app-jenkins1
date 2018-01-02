@@ -24,7 +24,7 @@ class Post
     /**
      * @var string $ticket
      *
-     * @ORM\ManyToOne(targetEntity="\Adservice\TicketBundle\Entity\Ticket")
+     * @ORM\ManyToOne(targetEntity="\Adservice\TicketBundle\Entity\Ticket", inversedBy="posts")
      */
     private $ticket;
 

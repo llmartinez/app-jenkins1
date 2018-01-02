@@ -831,7 +831,7 @@ error: "Une erreur s’est produite"
 back_app:  "Revenir à l’application"
 
 termsConditions:	" "
-_termsConditions: 	"En utilisant l’application, vous acceptez les <a href="">termes et conditions</a> suivants."
+_termsConditions: 	"En utilisant l’application, vous acceptez les <a href=\"\">termes et conditions</a> suivants."
 footerText: 	 	"2014 © Grup Eina Digital · Centre d’Innovation et de Ressources"
 
 

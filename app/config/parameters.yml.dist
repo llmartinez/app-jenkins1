@@ -1,0 +1,51 @@
+parameters:
+    env: "dev"
+
+    database_driver: "pdo_mysql"
+    database_host: "localhost"
+    database_port: ""
+    database_name: "adserviceticketing"
+    database_user: "root"
+    database_password: "root"
+
+    database_old_driver: "pdo_mysql"
+    database_old_host: "localhost"
+    database_old_port: ""
+    database_old_name: "adservice"
+    database_old_user: "root"
+    database_old_password: "root"
+
+    database_lock_driver: "pdo_mysql"
+    database_lock_host: "localhost"
+    database_lock_port: ""
+    database_lock_name: "adservicehistorical"
+    database_lock_user: "root"
+    database_lock_password: "root"
+
+    mailer_transport: smtp
+    mailer_host: ""
+    mailer_user: ""
+    mailer_password: ""
+
+    locale: "es"
+    secret: "secret"
+    secret_iv: "secret_iv"
+    mail_db: ""
+    mail_report: ""
+    mail_test: ""
+    #mail_centralita_default: ""
+    mail_centralita_default: ""
+    mail_einatech: ""
+    mail_report_ad: ""
+    mail_top_fr: ""
+    mail_cati: ""
+    mail_ramon: ""
+    mail_admin_1: ""
+    mail_admin_2: ""
+
+    mail_noreply: ""
+    mail_info: ""
+    mail_support: ""
+
+    route_logo: "bundles/util/images/icon/logo"
+    route_logo_mail: "http://adserviceticketing.com/logo"

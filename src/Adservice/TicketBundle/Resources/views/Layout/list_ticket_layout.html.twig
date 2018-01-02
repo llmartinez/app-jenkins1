@@ -3,17 +3,17 @@
 {% block breadcrumb %}
 
     <ol class="breadcrumb" id="breadcrumb">
-      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
-      <li class="active">{% trans %} menu.list_tickets {% endtrans %}</li>
+      <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
+      <li class="active">{{ 'menu.list_tickets'|trans }}</li>
     </ol>
 
 {% endblock  %}
 
 {% block main %}
 
-{% if app.session.hasFlash('popup') %}
-     <p class="alert">{{ app.session.getFlash('popup')|nl2br }}</p>
-{% endif %}
+{% for flashMessage in app.session.flashbag.get('popup') %}
+     <p class="alert">{{ flashMessage|nl2br }}</p>
+{% endfor %}
 
 <div>
     {% if is_granted('ROLE_ASSESSOR') %}
@@ -25,16 +25,16 @@
         {% endif %}
 
     {% else %}
-        {% set workshop = app.security.getToken().getUser().getWorkshop() %}
+        {% set workshop = app.user.getWorkshop() %}
     {% endif %}
 
     {# BANNER ALERTA - Mantenimiento #}
-    {# <p class="alert" style="background-color:#DF0101">{% trans %} error.maintenance {% endtrans %}</p> #}
+    {# <p class="alert" style="background-color:#DF0101">{{ 'error.maintenance'|trans }}</p> #}
 
     {# Mostrar un acceso a VTS de clientes de Phone Eina #}
     {% if user_catserv is defined and user_catserv != '' %}
         <div id="ged_btns_min">
-            {% set user_catserv = app.security.getToken().getUser().getCategoryService() %}
+            {% set user_catserv = app.user.getCategoryService() %}
             {% if user_catserv.getDis() != null %} <input type="hidden" id="dis-url" value="{{ user_catserv.getDis() }}">{% endif %}
             {% if user_catserv.getVts() != null %} <input type="hidden" id="vts-url" value="{{ user_catserv.getVts() }}">{% endif %}
 
@@ -58,7 +58,7 @@
         {% if workshop is defined and workshop.id != "" %}  {% include 'TicketBundle:Ticket:list_ticket.html.twig'  %}
         {% else %}                                          {% include 'TicketBundle:Ticket:history_ticket.html.twig' %}  {% endif %}
     {% else %}
-        {% set workshop = app.security.getToken().getUser().getWorkshop() %}
+        {% set workshop = app.user.getWorkshop() %}
         {% include 'TicketBundle:Ticket:list_ticket.html.twig' %}
     {% endif %}
 

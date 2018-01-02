@@ -5,6 +5,7 @@ namespace Adservice\OrderBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Adservice\UtilBundle\Controller\UtilController as UtilController;
@@ -34,13 +35,13 @@ class WorkshopOrderController extends Controller {
      * @return type
      * @throws AccessDeniedException
      */
-    public function listWorkshopsAction($page=1 , $w_idpartner='0', $w_id='0', $country='0', $partner='0', $status='0', $term='0', $field='0') {
-        $security = $this->get('security.context');
-        $user     = $security->getToken()->getUser();
-        if ($security->isGranted('ROLE_COMMERCIAL') === false OR $user->getAllowList() == false) {
+    public function listWorkshopsAction(Request $request, $page=1 , $w_idpartner='0', $w_id='0', $country='0', $partner='0', $status='0', $term='0', $field='0') {
+
+        $user     = $this->getUser();
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_COMMERCIAL') === false OR $user->getAllowList() == false) {
             throw new AccessDeniedException();
         }
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $params   = array();
 
         if($user->getCategoryService() != null) {
@@ -66,13 +67,15 @@ class WorkshopOrderController extends Controller {
         }
         if ($country != '0') $params[] = array('country', ' = '.$country);
 
-        if($security->isGranted('ROLE_SUPER_AD') OR $security->isGranted('ROLE_TOP_AD')) {
+        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD') OR
+            $this->get('security.authorization_checker')->isGranted('ROLE_TOP_AD')) {
             if ($partner != '0') $params[] = array('partner', ' = '.$partner);
             // $params[] = array('country', ' = '.$user->getCountry()->getId());
         }
         else { $params[] = array('partner', ' = '.$user->getPartner()->getId()); }
 
-        if($security->isGranted('ROLE_COMMERCIAL') AND !$security->isGranted('ROLE_AD') AND $user->getShop() != null) {
+        if($this->get('security.authorization_checker')->isGranted('ROLE_COMMERCIAL') AND
+            !$this->get('security.authorization_checker')->isGranted('ROLE_AD') AND $user->getShop() != null) {
             $params[] = array('shop', ' = '.$user->getShop()->getId());
         }
 
@@ -90,7 +93,7 @@ class WorkshopOrderController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        if($security->isGranted('ROLE_SUPER_AD'))
+        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD'))
         {
             if($user->getCategoryService() != null)
             {
@@ -108,7 +111,7 @@ class WorkshopOrderController extends Controller {
 
         $numTickets = 0;
 
-        if($security->isGranted('ROLE_SUPER_AD')){
+        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')){
             if ($partner != '0'){
                 if($user->getCategoryService() != null) {
                     $numTickets = $em->getRepository("WorkshopBundle:Workshop")->getNumTicketsByCategoryServicePartner($user->getCategoryService()->getId(),
@@ -117,14 +120,14 @@ class WorkshopOrderController extends Controller {
                     $numTickets = $em->getRepository("WorkshopBundle:Workshop")->getNumTicketsByPartnerCountry($partner);
                 }
             }
-            elseif ($security->isGranted('ROLE_SUPER_AD'))
+            elseif ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD'))
                 if($user->getCategoryService() != null) {
                     $numTickets = $em->getRepository("WorkshopBundle:Workshop")->getNumTicketsByCategoryServicePartner($user->getCategoryService()->getId(), '');
                 }else{
                     $numTickets = $em->getRepository("WorkshopBundle:Workshop")->getNumTicketsByPartnerCountry('', $user->getCountry()->getId());
                 }
         }
-        elseif ($security->isGranted('ROLE_AD')){
+        elseif ($this->get('security.authorization_checker')->isGranted('ROLE_AD')){
             $numTickets = $em->getRepository("WorkshopBundle:Workshop")->getNumTicketsByPartnerId($user->getPartner()->getId());
         }
 
@@ -151,18 +154,18 @@ class WorkshopOrderController extends Controller {
      * @return type
      * @throws AccessDeniedException.
      */
-    public function newAction(){
-        $security = $this->get('security.context');
-        $user = $security->getToken()->getUser();
+    public function newAction(Request $request){
 
-        if ($security->isGranted('ROLE_COMMERCIAL') === false OR $user->getAllowOrder() == false)
+        $user = $this->getUser();
+
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_COMMERCIAL') === false OR $user->getAllowOrder() == false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
-        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+
 
         $workshopOrder = new WorkshopOrder();
-        if ($security->isGranted('ROLE_SUPER_AD')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
 
             if($request->request->get('partner') != null)
                 $id_partner = $request->request->get('partner');
@@ -188,10 +191,10 @@ class WorkshopOrderController extends Controller {
         if ($partner != null) $code = UtilController::getCodeWorkshopUnused($em, $partner->getCodePartner(), $workshopOrder->getCodeWorkshop()); /*OBTIENE EL PRIMER CODIGO DISPONIBLE*/
         else                  $code = 0;
 
-        $request = $this->getRequest();
+
 
         // Creamos variables de sesion para fitlrar los resultados del formulario
-        if ($security->isGranted('ROLE_SUPER_AD')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
@@ -199,7 +202,7 @@ class WorkshopOrderController extends Controller {
             $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
             $_SESSION['id_country'] = ' = '.$user->getCountry()->getId();
 
-        }elseif($security->isGranted('ROLE_AD')) {
+        }elseif($this->get('security.authorization_checker')->isGranted('ROLE_AD')) {
             $_SESSION['id_partner'] = ' = '.$partner->getId();
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }else {
@@ -218,7 +221,7 @@ class WorkshopOrderController extends Controller {
         $form    = $this->createForm(new WorkshopNewOrderType(), $workshopOrder);
 
         if ($request->getMethod() == 'POST') {
-            $form->bindRequest($request);
+            $form->handleRequest($request);
             // $id_partner = $request->request->get('partner');
             // $partner    = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
             if($workshopOrder->getRegion() == null){
@@ -322,7 +325,7 @@ class WorkshopOrderController extends Controller {
                         }
                     }
 
-                    if ($security->isGranted('ROLE_AD'))
+                    if ($this->get('security.authorization_checker')->isGranted('ROLE_AD'))
                         return $this->redirect($this->generateUrl('list_orders'));
                     else
                         return $this->redirect($this->generateUrl('list_orders', array('option' => 'preorder_pending')));
@@ -343,12 +346,12 @@ class WorkshopOrderController extends Controller {
                     else {
                         $flash = $this->get('translator')->trans('error.code_workshop.used').$code;
                     }
-                    $this->get('session')->setFlash('error', $flash);
+                    $this->get('session')->getFlashBag()->add('error', $flash);
                 }
             }else
                 {
                 $flash = $this->get('translator')->trans('error.bad_introduction');
-                $this->get('session')->setFlash('error', $flash);
+                $this->get('session')->getFlashBag()->add('error', $flash);
             }
 
         }
@@ -383,12 +386,11 @@ class WorkshopOrderController extends Controller {
      * @throws AccessDeniedException
      * @throws type
      */
-    public function editAction($id)
+    public function editAction(Request $request, $id)
     {
-        $security = $this->get('security.context');
-        $em = $this->getDoctrine()->getEntityManager();
-        $request = $this->getRequest();
-        $user = $security->getToken()->getUser();
+        $em = $this->getDoctrine()->getManager();
+
+        $user = $this->getUser();
 
         //miramos si es una "re-modificacion" (una modificacion ha sido rechazada y la volvemos a modificar para volver a enviar)
         $workshopOrder = $em->getRepository("OrderBundle:WorkshopOrder")->findOneBy(array('id_workshop' => $id,
@@ -409,10 +411,10 @@ class WorkshopOrderController extends Controller {
             }
         }
 
-        if (!$security->isGranted('ROLE_SUPERADMIN'))
+        if (!$this->get('security.authorization_checker')->isGranted('ROLE_SUPERADMIN'))
         {
             // SUPER_AD
-            if ($security->isGranted('ROLE_SUPER_AD'))
+            if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD'))
             {
                 //if($user->getCountry()->getId() != $workshopOrder->getCountry()->getId())
                 //throw new AccessDeniedException();
@@ -424,16 +426,18 @@ class WorkshopOrderController extends Controller {
             }
         }
         
-        if ((($security->isGranted('ROLE_AD') and $user->getCategoryService()->getId() == $workshopOrder->getCategoryService()->getId()) === false)
-        and (!$security->isGranted('ROLE_SUPER_AD'))) {
+        if ((($this->get('security.authorization_checker')->isGranted('ROLE_AD') and
+                    $user->getCategoryService()->getId() == $workshopOrder->getCategoryService()->getId()) === false)
+        and (!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD'))) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
 
-        if(!$security->isGranted('ROLE_SUPER_AD') AND $user->getPartner() != null AND $user->getPartner()->getCodePartner()!=$workshopOrder->getCodePartner())
+        if(!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD') AND
+            $user->getPartner() != null AND $user->getPartner()->getCodePartner()!=$workshopOrder->getCodePartner())
         {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
-        if ($security->isGranted('ROLE_SUPER_AD'))
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD'))
         {
             $id_partner = '0';
 
@@ -456,7 +460,7 @@ class WorkshopOrderController extends Controller {
         $partner = $workshop->getPartner();
 
         // Creamos variables de sesion para fitlrar los resultados del formulario
-        if ($security->isGranted('ROLE_SUPER_AD')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
@@ -491,7 +495,7 @@ class WorkshopOrderController extends Controller {
 
         if ($request->getMethod() == 'POST')
         {
-            $form->bindRequest($request);
+            $form->handleRequest($request);
 
             if( $request->request->has('workshopOrder_editOrder')['shop'])
             {
@@ -524,7 +528,7 @@ class WorkshopOrderController extends Controller {
                     and $workshopOrder->getCountry() != null and  $workshopOrder->getCity() != null
                     and $workshopOrder->getAddress() != null and $workshopOrder->getPostalCode() != null)
                 {
-                    $user = $security->getToken()->getUser();
+                    $user = $this->getUser();
 
                     //$workshopOrder = UtilController::newEntity($workshopOrder, $user);
                     $workshopOrder->setCreatedBy($workshop->getCreatedBy());
@@ -588,7 +592,7 @@ class WorkshopOrderController extends Controller {
                 }else
                 {
                     $flash = $this->get('translator')->trans('error.bad_introduction');
-                    $this->get('session')->setFlash('error', $flash);
+                    $this->get('session')->getFlashBag()->add('error', $flash);
                 }
 
                 return $this->redirect($this->generateUrl('list_orders'));
@@ -631,14 +635,13 @@ class WorkshopOrderController extends Controller {
      * @throws AccessDeniedException
      * @throws type
      */
-    public function changeStatusAction($id, $status, $workshop){
+    public function changeStatusAction(Request $request, $id, $status, $workshop){
 
-        $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_AD') === false)
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
-        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+
 
         //si veneimos de un estado "rejected" y queremos volver a activar/desactivar tenemos que eliminar la workshopOrder antigua
         //antes de crear la nueva (asi evitamos tener workshopsOrders duplicados)
@@ -648,7 +651,7 @@ class WorkshopOrderController extends Controller {
             $em->flush();
         }
 
-        $user = $security->getToken()->getUser();
+        $user = $this->getUser();
         $workshopOrder = $this->workshop_to_workshopOrder($workshop);
         $workshopOrder->setCreatedBy($workshop->getCreatedBy());
         $workshopOrder->setCreatedAt($workshop->getCreatedAt());
@@ -714,17 +717,18 @@ class WorkshopOrderController extends Controller {
      * @throws AccessDeniedException
      * @throws type
      */
-    public function rejectAction($workshopOrder){
-        if ($this->get('security.context')->isGranted('ROLE_AD') === false)
+    public function rejectAction(Request $request, $workshopOrder){
+
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
-        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+
 
         $form = $this->createForm(new WorkshopRejectOrderType(), $workshopOrder);
 
         if ($request->getMethod() == 'POST') {
-            $form->bindRequest($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
 
@@ -785,13 +789,13 @@ class WorkshopOrderController extends Controller {
      * @ParamConverter("workshopOrder", class="OrderBundle:WorkshopOrder")
      * @return type
      */
-    public function resendAction($workshopOrder){
+    public function resendAction(Request $request, $workshopOrder){
 
-        if ($this->get('security.context')->isGranted('ROLE_AD') === false)
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
-        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+
 
         //si veneimos de un estado "rejected" y queremos volver a solicitar tenemos que eliminar la workshopOrder antigua
         //antes de crear la nueva (asi evitamos tener workshopsOrders duplicados)
@@ -853,13 +857,13 @@ class WorkshopOrderController extends Controller {
      * @throws AccessDeniedException
      * @throws type
      */
-    public function removeAction($workshopOrder){
+    public function removeAction(Request $request, $workshopOrder){
 
-        if ($this->get('security.context')->isGranted('ROLE_COMMERCIAL') === false)
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_COMMERCIAL') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
-        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+
 
         $action = $workshopOrder->getWantedAction();
 
@@ -918,23 +922,22 @@ class WorkshopOrderController extends Controller {
      * @return type
      * @throws AccessDeniedException
      */
-    public function acceptAction($workshopOrder, $status)
+    public function acceptAction(Request $request, $workshopOrder, $status)
     {
-        $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_AD') === false)
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
-        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+
 
         // activate   + accepted = setActive a TRUE  and delete workshopOrder
         // deactivate + accepted = setActive a FALSE and delete workshopOrder
         // modify     + accepted = se hacen los cambios en workshop and delete del workshopOrder
         // create     + accepted = new workshop and delete workshopOrder
 
-        $user = $security->getToken()->getUser();
+        $user = $this->getUser();
         
-        $catser = $this->get('security.context')->getToken()->getUser()->getCategoryService();
+        $catser = $user->getCategoryService();
             if($catser != null)
                 $catserv = $catser->getId();
             else
@@ -978,7 +981,7 @@ class WorkshopOrderController extends Controller {
             $flash .=" ". $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getMobileNumber2();
         }
 
-        //  else $this->get('session')->setFlash('error', $flash);
+        //  else $this->get('session')->getFlashBag()->add('error', $flash);
 
         if (($workshopOrder->getWantedAction() == 'preorder')  && $status == 'accepted'){
 
@@ -1013,9 +1016,9 @@ class WorkshopOrderController extends Controller {
                 // }
 
                 $flash =  $this->get('translator')->trans('preorder').' '.$this->get('translator')->trans('action.accepted').': '.$this->get('translator')->trans('create').' '.$this->get('translator')->trans('new.order.workshop');
-                $this->get('session')->setFlash('alert', $flash);
+                $this->get('session')->getFlashBag()->add('alert', $flash);
             }
-            else $this->get('session')->setFlash('error', $flash);
+            else $this->get('session')->getFlashBag()->add('error', $flash);
         }
         elseif (( $workshopOrder->getWantedAction() == 'activate') && $status == 'accepted')
         {
@@ -1403,15 +1406,15 @@ class WorkshopOrderController extends Controller {
                                    
                 }
                 
-                if ($security->isGranted('ROLE_TOP_AD') and $catserv == 3){
+                if ($this->get('security.authorization_checker')->isGranted('ROLE_TOP_AD') and $catserv == 3){
                     $flash = $this->get('translator')->trans('create') . ' ' . $this->get('translator')->trans('workshop') . ': ' . $username;
                 }
                 else{
                     $flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('workshop').': '.$username.'  -  '.$this->get('translator')->trans('with_password').': '.$pass;
                 }
-                $this->get('session')->setFlash('alert', $flash);
+                $this->get('session')->getFlashBag()->add('alert', $flash);
             }
-            else $this->get('session')->setFlash('error', $flash);
+            else $this->get('session')->getFlashBag()->add('error', $flash);
         }
 
         if(($preorder == false) and ($find == null or $workshopOrder->getCodeWorkshop() != $find->getCodeWorkshop()))
@@ -1652,8 +1655,8 @@ class WorkshopOrderController extends Controller {
         return $ordersBefore;
     }
 
-    public function findCifAction($cif) {
-        $em = $this->getDoctrine()->getEntityManager();
+    public function findCifAction(Request $request, $cif) {
+        $em = $this->getDoctrine()->getManager();
         $workshop = $em->getRepository("WorkshopBundle:Workshop")->findOneByCif($cif);
         $find = false;
         if($workshop){
@@ -1668,7 +1671,7 @@ class WorkshopOrderController extends Controller {
      * @Route("/workshop/doPdfWorkshop/{id}")
      * @ParamConverter("workshop", class="WorkshopBundle:Workshop")
      */
-    public function doPdfWorkshopAction($workshop) {
+    public function doPdfWorkshopAction(Request $request, $workshop) {
 
         $trans = $this->get('translator');
         $filename = $trans->trans('workshop').'_'.$workshop->getCodePartner().'-'.$workshop->getCodeWorkshop();

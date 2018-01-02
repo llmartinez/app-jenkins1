@@ -29,7 +29,7 @@ class Version {
     /**
      * @var integer $marca
      *
-     * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Brand")
+     * @ORM\ManyToOne(targetEntity="Brand")
      * @ORM\JoinColumn(name="marca", referencedColumnName="Marca")
      */
     private $marca;
@@ -37,17 +37,15 @@ class Version {
     /**
      * @var integer $model
      *
-     * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Model")
+     * @ORM\ManyToOne(targetEntity="Model", inversedBy="version")
      * @ORM\JoinColumn(name="modelo", referencedColumnName="Modelo")
      */
     private $model;
-
 
     /**
      * @var string $motor
      *
      * @ORM\Column(name="Motor", type="string", length=255)
-     * @ORM\Id
      */
     private $motor;
 

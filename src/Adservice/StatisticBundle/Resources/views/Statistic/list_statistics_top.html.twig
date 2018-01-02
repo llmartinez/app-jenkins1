@@ -1,33 +1,33 @@
 {% extends '::layout.html.twig' %}
-{% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
-    {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+{% if app.user.getCategoryService().getId() is defined %}
+    {% set id_catserv = app.user.getCategoryService().getId() %}
 {% else %} 
     {% set id_catserv = '0' %}
 {% endif %}
 {% block body %}
 
-    {% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
-               {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+    {% if app.user.getCategoryService().getId() is defined %}
+               {% set id_catserv = app.user.getCategoryService().getId() %}
     {% else %} {% set id_catserv = '0' %}
     {% endif %}
 
     <ol class="breadcrumb">
-        <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
-        <li class="active"> {% trans %} menu.list_statistics {% endtrans %} </li>
+        <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
+        <li class="active"> {{ 'menu.list_statistics'|trans }} </li>
     </ol>
 
 <div>
 {# FILTROS GENERALES #}
     <div class="col-xs-12 col-md-12 form-group">
-        <legend>{% trans %} filter_general {% endtrans %}</legend>
+        <legend>{{ 'filter_general'|trans }}</legend>
 
         <input type="hidden" id="id_catserv" value="{{ id_catserv }}">
-        <input type="hidden" id="id_country" value="{{ app.security.getToken().getUser().getCountry().getId() }}">
+        <input type="hidden" id="id_country" value="{{ app.user.getCountry().getId() }}">
 
     {% if is_granted('ROLE_TOP_AD') %}
-        <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} partner {% endtrans %}</label>
+        <div class="col-xs-3 col-md-3 form-group"> <label> {{ 'partner'|trans }}</label>
             <select id="flt_partner" name="flt_partner" class='form-control'>
-                    <option value="0">{% trans %} all {% endtrans %}</option>
+                    <option value="0">{{ 'all'|trans }}</option>
                 {% for partner in partners %}
                     <option value="{{ partner.id }}">{{ partner }}</option>
                 {% endfor %}
@@ -35,15 +35,15 @@
         </div>
         <div class="col-xs-3 col-md-3 form-group">
             <table style="margin: 0 auto;">
-                <tr><td><label> {% trans %} date.start {% endtrans %} </label></td></tr>
+                <tr><td><label> {{ 'date.start'|trans }} </label></td></tr>
                 <tr><td>
-                    <input id="from_d" type="number" {% if from_d != '0'%} value="{{ from_d | date ('d')}}" {% endif %} placeholder="{% trans %} date.day {% endtrans %}"
+                    <input id="from_d" type="number" {% if from_d != '0'%} value="{{ from_d | date ('d')}}" {% endif %} placeholder="{{ 'date.day'|trans }}"
                                                                                                                         class='form-control'
                                                                                                                         style="min-width:60px;width:30%;float:left;">
-                    <input id="from_m" type="number" {% if from_m != '0'%} value="{{ from_m | date ('m')}}" {% endif %} placeholder="{% trans %} date.month {% endtrans %}"
+                    <input id="from_m" type="number" {% if from_m != '0'%} value="{{ from_m | date ('m')}}" {% endif %} placeholder="{{ 'date.month'|trans }}"
                                                                                                                         class='form-control'
                                                                                                                         style="min-width:60px;width:30%;float:left;">
-                    <input id="from_y" type="number" {% if from_y != '0'%} value="{{ from_y | date ('Y')}}" {% endif %} placeholder="{% trans %} date.year {% endtrans %}"
+                    <input id="from_y" type="number" {% if from_y != '0'%} value="{{ from_y | date ('Y')}}" {% endif %} placeholder="{{ 'date.year'|trans }}"
                                                                                                                         class='form-control'
                                                                                                                         style="min-width:75px;width:40%;float:left;">
                 </td>
@@ -51,26 +51,26 @@
         </div>
         <div class="col-xs-3 col-md-3 form-group">
             <table style="margin: 0 auto;">
-                <tr><td><label> {% trans %} date.end   {% endtrans %} </label></td></tr>
+                <tr><td><label> {{ 'date.end'|trans }} </label></td></tr>
                 <td>
-                    <input id="to_d" type="number" {% if to_d != '0'%}value="{{ to_d | date ('d')}}"{% endif %} placeholder="{% trans %} date.day {% endtrans %}"
+                    <input id="to_d" type="number" {% if to_d != '0'%}value="{{ to_d | date ('d')}}"{% endif %} placeholder="{{ 'date.day'|trans }}"
                                                                                                                 class='form-control'
                                                                                                                 style="min-width:60px;width:30%;float:left;">
-                    <input id="to_m" type="number" {% if to_m != '0'%}value="{{ to_m | date ('m')}}"{% endif %} placeholder="{% trans %} date.month {% endtrans %}"
+                    <input id="to_m" type="number" {% if to_m != '0'%}value="{{ to_m | date ('m')}}"{% endif %} placeholder="{{ 'date.month'|trans }}"
                                                                                                                 class='form-control'
                                                                                                                 style="min-width:60px;width:30%;float:left;">
-                    <input id="to_y" type="number" {% if to_y != '0'%}value="{{ to_y | date ('Y')}}"{% endif %} placeholder="{% trans %} date.year {% endtrans %}"
+                    <input id="to_y" type="number" {% if to_y != '0'%}value="{{ to_y | date ('Y')}}"{% endif %} placeholder="{{ 'date.year'|trans }}"
                                                                                                                 class='form-control'
                                                                                                                 style="min-width:75px;width:40%;float:left;">
                 </td></tr>
             </table>
         </div>
-        {# <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} raport {% endtrans %}</label>
+        {# <div class="col-xs-3 col-md-3 form-group"> <label> {{ 'raport'|trans }}</label>
             <select id="flt_raport" class='form-control'>
-                <option value="0" >{% trans %} any {% endtrans %}</option> #}
+                <option value="0" >{{ 'any'|trans }}</option> #}
 
                 {# TOP TEN de tickets de talleres por socio #}
-                {# <option value="ticketbyworkshopforpartner"    >{% trans %} ticketbyworkshopforpartner {% endtrans %}</option> #}
+                {# <option value="ticketbyworkshopforpartner"    >{{ 'ticketbyworkshopforpartner'|trans }}</option> #}
 
         {#    </select>
         </div > #}
@@ -78,45 +78,45 @@
 
 {# FILTROS DE TALLER #}
         <div class="col-xs-12 col-md-12 form-group">
-        {# <legend>{% trans %} filter_workshop {% endtrans %}</legend> #}
+        {# <legend>{{ 'filter_workshop'|trans }}</legend> #}
 
-            <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} code_zone {% endtrans %}</label>
-                <input type="text" id="code_zone" name="code_zone" class='form-control' placeholder="{% trans %} code_zone {% endtrans %}">
+            <div class="col-xs-3 col-md-3 form-group"> <label> {{ 'code_zone'|trans }}</label>
+                <input type="text" id="code_zone" name="code_zone" class='form-control' placeholder="{{ 'code_zone'|trans }}">
             </div>
             {% if id_catserv != 3 %}
-                <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} shop {% endtrans %}</label>
-                    <input type="hidden" id="lbl_all" value="{% trans %} all {% endtrans %}">
+                <div class="col-xs-3 col-md-3 form-group"> <label> {{ 'shop'|trans }}</label>
+                    <input type="hidden" id="lbl_all" value="{{ 'all'|trans }}">
                     <select id="flt_wks_shop" class='form-control'>
-                            <option value="0">{% trans %} all {% endtrans %}</option>
+                            <option value="0">{{ 'all'|trans }}</option>
                         {% for shop in shops %}
                             <option value="{{ shop.id }}">{{ shop }}</option>
                         {% endfor %}
                     </select>
                 </div>
             {% endif %}
-            <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} typology {% endtrans %}</label>
+            <div class="col-xs-3 col-md-3 form-group"> <label> {{ 'typology'|trans }}</label>
                 <select id="flt_wks_typology" class='form-control'>
-                        <option value="0">{% trans %} all {% endtrans %}</option>
+                        <option value="0">{{ 'all'|trans }}</option>
                     {% for typology in typologies %}
                         <option value="{{ typology.id }}">{{ typology }}</option>
                     {% endfor %}
                 </select>
             </div>
     {% endif %}
-            <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} status {% endtrans %}</label>
+            <div class="col-xs-3 col-md-3 form-group"> <label> {{ 'status'|trans }}</label>
                 <select id="flt_wks_status" class='form-control'>
-                    <option value="all"     >{% trans %} all      {% endtrans %}</option>
-                    <option value="active"  >{% trans %} active   {% endtrans %}</option>
-                    <option value="deactive">{% trans %} inactive {% endtrans %}</option>
-                    <option value="test"    >{% trans %} testing  {% endtrans %}</option>
-                    <option value="check"   >{% trans %} haschecks{% endtrans %}</option>
-                    <option value="infotech">{% trans %} infotech {% endtrans %}</option>
+                    <option value="all"     >{{ 'all'|trans }}</option>
+                    <option value="active"  >{{ 'active'|trans }}</option>
+                    <option value="deactive">{{ 'inactive'|trans }}</option>
+                    <option value="test"    >{{ 'testing'|trans }}</option>
+                    <option value="check"   >{{ 'haschecks'|trans }}</option>
+                    <option value="infotech">{{ 'infotech'|trans }}</option>
                     {# <option value="noticket">Without Tickets</option> #}
                  </select>
              </div>
             <div class="col-xs-9 col-md-9 form-group mt20">
                 <button class="btn btn-primary btn100" id="btn_raport_partner" style="margin-top: 4px;">
-                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/download.png') }}"> {% trans %} generate.workshop {% endtrans %}</button>
+                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/download.png') }}"> {{ 'generate.workshop'|trans }}</button>
             </div>
         </div>
     </div>

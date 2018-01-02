@@ -1,17 +1,17 @@
 {% if is_granted('ROLE_ASSESSOR') %}
 
-{# 	<legend>{% trans %} ticket.repeated {% endtrans %}</legend>
+{# 	<legend>{{ 'ticket.repeated'|trans }}</legend>
 
-	<input type="hidden" id="txt_repeated" value="{% trans %} ticket.similar.matching {% endtrans %}">
+	<input type="hidden" id="txt_repeated" value="{{ 'ticket.similar.matching'|trans }}">
 	<div id="tbl_repeated">
-		<p>{% trans %} ticket.repeated.matching {% endtrans %}</p>
+		<p>{{ 'ticket.repeated.matching'|trans }}</p>
 	</div> #}
 
-	<legend>{% trans %} ticket.similar {% endtrans %}</legend>
+	<legend>{{ 'ticket.similar'|trans }}</legend>
 
-	<input type="hidden" id="txt_similar" value="{% trans %} ticket.similar.matching {% endtrans %}">
+	<input type="hidden" id="txt_similar" value="{{ 'ticket.similar.matching'|trans }}">
 	<div id="tbl_similar">
-		<p>{% trans %} ticket.similar.matching {% endtrans %}</p>
+		<p>{{ 'ticket.similar.matching'|trans }}</p>
 	</div>
 
 {% endif %}

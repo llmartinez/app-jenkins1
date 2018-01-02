@@ -3,7 +3,7 @@
 namespace Adservice\PartnerBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -23,16 +23,15 @@ class ShopController extends Controller {
      * Listado de todas las tiendas de la bbdd
      * @throws AccessDeniedException
      */
-    public function listAction($page=1, $country='0', $catserv=0, $partner='0', $term='0', $field='0') {
+    public function listAction(Request $request, $page=1, $country='0', $catserv=0, $partner='0', $term='0', $field='0') {
 
-        $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_AD') === false) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_AD') === false) {
             throw new AccessDeniedException();
         }
-        if($user = $this->get('security.context')->getToken()->getUser()->getCategoryService() != null)
-             $catser = $user = $this->get('security.context')->getToken()->getUser()->getCategoryService()->getId();
+        if($user = $this->getUser()->getCategoryService() != null)
+             $catser = $user = $this->getUser()->getCategoryService()->getId();
         else $catser = '0';
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $params[] = array("name", " != '...' "); //Evita listar las tiendas por defecto de los socios (Tiendas con nombre '...')
 
         if ($term != '0' and $field != '0'){
@@ -50,12 +49,12 @@ class ShopController extends Controller {
                 $params[] = array($term, " LIKE '%".$field."%'");
             }
         }
-        if($security->isGranted('ROLE_SUPER_ADMIN')) {
+        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
             if ($catser != '0' && $catser != 'none') $params[] = array('category_service', ' = '.$catser);
             if ($partner != 'none' && $partner != '0' ) $params[] = array('partner', ' = '.$partner);
             if ($country != 'none' && $country != '0' ) $params[] = array('country', ' = '.$country);
         }
-        elseif( $security->isGranted('ROLE_ADMIN')){
+        elseif( $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')){
             if ($partner != 'none' && $partner != '0' ) $params[] = array('partner', ' = '.$partner);
             if ($country != 'none' && $country != '0' ) $params[] = array('country', ' = '.$country);
             $params[] = array('category_service', ' = '.$catser);
@@ -76,10 +75,10 @@ class ShopController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        if($security->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
+        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();
 
-        if($security->isGranted('ROLE_SUPER_ADMIN')) {
+        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
             if($catserv != 0) $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('category_service' => $catserv));
             else              $partners = $em->getRepository('PartnerBundle:Partner')->findAll();
         }
@@ -104,36 +103,36 @@ class ShopController extends Controller {
      * Crea una tienda en la bbdd
      * @throws AccessDeniedException
      */
-    public function newShopAction() {
-        $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_ADMIN') === false){
+    public function newShopAction(Request $request) {
+
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
-        $em      = $this->getDoctrine()->getEntityManager();
+        $em      = $this->getDoctrine()->getManager();
         $shop    = new Shop();
-        $request = $this->getRequest();
 
-        if ($security->isGranted('ROLE_SUPER_AD')) {
 
-            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
+
+            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $this->getUser()->getCountry()->getId(),
                                                                                     'active' => '1'));
         }
         else $partners = '0';
 
         // Creamos variables de sesion para fitlrar los resultados del formulario
-        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
 
            //$_SESSION['id_country'] = ' != 0 ';
             $_SESSION['id_catserv'] = ' != 0 ';
 
-        }elseif ($security->isGranted('ROLE_SUPER_AD')) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
 
             $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
-            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
-            $_SESSION['id_catserv'] = ' = '.$security->getToken()->getUser()->getCategoryService()->getId();
+            $_SESSION['id_country'] = ' = '.$this->getUser()->getCountry()->getId();
+            $_SESSION['id_catserv'] = ' = '.$this->getUser()->getCategoryService()->getId();
 
         }else {
             $_SESSION['id_partner'] = ' = '.$partner->getId();
@@ -144,13 +143,13 @@ class ShopController extends Controller {
 
         if ($request->getMethod() == 'POST') {
             
-            $form->bindRequest($request);
+            $form->handleRequest($request);
           
             if ($form->isValid()) {
                 if($shop->getCategoryService() == null){
-                    $shop->setCategoryService($security->getToken()->getUser()->getCategoryService());
+                    $shop->setCategoryService($this->getUser()->getCategoryService());
                 }
-                $user = $security->getToken()->getUser();
+                $user = $this->getUser();
                 $shop = UtilController::newEntity($shop, $user );
                 $shop = UtilController::settersContact($shop, $shop);
                 UtilController::saveEntity($em, $shop, $user);
@@ -158,12 +157,12 @@ class ShopController extends Controller {
                 return $this->redirect($this->generateUrl('shop_list'));
             }
         }
-        if ($security->isGranted('ROLE_SUPER_ADMIN')){
-            //$country = $security->getToken()->getUser()->getCountry()->getId();
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')){
+            //$country = $this->getUser()->getCountry()->getId();
             $catserv = null;
         }
         else{
-            $catserv = $security->getToken()->getUser()->getCategoryService();
+            $catserv = $this->getUser()->getCategoryService();
         }
         return $this->render('PartnerBundle:Shop:new_shop.html.twig', array('shop'      => $shop,
                                                                             'form_name' => $form->getName(),
@@ -178,34 +177,34 @@ class ShopController extends Controller {
      * Si la petición es GET  --> mostrar el formulario
      * Si la petición es POST --> save del formulario
      */
-    public function editShopAction($shop){
-        $security = $this->get('security.context');
-        if ((($security->isGranted('ROLE_ADMIN') and $security->getToken()->getUser()->getCountry()->getId() == $shop->getCountry()->getId()) === false)
-        and (!$security->isGranted('ROLE_SUPER_ADMIN'))) {
+    public function editShopAction(Request $request, $shop){
+
+        if ((($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') and
+                $this->getUser()->getCountry()->getId() == $shop->getCountry()->getId()) === false)
+        and (!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN'))) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
 
-        $em = $this->getDoctrine()->getEntityManager();
-        $petition = $this->getRequest();
-        if ($security->isGranted('ROLE_SUPER_AD')) {
+        $em = $this->getDoctrine()->getManager();
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
 
-            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
+            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $this->getUser()->getCountry()->getId(),
                                                                                     'active' => '1'));
         }
         else $partners = '0';
 
         // Creamos variables de sesion para fitlrar los resultados del formulario
-        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
 
             $_SESSION['id_country'] = ' != 0 ';
 
-        }elseif ($security->isGranted('ROLE_SUPER_AD')) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
 
             $_SESSION['id_partner'] = ' IN ('.$partner_ids.')';
-            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+            $_SESSION['id_country'] = ' = '.$this->getUser()->getCountry()->getId();
 
         }else {
             $_SESSION['id_partner'] = ' = '.$partner->getId();
@@ -216,13 +215,13 @@ class ShopController extends Controller {
         $actual_city   = $shop->getRegion();
         $actual_region = $shop->getCity();
 
-        if ($petition->getMethod() == 'POST') {
-            $form->bindRequest($petition);
+        if ($request->getMethod() == 'POST') {
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
 
                 $shop = UtilController::settersContact($shop, $shop, $actual_region, $actual_city);
-                UtilController::saveEntity($em, $shop, $security->getToken()->getUser());
+                UtilController::saveEntity($em, $shop, $this->getUser());
                 return $this->redirect($this->generateUrl('shop_list'));
             }
         }
@@ -240,12 +239,12 @@ class ShopController extends Controller {
      * @throws AccessDeniedException
      * @throws CreateNotFoundException
      */
-    public function deleteShopAction($shop){
+    public function deleteShopAction(Request $request, $shop){
 
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $em->remove($shop);
         $em->flush();
 

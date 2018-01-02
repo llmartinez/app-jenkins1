@@ -3,6 +3,7 @@ namespace Adservice\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\Request;
 
 use Adservice\UtilBundle\Entity\Pagination;
 use Adservice\UserBundle\Entity\CategoryService;
@@ -14,10 +15,10 @@ class CategoryController extends Controller
     /**
      * Devuelve la lista de categorias de servicio
      */
-    public function listCategoriesAction($page=1) {
-        $em = $this->getDoctrine()->getEntityManager();
-        $security = $this->get('security.context');
-        if (! $security->isGranted('ROLE_SUPER_ADMIN')) {
+    public function listCategoriesAction(Request $request, $page=1) {
+        $em = $this->getDoctrine()->getManager();
+
+        if (! $this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
              throw new AccessDeniedException();
         }
         $params[] = array();
@@ -37,22 +38,20 @@ class CategoryController extends Controller
     /**
      * Crear una nueva categoria de servicio
      */
-    public function newCategoryServiceAction() {
-        $security = $this->get('security.context');
-        if (! $security->isGranted('ROLE_SUPER_ADMIN')){
+    public function newCategoryServiceAction(Request $request) {
+
+        if (! $this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')){
             throw new AccessDeniedException();
         }
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $category = new CategoryService();
 
-        $petition = $this->getRequest();
-        
         // Creamos variables de sesion para fitlrar los resultados del formulario
         $form = $this->createForm(new CategoryServiceType(), $category);
 
-        if ($petition->getMethod() == 'POST') {
-            $form->bindRequest($petition);
+        if ($request->getMethod() == 'POST') {
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
                 $category->setSlug(str_replace(" ", "-", strtolower($category->getSlug())));
@@ -71,23 +70,21 @@ class CategoryController extends Controller
     /**
      * Crear una nueva categoria de servicio
      */
-    public function editCategoryServiceAction($id) {
-        $security = $this->get('security.context');
-        if (! $security->isGranted('ROLE_SUPER_ADMIN')){
+    public function editCategoryServiceAction(Request $request, $id) {
+
+        if (! $this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')){
             throw new AccessDeniedException();
         }
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $category = $em->getRepository("UserBundle:CategoryService")->find($id);
         if (!$category) throw $this->createNotFoundException('Categoría de servicio no encontrado en la BBDD');
 
-        $petition = $this->getRequest();
-        
         // Creamos variables de sesion para fitlrar los resultados del formulario
         $form = $this->createForm(new CategoryServiceType(), $category);
 
-        if ($petition->getMethod() == 'POST') {
-            $form->bindRequest($petition);
+        if ($request->getMethod() == 'POST') {
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
                 $category->setSlug(str_replace(" ", "-", strtolower($category->getSlug())));

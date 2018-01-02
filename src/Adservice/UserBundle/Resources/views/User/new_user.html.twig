@@ -1,8 +1,8 @@
 {% extends '::layout.html.twig' %}
 
 {% block body %}
-    {% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
-               {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+    {% if app.user.getCategoryService().getId() is defined %}
+               {% set id_catserv = app.user.getCategoryService().getId() %}
     {% else %} {% set id_catserv = '0' %}
     {% endif %}
     {% if id_catserv ==  3 %}
@@ -11,54 +11,53 @@
         {% set is_hidden = '' %}
     {% endif %}
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
       {% if is_granted('ROLE_ADMIN') %}
-        <li><a href="{{ path('user_list' ) }}">{% trans %} menu.list_users {% endtrans %}</a></li>
+        <li><a href="{{ path('user_list' ) }}">{{ 'menu.list_users'|trans }}</a></li>
       {% else %}
-        <li><a href="{{ path('user_partner_list' ) }}">{% trans %} menu.list_users {% endtrans %}</a></li>
+        <li><a href="{{ path('user_partner_list' ) }}">{{ 'menu.list_users'|trans }}</a></li>
       {% endif %}
 
-      <li class="active">{% trans %} new.user {% endtrans %}</li>
+      <li class="active">{{ 'new.user'|trans }}</li>
     </ol>
 
     {% if error_username is defined %}<p class="alert label-danger">{{ error_username }}</p>{% endif %}
 
-    <form action="{{ path('user_new',{ 'type':user_type}) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
-
+    {{ form_start(form, {'action': path('user_new',{ 'type':user_type})}) }}
         <div class="col-xs-12 col-md-12 form-group">
              <div class="col-xs-4 col-md-4 form-group">
-                <label>{% trans %} username {% endtrans %}</label> {{ form_widget(form.username, { 'attr': {'class': 'form-control', 'required': 'required', 'placeholder': 'name' | trans  } }) }}
+                <label>{{ 'username'|trans }}</label> {{ form_widget(form.username, { 'attr': {'class': 'form-control', 'required': 'required', 'placeholder': 'name' | trans  } }) }}
                 <div class="w25 fl">
-                        <label class="mt20">{% trans %} active {% endtrans %}</label> {{ form_widget(form.active, { 'attr': {'checked': 'checked'} }) }}
+                        <label class="mt20">{{ 'active'|trans }}</label> {{ form_widget(form.active, { 'attr': {'checked': 'checked'} }) }}
                 </div>
                 <div class="w25 fl">
                     {% if form.allow_list is defined %}
-                        <label class="mt20">{% trans %} allow_list {% endtrans %}</label> {{ form_widget(form.allow_list, { 'attr': {'checked': 'checked'} }) }}
+                        <label class="mt20">{{ 'allow_list'|trans }}</label> {{ form_widget(form.allow_list, { 'attr': {'checked': 'checked'} }) }}
                     {% endif %}
                 </div>
                 <div class="w25 fl">
                     {% if form.allow_create is defined %}
-                        <label class="mt20">{% trans %} allow_create {% endtrans %}</label> {{ form_widget(form.allow_create, { 'attr': {'checked': 'checked'} }) }}
+                        <label class="mt20">{{ 'allow_create'|trans }}</label> {{ form_widget(form.allow_create, { 'attr': {'checked': 'checked'} }) }}
                     {% endif %}
                 </div>
                 <div class="w25 fl">
                     {% if form.allow_order is defined %}
-                        <label class="mt20">{% trans %} allow_order {% endtrans %}</label> {{ form_widget(form.allow_order, { 'attr': {'checked': 'checked'} }) }}
+                        <label class="mt20">{{ 'allow_order'|trans }}</label> {{ form_widget(form.allow_order, { 'attr': {'checked': 'checked'} }) }}
                     {% endif %}
                 </div>
             </div>
              <div class="col-xs-4 col-md-4 form-group">
-                <input type="hidden" id="pass_field1" value="{% trans %} password {% endtrans %}">
-                <input type="hidden" id="pass_field2" value="{% trans %} repeat_password {% endtrans %}">
+                <input type="hidden" id="pass_field1" value="{{ 'password'|trans }}">
+                <input type="hidden" id="pass_field2" value="{{ 'repeat_password'|trans }}">
                 {{ form_widget(form.password, { 'attr': { 'required': 'required' } }) }}
             </div>
             {% if is_granted('ROLE_ADMIN') %}
                 {% if not is_granted('ROLE_SUPER_ADMIN') %}
                     <div class="col-xs-2 col-md-2 form-group">
                         {% if user_type == "assessor" %}
-                            <label> {% trans %} category_service {% endtrans %} </label>
+                            <label> {{ 'category_service'|trans }} </label>
                         {% else %}
-                            <label>{% trans %} category_service {% endtrans %} *</label>
+                            <label>{{ 'category_service'|trans }} *</label>
                         {% endif %}
                         <select  id="admin_assessor_type_category_service" name="admin_assessor_type_shoptype[category_service]" class="form-control">
                             <option value="0"></option>
@@ -66,12 +65,12 @@
                         </select>
                     </div>
                     <div class="col-xs-2 col-md-2 form-group" hidden>
-                        <label>{% trans %} category_service {% endtrans %} *</label> {{ form_widget(form.category_service, { 'attr': {'class': 'form-control'} }) }}
+                        <label>{{ 'category_service'|trans }} *</label> {{ form_widget(form.category_service, { 'attr': {'class': 'form-control'} }) }}
                     </div>
                 {% else %}
                     {% if form.category_service is defined %}
                         <div class="col-xs-2 col-md-2 form-group fl">
-                            <label>{% trans %} category_service {% endtrans %} *</label> {{ form_widget(form.category_service, { 'attr': {'class': 'form-control'} }) }}
+                            <label>{{ 'category_service'|trans }} *</label> {{ form_widget(form.category_service, { 'attr': {'class': 'form-control'} }) }}
                         </div>
                     {% endif %}
                 {% endif %}
@@ -81,45 +80,45 @@
             {% if form.partner is defined %}
              <div class="col-xs-2 col-md-2 form-group">
                 {% if user_type == "super_ad" %}
-                    <label>{% trans %} partner {% endtrans %}</label> {{ form_widget(form.partner, { 'attr': {'class': 'form-control' } }) }}
+                    <label>{{ 'partner'|trans }}</label> {{ form_widget(form.partner, { 'attr': {'class': 'form-control' } }) }}
                 {% else %}
-                    <label>{% trans %} partner {% endtrans %} *</label> {{ form_widget(form.partner, { 'attr': {'class': 'form-control' , 'required': 'required'} }) }}
+                    <label>{{ 'partner'|trans }} *</label> {{ form_widget(form.partner, { 'attr': {'class': 'form-control' , 'required': 'required'} }) }}
                 {% endif %}
             </div>
             {% endif %}
 
             {% if form.shop is defined and user_type == "commercial" %}
                  <div class="col-xs-2 col-md-2 form-group">
-                    <label>{% trans %} shop {% endtrans %}</label> {{ form_widget(form.shop, { 'attr': {'class': 'form-control'} }) }}
+                    <label>{{ 'shop'|trans }}</label> {{ form_widget(form.shop, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             {% endif %}
 
             {% if form.workshop is defined %} {# DEPRECATED #}
             <div class="col-xs-2 col-md-2 form-group">
-                <label>{% trans %} workshop {% endtrans %} *</label> {{ form_widget(form.workshop, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+                <label>{{ 'workshop'|trans }} *</label> {{ form_widget(form.workshop, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
             </div>
             {% endif %}
             <div class="col-xs-2 col-md-2 form-group">
 
                 {% if user_type == "assessor" %}
-                    <label> {% trans %} service_country {% endtrans %} *</label> {{ form_widget(form.country_service,  { 'attr': {'class': 'form-control'} }) }}
+                    <label> {{ 'service_country'|trans }} *</label> {{ form_widget(form.country_service,  { 'attr': {'class': 'form-control'} }) }}
                 {% endif %}
 
-                <label>{% trans %} language {% endtrans %} *</label>
+                <label>{{ 'language'|trans }} *</label>
                 {{ form_widget(form.language, { 'attr': {'class': 'form-control'} }) }}
 
                 {% if form.charge is defined %} {# DEPRECATED #}
-                <label>{% trans %} charge {% endtrans %} *</label> {{ form_widget(form.charge, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+                <label>{{ 'charge'|trans }} *</label> {{ form_widget(form.charge, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
                 {% endif %}
             </div>
         </div>
 
-        <legend>{% trans %} contact {% endtrans %}</legend>
+        <legend>{{ 'contact'|trans }}</legend>
 
         <div class="col-xs-12 col-md-12 form-group">
             <div class="col-xs-12 col-md-12 form-group">
                 <div class="col-xs-2 col-md-2 form-group">
-                    <label> {% trans %} contact         {% endtrans %} *</label> {{ form_widget(form.name,    { 'attr': {'class': 'form-control'} }) }}
+                    <label> {{ 'contact'|trans }} *</label> {{ form_widget(form.name,    { 'attr': {'class': 'form-control'} }) }}
                                                                                  {{ form_widget(form.surname, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             {% include 'UtilBundle:Default:contact_fields.html.twig' %}
@@ -127,12 +126,12 @@
             {{ form_rest(form) }}
 
                 <button class="btn btn-primary pull-right" id="confirm">
-                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}">{% trans %} btn.create {% endtrans %}
+                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}">{{ 'btn.create'|trans }}
                 </button>
                 <button class="btn btn-primary pull-right" id="btn_create" type="submit" style="display:none;"></button>
             </div>
         </div>
-    </form>
+    {{ form_end(form) }}
 
 {% endblock %}
 
@@ -150,12 +149,12 @@
             if(catserv != '') {
                 if(catserv != undefined){
                     event.preventDefault();
-                    confirm = window.confirm("{% trans %} btn.confirm_catservice {% endtrans %}: "
+                    confirm = window.confirm("{{ 'btn.confirm_catservice'|trans }}: "
                                             + $("select[id*='category_service'] option[value="+catserv+"]").text());
                 }else{
                     var catserv = $("#category_service_id").val();
                     event.preventDefault();
-                    confirm = window.confirm("{% trans %} btn.confirm_catservice {% endtrans %}: "+ catserv);
+                    confirm = window.confirm("{{ 'btn.confirm_catservice'|trans }}: "+ catserv);
                 }
             }
 

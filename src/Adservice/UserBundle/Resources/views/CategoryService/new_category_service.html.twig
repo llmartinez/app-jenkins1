@@ -3,39 +3,38 @@
 {% block body %}
 
     <ol class="breadcrumb">
-        <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
-        <li><a href="{{ path('category_service_list') }}">{% trans %} menu.list_categories {% endtrans %}</a></li>
-        <li class="active">{% trans %} new.category_service {% endtrans %}</li>
+        <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
+        <li><a href="{{ path('category_service_list') }}">{{ 'menu.list_categories'|trans }}</a></li>
+        <li class="active">{{ 'new.category_service'|trans }}</li>
     </ol>
 
-    <form action="{{ path("category_service_new") }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
-
+    {{ form_start(form, {'action': path("category_service_new")}) }}
         <div class="container">
-            <legend>{% trans %} category_service {% endtrans %}</legend>
+            <legend>{{ 'category_service'|trans }}</legend>
 
             <div class="col-xs-12 col-md-12 form-group">
-                {% if app.session.hasFlash('error') %}
-                    <p class="error">{{ app.session.getFlash('error') }}</p>
-                {% endif %}
+                {% for flashMessage in app.session.flashbag.get('error') %}
+                    <p class="error">{{ flashMessage }}</p>
+                {% endfor %}
             </div>
 
             <div class="col-xs-12 col-md-12 form-group">
                 <div class="col-xs-6 col-md-6 form-group">
-                    <label for="adservice_userbundle_categoryservicetype_category_service">{% trans %} category_service {% endtrans %}</label>
+                    <label for="adservice_userbundle_categoryservicetype_category_service">{{ 'category_service'|trans }}</label>
                     {{ form_widget(form.category_service, { 'attr': {'class': 'form-control'} }) }}
                 </div>
                 <div class="col-xs-6 col-md-6 form-group">
-                    <label for="adservice_userbundle_categoryservicetype_email">{% trans %} email {% endtrans %}</label>
+                    <label for="adservice_userbundle_categoryservicetype_email">{{ 'email'|trans }}</label>
                     {{ form_widget(form.email, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>
             <div class="col-xs-12 col-md-12 form-group">
                 <div class="col-xs-4 col-md-4 form-group">
-                    <label for="adservice_userbundle_categoryservicetype_dis">{% trans %} dis {% endtrans %}</label>
+                    <label for="adservice_userbundle_categoryservicetype_dis">{{ 'dis'|trans }}</label>
                     {{ form_widget(form.dis, { 'attr': {'class': 'form-control'} }) }}
                 </div>
                 <div class="col-xs-4 col-md-4 form-group">
-                    <label for="adservice_userbundle_categoryservicetype_vts">{% trans %} vts {% endtrans %}</label>
+                    <label for="adservice_userbundle_categoryservicetype_vts">{{ 'vts'|trans }}</label>
                     {{ form_widget(form.vts, { 'attr': {'class': 'form-control'} }) }}
                 </div>
                 <div class="col-xs-4 col-md-4 form-group">
@@ -45,8 +44,8 @@
             </div>
             {{ form_rest(form) }}
 
-            <button class="btn btn-primary pull-right" id="btn_create" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.send {% endtrans %}</button>
+            <button class="btn btn-primary pull-right" id="btn_create" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {{ 'btn.send'|trans }}</button>
         </div>
-    </form>
+    {{ form_end(form) }}
 
 {% endblock %}

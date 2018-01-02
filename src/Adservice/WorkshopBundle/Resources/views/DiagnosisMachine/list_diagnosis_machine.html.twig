@@ -6,30 +6,30 @@
     <input type="hidden" id="route" name="route" value="{{ route }}">
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
-      <li class="active">{% trans %} menu.list_diagnosis_machines {% endtrans %}</li>
+      <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
+      <li class="active">{{ 'menu.list_diagnosis_machines'|trans }}</li>
     </ol>
 
     <div style="width: 90%; margin-left: 5%;">
 
-        <legend>{% trans %} menu.list_diagnosis_machines {% endtrans %}
-            <a id="newDiagnosisMachine" href="{{ path('diagnosis_machine_edit') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {% trans %} new.diagnosis_machine {% endtrans %}</a></td>
+        <legend>{{ 'menu.list_diagnosis_machines'|trans }}
+            <a id="newDiagnosisMachine" href="{{ path('diagnosis_machine_edit') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {{ 'new.diagnosis_machine'|trans }}</a></td>
         </legend>
 
         {% if is_granted('ROLE_SUPER_ADMIN') %}
-         <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} category_service {% endtrans %} </label>
+         <div class="col-xs-3 col-md-3 form-group"> <label> {{ 'category_service'|trans }} </label>
             <select id="flt_catserv" class='form-control'>
                 {% if is_granted('ROLE_SUPER_ADMIN') %}
-                    <option value='0'>{% trans %} all {% endtrans %}</option>
+                    <option value='0'>{{ 'all'|trans }}</option>
                 {% endif %}
                 {% for _catserv in catservices %}
                     <option value="{{ _catserv.id }}">{{ _catserv }}</option>
                 {% endfor %}
         </select></div>
         {#
-        <div class="col-xs-3 col-md-3 form-group"> <label> {% trans %} country {% endtrans %} </label>
+        <div class="col-xs-3 col-md-3 form-group"> <label> {{ 'country'|trans }} </label>
             <select id="flt_country" class='form-control'>
-                    <option value="none">{% trans %} all {% endtrans %}</option>
+                    <option value="none">{{ 'all'|trans }}</option>
                 {% for country in countries %}
                     <option value="{{ country.id }}">{{ country | trans }}</option>
                 {% endfor %}

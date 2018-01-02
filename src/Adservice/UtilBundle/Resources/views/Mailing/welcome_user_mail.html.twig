@@ -9,7 +9,7 @@
         {% set url_logo = route_logo_mail ~ '.png' %}
         <img src="{{ asset(url_logo) }}" style="height: 60px;">
         <br>
-        Bienvenido a {% trans %} header.welcome {% endtrans %}
+        Bienvenido a {{ 'header.welcome'|trans }}
     </td></tr>
 </table>
 <table style="width: 100%;border: 0;color: #000000;font-family: Verdana, Geneva, sans-serif;font-size: 12px;margin-top: 50px;">
@@ -50,7 +50,7 @@
 </table>
 <table width="100%" border="0" cellspacing="5" cellpadding="0" style="background-color: #FFF;">
     <tr><td valign="bottom" align="center" style="font-size: 10px; color: #428bca; font-family: Verdana, Geneva, sans-serif;">
-        {% trans %} footerText {% endtrans %}
+        {{ 'footerText'|trans }}
     </td></tr>
 </table>
 </body>

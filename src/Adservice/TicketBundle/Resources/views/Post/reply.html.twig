@@ -5,7 +5,7 @@
     {# se define bloqued_by_assessor para no repetir la comprovacion if en el codigo  #}
         {# {% if ( is_granted('ROLE_ASSESSOR')
             and ticket.blockedBy is not null
-            and ticket.blockedBy == app.security.getToken().getUser()) %}
+            and ticket.blockedBy == app.user) %}
 
                 {% set bloqued_by_assessor = 0 %}
         {% else %}
@@ -17,17 +17,17 @@
     {# comprueba que el asesor tenga asignado el ticket o que el usuario sea el dueño del ticket #}
         {% if ( bloqued_by_assessor == 0 )
            or ( not is_granted('ROLE_ASSESSOR')
-                and app.security.getToken().getUser().getWorkshop() == ticket.workshop) %}
+                and app.user.getWorkshop() == ticket.workshop) %}
 
         {# formulario de respuesta de POST #}
 
-            <legend> {% trans %} reply {% endtrans %}:
+            <legend> {{ 'reply'|trans }}:
 
             {% if is_granted('ROLE_ASSESSOR') %}
                 <div class="col-xs-4 col-md-4 form-group pull-right prl0">
                     <select class="form-control pull-right" id="default_sentences">
-                        <option value="0">{% trans %} sentence.default {% endtrans %}</option>
-                        <option value="{% trans %} gas_table {% endtrans %}">{% trans %} insert_gas_table {% endtrans %}</option>
+                        <option value="0">{{ 'sentence.default'|trans }}</option>
+                        <option value="{{ 'gas_table'|trans }}">{{ 'insert_gas_table'|trans }}</option>
 
                         {% for sentence in sentences %}
                             <option value="{{sentence.name}}">{{ sentence.name|length > 25 ? sentence.name|slice(0, 25) ~ '...' : sentence.name }}</option>
@@ -37,7 +37,16 @@
             {% endif %}
             </legend>
 
-            <div class="error">{{ app.session.getFlash('error') }}<span>{{ app.session.getFlash('span' ) }}</span></div>
+            <div class="error">
+                {% for flashMessage in app.session.flashbag.get('error') %}
+                    {{ flashMessage }}
+                {% endfor %}
+                <span>
+                    {% for flashMessage in app.session.flashbag.get('span') %}
+                        {{ flashMessage }}
+                    {% endfor %}
+                </span>
+            </div>
 
             {% set today = "now"|date('l')  %}
              {% if (today != "Saturday" and today != "Sunday") or env == "demo"  %}
@@ -46,30 +55,31 @@
                     <div>{{ form_widget(formP.message, { 'attr': {'class': 'ac-message', 'rows': '6', 'placeholder': 'answer' | trans } }) }}</div>
 
                     {{ form_widget(formD.file, { 'attr': {'class': 'ac-message'} })  }}
-                    <label class="error" style="display: none;" id='alertFileSize'>{% trans %} error.file_size {% endtrans %}10Mb</label>
+                    <label class="error" style="display: none;" id='alertFileSize'>{{ 'error.file_size'|trans }}10Mb</label>
 
                     <button class="btn btn-primary pull-right btn100 sendTicket" name="sendTicket" type="submit">
-                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.send {% endtrans %}</button>
-                    {% if app.session.hasFlash('error') %}
-                    {% endif %}
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {{ 'btn.send'|trans }}</button>
+                    {% for flashMessage in app.session.flashbag.get('error') %}
+                        {{ flashMessage }}
+                    {% endfor %}
                     {{ form_rest(formP) }}
                     {{ form_rest(formD) }}
 
                     {#<a class="btn btn-primary pull-right btn100 closeTicket" href="{{ path('closeTicket', { 'id': ticket.id }) }}">
                         <img class="img_icon" src="{{ asset('bundles/util/images/icon/close_.png') }}">
-                        {% trans %} ticket.close {% endtrans %}</a>#}
+                        {{ 'ticket.close'|trans }}</a>#}
                      <button class="btn btn-primary pull-right btn100 closeTicket" name="closeTicket" type="submit">
-                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/close_.png') }}"> {% trans %} ticket.close {% endtrans %}</button>
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/close_.png') }}"> {{ 'ticket.close'|trans }}</button>
                 {% else %}
-                    {% trans %} reply_inactive {% endtrans %}
+                    {{ 'reply_inactive'|trans }}
                 {% endif %}
             {% else %}
-                <p class="alert">{% trans %} ticket.weekend_closed {% endtrans %}</p>
+                <p class="alert">{{ 'ticket.weekend_closed'|trans }}</p>
             {% endif %}
 
         {% endif %}
 
     {% else %}
-        <a class="btn btn-primary pull-right btn100" style="background-color:gray"> {% trans %} ticket.closed {% endtrans %} </a>
+        <a class="btn btn-primary pull-right btn100" style="background-color:gray"> {{ 'ticket.closed'|trans }} </a>
     {% endif %}
 </div>

@@ -4,6 +4,7 @@ namespace Adservice\OrderBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Adservice\UtilBundle\Controller\UtilController as UtilController;
@@ -29,25 +30,24 @@ class ShopOrderController extends Controller {
      * Listado de todas las tiendas de la bbdd
      * @throws AccessDeniedException
      */
-    public function listShopsAction($page=1, $partner='none') {
+    public function listShopsAction(Request $request, $page=1, $partner='none') {
 
-        $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_AD') === false) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_AD') === false) {
             throw new AccessDeniedException();
         }
-        $em   = $this->getDoctrine()->getEntityManager();
-        $user = $security->getToken()->getUser();
+        $em   = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
 
         $params[] = array("name", " != '...' "); //Evita listar las tiendas por defecto de los socios (Tiendas con nombre '...')
 
-        if($security->isGranted('ROLE_SUPER_AD')) {
-            $country = $security->getToken()->getUser()->getCountry();
+        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
+            $country = $user->getCountry();
             // $params[] = array('country', ' = '.$country->getId());
             if ($partner != 'none') $params[] = array('partner', ' = '.$partner);
         }
-        else $params[] = array('partner', ' = '.$security->getToken()->getUser()->getPartner()->getId());
+        else $params[] = array('partner', ' = '.$user->getPartner()->getId());
 
-        //$params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+        //$params[] = array('country', ' = '.$this->getUser()->getCountry()->getId());
 
         if($user->getCategoryService() != null) {
             $params[] = array('category_service', ' = '.$user->getCategoryService()->getId());
@@ -61,7 +61,7 @@ class ShopOrderController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        if($security->isGranted('ROLE_SUPER_AD') and $user->getCategoryService() != null)
+        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD') and $user->getCategoryService() != null)
         {
             $consulta = $em->createQuery("SELECT p FROM PartnerBundle:Partner p JOIN p.users u
                                           WHERE u.category_service = ".$user->getCategoryService()->getId()."
@@ -69,7 +69,7 @@ class ShopOrderController extends Controller {
 
             $partners = $consulta->getResult();
         }
-        // elseif($security->isGranted('ROLE_AD')) {
+        // elseif($this->get('security.authorization_checker')->isGranted('ROLE_AD')) {
         //     $country = $user->getCountry();
         //     $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('country'=>$country),array('name'=>'ASC'));
         // }
@@ -95,18 +95,17 @@ class ShopOrderController extends Controller {
      * @return type
      * @throws AccessDeniedException.
      */
-    public function newAction(){
-        $request = $this->getRequest();
-        $security = $this->get('security.context');
-        $user = $security->getToken()->getUser();
-        if ($security->isGranted('ROLE_AD') === false)
+    public function newAction(Request $request){
+
+        $user = $this->getUser();
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
-        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+
 
         $shopOrder = new ShopOrder();
-        if ($security->isGranted('ROLE_SUPER_AD')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
             $id_partner = '0';
             $params_partners['active'] = '1';
 
@@ -121,7 +120,7 @@ class ShopOrderController extends Controller {
         $partner = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
 
         // Creamos variables de sesion para fitlrar los resultados del formulario
-        if ($security->isGranted('ROLE_SUPER_AD')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
@@ -141,14 +140,14 @@ class ShopOrderController extends Controller {
 
         if ($request->getMethod() == 'POST') {
 
-            $form->bindRequest($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
                 $partner_id = $request->request->get('shopOrder_newOrder')['partner'];
                 $partner = $em->getRepository("PartnerBundle:Partner")->find($partner_id);
 
                 $shopOrder = UtilController::newEntity($shopOrder, $user);
-                if ($security->isGranted('ROLE_AD_COUNTRY') === false)
+                if ($this->get('security.authorization_checker')->isGranted('ROLE_AD_COUNTRY') === false)
 
                 $shopOrder->setPartner($partner);
                 $shopOrder->setCategoryService($user->getCategoryService());
@@ -209,11 +208,10 @@ class ShopOrderController extends Controller {
      * @return type
      * @throws AccessDeniedException
      */
-    public function editAction($id) {
-        $security = $this->get('security.context');
-        $user = $security->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
-        $request = $this->getRequest();
+    public function editAction(Request $request, $id) {
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+
 
         //miramos si es una "re-modificacion" (una modificacion ha sido rechazada y la volvemos a modificar para volver a enviar)
         $shopOrder = $em->getRepository("OrderBundle:ShopOrder")->findOneBy(array('id'     => $id,
@@ -228,13 +226,15 @@ class ShopOrderController extends Controller {
              $shopOrder = $this->shop_to_shopOrder($shop);
         }
 
-        if (($security->isGranted('ROLE_AD') and ($user->getPartner() != null and $user->getPartner()->getId() == $shopOrder->getPartner()->getId()) === false)
-        and ($security->isGranted('ROLE_SUPER_AD') and ($user->getCountry()->getId() == $shopOrder->getCountry()->getId()) === false)) {
+        if (($this->get('security.authorization_checker')->isGranted('ROLE_AD') and
+                ($user->getPartner() != null and $user->getPartner()->getId() == $shopOrder->getPartner()->getId()) === false)
+        and ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD') and
+                ($user->getCountry()->getId() == $shopOrder->getCountry()->getId()) === false)) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
 
         if (!$shopOrder) $shopOrder = new ShopOrder();
-        if ($security->isGranted('ROLE_SUPER_AD')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
             $id_partner = '0';
             $partners   = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $user->getCountry()->getId(),
                                                                                     'active' => '1'));
@@ -246,7 +246,7 @@ class ShopOrderController extends Controller {
         $partner = $em->getRepository("PartnerBundle:Partner")->find($id_partner);
 
         // Creamos variables de sesion para fitlrar los resultados del formulario
-        if ($security->isGranted('ROLE_SUPER_AD')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
             foreach ($partners as $p) { $partner_ids = $partner_ids.', '.$p->getId(); }
@@ -262,7 +262,7 @@ class ShopOrderController extends Controller {
         $form = $this->createForm(new ShopEditOrderType(), $shopOrder);
 
         if ($request->getMethod() == 'POST') {
-            $form->bindRequest($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
 
@@ -339,13 +339,13 @@ class ShopOrderController extends Controller {
      * @throws AccessDeniedException
      * @throws type
      */
-    public function changeStatusAction($id, $status, $shop){
-        $security = $this->get('security.context');
-        $request = $this->getRequest();
-        if ($security->isGranted('ROLE_AD') === false)
+    public function changeStatusAction(Request $request, $id, $status, $shop){
+
+
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         //si veneimos de un estado "rejected" y queremos volver a activar/desactivar tenemos que eliminar la shopOrder antigua
         //antes de crear la nueva (asi evitamos tener workshopsOrders duplicados)
@@ -355,7 +355,7 @@ class ShopOrderController extends Controller {
             $em->flush();
         }
 
-        $user = $security->getToken()->getUser();
+        $user = $this->getUser();
         $shopOrder = $this->shop_to_shopOrder($shop);
         $shopOrder = UtilController::newEntity($shopOrder, $user);
 
@@ -419,17 +419,17 @@ class ShopOrderController extends Controller {
      * @throws AccessDeniedException
      * @throws type
      */
-    public function rejectAction($shopOrder){
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false)
+    public function rejectAction(Request $request, $shopOrder){
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
-        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+
 
         $form = $this->createForm(new ShopRejectOrderType(), $shopOrder);
 
         if ($request->getMethod() == 'POST') {
-            $form->bindRequest($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
 
@@ -490,13 +490,13 @@ class ShopOrderController extends Controller {
      * @ParamConverter("shopOrder", class="OrderBundle:ShopOrder")
      * @return type
      */
-    public function resendOrderAction($shopOrder){
+    public function resendOrderAction(Request $request, $shopOrder){
 
-        if ($this->get('security.context')->isGranted('ROLE_AD') === false)
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
-        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+
 
         //si veneimos de un estado "rejected" y queremos volver a solicitar tenemos que eliminar la workshopOrder antigua
         //antes de crear la nueva (asi evitamos tener workshopsOrders duplicados)
@@ -558,13 +558,13 @@ class ShopOrderController extends Controller {
      * @throws AccessDeniedException
      * @throws type
      */
-    public function removeAction($shopOrder){
+    public function removeAction(Request $request, $shopOrder){
 
-        if ($this->get('security.context')->isGranted('ROLE_AD') === false)
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
-        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+
         $action = $shopOrder->getWantedAction();
 
         $mail = $shopOrder->getCreatedBy()->getEmail1();
@@ -622,18 +622,18 @@ class ShopOrderController extends Controller {
      * @throws AccessDeniedException
      * @throws type
      */
-    public function deleteAction($shop){
-        $security = $this->get('security.context');
-        $request = $this->getRequest();
-        if ($security->isGranted('ROLE_AD') === false)
+    public function deleteAction(Request $request, $shop){
+
+
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_AD') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $shopOrder = $this->shop_to_shopOrder($shop);
         $action = $shopOrder->setWantedAction('delete');
         $action = $shopOrder->setAction('delete');
 
-        UtilController::saveEntity($em, $shopOrder, $security->getToken()->getUser());
+        UtilController::saveEntity($em, $shopOrder, $this->getUser());
 
         $mail = $shopOrder->getCreatedBy()->getEmail1();
         $pos = strpos($mail, '@');
@@ -686,20 +686,19 @@ class ShopOrderController extends Controller {
      * @return type
      * @throws AccessDeniedException
      */
-    public function acceptAction($shopOrder, $status){
+    public function acceptAction(Request $request, $shopOrder, $status){
 
-        $security = $this->get('security.context');
-        $request = $this->getRequest();
-        if ($security->isGranted('ROLE_ADMIN') === false)
+
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         // activate   + accepted = setActive a TRUE  and delete shopOrder
         // deactivate + accepted = setActive a FALSE and delete shopOrder
         // modify     + accepted = se hacen los cambios en shop and delete del shopOrder
         // create     + accepted = new workshop and delete shopOrder
 
-        $user = $security->getToken()->getUser();
+        $user = $this->getUser();
 
         if (( $shopOrder->getWantedAction() == 'activate') && $status == 'accepted'){
             $shop = $em->getRepository('PartnerBundle:Shop')->findOneBy(array('id' => $shopOrder->getIdShop()));
@@ -775,7 +774,7 @@ class ShopOrderController extends Controller {
             $request->setLocale($locale);
         }
 
-        $user = $security->getToken()->getUser();
+        $user = $this->getUser();
         $shopOrders = $em->getRepository("OrderBundle:ShopOrder")->findAll();
         $ordersBefore = $this->getShopOrdersBefore($em, $shopOrders);
 

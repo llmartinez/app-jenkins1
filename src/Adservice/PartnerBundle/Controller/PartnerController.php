@@ -3,7 +3,8 @@
 namespace Adservice\PartnerBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Security\Core\SecurityContext;
+
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -23,13 +24,12 @@ class PartnerController extends Controller {
      * Listado de todos los socios de la bbdd
      * @throws AccessDeniedException
      */
-    public function listAction($page=1, $country='0', $catserv=0, $term='0', $field='0') {
+    public function listAction(Request $request, $page=1, $country='0', $catserv=0, $term='0', $field='0') {
 
-        $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_ADMIN') === false) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') === false) {
             throw new AccessDeniedException();
         }
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $params = array();
         if ($term != '0' and $field != '0'){
 
@@ -47,14 +47,14 @@ class PartnerController extends Controller {
             }
         }
         $cat_services = array();
-        if($security->isGranted('ROLE_SUPER_ADMIN')) {
+        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
 
             $cat_services = $em->getRepository("UserBundle:CategoryService")->findAll();
             if ($country != '0') $params[] = array('country', ' = '.$country);
         }
         else{
-             $cat_services[] =  $this->get('security.context')->getToken()->getUser()->getCategoryService();
-            $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+             $cat_services[] =  $this->getUser()->getCategoryService();
+            $params[] = array('country', ' = '.$this->getUser()->getCountry()->getId());
         }
         $pagination = new Pagination($page);
 
@@ -67,7 +67,7 @@ class PartnerController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        if($security->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
+        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();
 
         return $this->render('PartnerBundle:Partner:list_partners.html.twig', array('all_partners' => $partners,
@@ -84,37 +84,37 @@ class PartnerController extends Controller {
      * Crea un socio en la bbdd
      * @throws AccessDeniedException
      */
-    public function newPartnerAction() {
-        $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_TOP_AD') === false){
+    public function newPartnerAction(Request $request) {
+
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_TOP_AD') === false){
             throw new AccessDeniedException();
         }
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $partner = new Partner();
-        $request = $this->getRequest();
+
         $cat_services = array();
         // Creamos variables de sesion para fitlrar los resultados del formulario
-        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
             $cat_services = $em->getRepository("UserBundle:CategoryService")->findAll();
             $_SESSION['id_country'] = ' != 0 ';
 
-        }elseif ($security->isGranted('ROLE_SUPER_AD')) {
-            $cat_services[] =  $this->get('security.context')->getToken()->getUser()->getCategoryService();
-            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
+            $cat_services[] =  $this->getUser()->getCategoryService();
+            $_SESSION['id_country'] = ' = '.$this->getUser()->getCountry()->getId();
 
         }else {
-            $cat_services[] =  $this->get('security.context')->getToken()->getUser()->getCategoryService();
+            $cat_services[] =  $this->getUser()->getCategoryService();
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
 
-        if ($security->isGranted('ROLE_ADMIN')) $_SESSION['code_billing'] = 'code_billing';
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) $_SESSION['code_billing'] = 'code_billing';
         else unset($_SESSION['code_billing']);
 
         $form = $this->createForm(new PartnerType(), $partner);
 
         if ($request->getMethod() == 'POST') {
 
-            $form->bindRequest($request);
+            $form->handleRequest($request);
             $code = UtilController::getCodePartnerUnused($em);
 
             if ($form->isValid())
@@ -123,10 +123,10 @@ class PartnerController extends Controller {
                 //$find = $em->getRepository("PartnerBundle:Partner")->findOneBy(array('code_partner' => $partner->getCodePartner()));
                 //if($find == null)
                 //{
-                    $partner = UtilController::newEntity($partner, $security->getToken()->getUser());
+                    $partner = UtilController::newEntity($partner, $this->getUser());
                     $partner = UtilController::settersContact($partner, $partner);
 
-                    if ($security->isGranted('ROLE_TOP_AD'))
+                    if ($this->get('security.authorization_checker')->isGranted('ROLE_TOP_AD'))
                         $partner->setRegion('-');
 
                     /*CREAR USERNAME Y EVITAR REPETICIONES*/
@@ -141,7 +141,7 @@ class PartnerController extends Controller {
                     $id_catserv = $request->request->get('id_catserv');
                     $catserv = $em->getRepository('UserBundle:CategoryService')->find($id_catserv);
 
-                    $newUser = UtilController::newEntity(new User(), $security->getToken()->getUser());
+                    $newUser = UtilController::newEntity(new User(), $this->getUser());
                     $newUser->setUsername      ($username);
                     $newUser->setPassword      ($pass);
                     $newUser->setName          ($partner->getContact());
@@ -172,27 +172,28 @@ class PartnerController extends Controller {
                     $newUser->setPassword($password);
                     $newUser->setSalt($salt);
 
-                    UtilController::saveEntity($em, $partner, $security->getToken()->getUser());
-                    UtilController::saveEntity($em, $newUser, $this->get('security.context')->getToken()->getUser());
+                    UtilController::saveEntity($em, $partner, $this->getUser());
+                    UtilController::saveEntity($em, $newUser, $this->getUser());
 
                     $flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('partner').': '.$username.' '.$this->get('translator')->trans('with_password').': '.$pass;
-                    $this->get('session')->setFlash('alert', $flash);
+                    $this->get('session')->getFlashBag()->add('alert', $flash);
 
-                    if ($security->isGranted('ROLE_TOP_AD') and !$security->isGranted('ROLE_ADMIN'))
+                    if ($this->get('security.authorization_checker')->isGranted('ROLE_TOP_AD') &&
+                        !$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
                         return $this->redirect($this->generateUrl('user_partner_list', array('0','3','0','0','0')));
 
                     return $this->redirect($this->generateUrl('partner_list'));
                 //}
                 //else{
                 //    $flash = $this->get('translator')->trans('error.code_partner.used').$code;
-                //    $this->get('session')->setFlash('error', $flash);
+                //    $this->get('session')->getFlashBag()->add('error', $flash);
                 //}
             }
         }
         else{
             $partner->setCodePartner(UtilController::getCodePartnerUnused($em));
             $flash = $this->get('translator')->trans('error.first_number').$partner->getCodePartner();
-            $this->get('session')->setFlash('info', $flash);
+            $this->get('session')->getFlashBag()->add('info', $flash);
         }
 
         $regions      = $em->getRepository("UtilBundle:Region")->findBy(array('country' => '1'));
@@ -215,29 +216,29 @@ class PartnerController extends Controller {
      * @ParamConverter("partner", class="PartnerBundle:Partner")
      * @return type
      */
-    public function editPartnerAction($partner){
-        $security = $this->get('security.context');
-        if ((!$security->isGranted('ROLE_SUPER_ADMIN'))        and 
-            (($security->isGranted('ROLE_ADMIN') and $security->getToken()->getUser()->getCategoryService()->getId() == $partner->getCategoryService()->getId()) === false)) {
+    public function editPartnerAction(Request $request, $partner){
+
+        if ((!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) &&
+            (($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') &&
+            $this->getUser()->getCategoryService()->getId() == $partner->getCategoryService()->getId()) === false)) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
-        $petition = $this->getRequest();
         // Creamos variables de sesion para fitlrar los resultados del formulario
-        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
 
             $_SESSION['id_country'] = ' != 0 ';
 
-        }elseif ($security->isGranted('ROLE_SUPER_AD')) {
-            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
+            $_SESSION['id_country'] = ' = '.$this->getUser()->getCountry()->getId();
 
         }else {
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
 
-        if ($security->isGranted('ROLE_ADMIN')) $_SESSION['code_billing'] = 'code_billing';
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) $_SESSION['code_billing'] = 'code_billing';
         else unset($_SESSION['code_billing']);
         
         $form = $this->createForm(new PartnerType(), $partner);
@@ -245,10 +246,10 @@ class PartnerController extends Controller {
         $actual_city   = $partner->getRegion();
         $actual_region = $partner->getCity();
 
-        if ($petition->getMethod() == 'POST') {
+        if ($request->getMethod() == 'POST') {
 
             $last_code = $partner->getCodePartner();
-            $form->bindRequest($petition);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
 
@@ -257,7 +258,7 @@ class PartnerController extends Controller {
                 if($code != $partner->getCodePartner() and $last_code != $partner->getCodePartner())
                 {
                     $flash = $this->get('translator')->trans('error.code_partner.used').$code.' ('.$last_code.').';
-                    $this->get('session')->setFlash('error', $flash);
+                    $this->get('session')->getFlashBag()->add('error', $flash);
                 }
                 else{
                     $partner = UtilController::settersContact($partner, $partner, $actual_region, $actual_city);
@@ -266,9 +267,9 @@ class PartnerController extends Controller {
                         $user_partner = UtilController::saveUserFromWorkshop($partner,$user_partner);
                         $user_partner->setName($partner->getContact());
                         $user_partner->setActive($partner->getActive());
-                        UtilController::saveEntity($em, $user_partner, $this->get('security.context')->getToken()->getUser());
+                        UtilController::saveEntity($em, $user_partner, $this->getUser());
                     }
-                    UtilController::saveEntity($em, $partner, $this->get('security.context')->getToken()->getUser());
+                    UtilController::saveEntity($em, $partner, $this->getUser());
                     return $this->redirect($this->generateUrl('partner_list'));
                 }
             }
@@ -288,12 +289,12 @@ class PartnerController extends Controller {
      * @throws AccessDeniedException
      * @throws CreateNotFoundException
      */
-    public function deletePartnerAction($partner){
+    public function deletePartnerAction(Request $request, $partner){
 
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $em->remove($partner);
         $em->flush();
 
@@ -304,13 +305,12 @@ class PartnerController extends Controller {
      * Listado de todos los usuarios socios de la bbdd
      * @throws AccessDeniedException
      */
-    // public function userPartnerlistAction($page=1, $country='0', $term='0', $field='0') {
+    // public function userPartnerlistAction(Request $request, $page=1, $country='0', $term='0', $field='0') {
 
-    //     $security = $this->get('security.context');
-    //     if ($security->isGranted('ROLE_TOP_AD') === false) {
+    //     if ($this->get('security.authorization_checker')->isGranted('ROLE_TOP_AD') === false) {
     //         throw new AccessDeniedException();
     //     }
-    //     $em = $this->getDoctrine()->getEntityManager();
+    //     $em = $this->getDoctrine()->getManager();
     //     $params = array();
     //     if ($term != '0' and $field != '0'){
 
@@ -329,7 +329,7 @@ class PartnerController extends Controller {
     //         $params[] = array('country', ' = '.$country);
     //     }
     //     $params[] = array('partner', ' > 0 ');
-    //     $params[] = array('category_service', ' = '.$security->getToken()->getUser()->getCategoryService()->getId());
+    //     $params[] = array('category_service', ' = '.$this->getUser()->getCategoryService()->getId());
     //     $pagination = new Pagination($page);
 
 
@@ -355,13 +355,12 @@ class PartnerController extends Controller {
      * Listado de todos los usuarios socios de la bbdd
      * @throws AccessDeniedException
      */
-    // public function userSuperPartnerlistAction($page=1, $country='0', $term='0', $field='0') {
+    // public function userSuperPartnerlistAction(Request $request, $page=1, $country='0', $term='0', $field='0') {
 
-    //     $security = $this->get('security.context');
-    //     if ($security->isGranted('ROLE_TOP_AD') === false) {
+    //     if ($this->get('security.authorization_checker')->isGranted('ROLE_TOP_AD') === false) {
     //         throw new AccessDeniedException();
     //     }
-    //     $em = $this->getDoctrine()->getEntityManager();
+    //     $em = $this->getDoctrine()->getManager();
     //     $params = array();
     //     if ($term != '0' and $field != '0'){
 
@@ -379,7 +378,7 @@ class PartnerController extends Controller {
     //     if($country != '0'){
     //         $params[] = array('country', ' = '.$country);
     //     }
-    //     $params[] = array('category_service', ' = '.$security->getToken()->getUser()->getCategoryService()->getId());
+    //     $params[] = array('category_service', ' = '.$this->getUser()->getCategoryService()->getId());
     //     $pagination = new Pagination($page);
 
     //     $partners = $pagination->getRows($em, 'UserBundle', 'User', $params, $pagination);
@@ -408,8 +407,8 @@ class PartnerController extends Controller {
     //                                                                                 ));
     // }
 
-    public function activeDeactiveListAction($user_id, $permission, $page, $country, $option, $term, $field){
-        $em = $this->getDoctrine()->getEntityManager();
+    public function activeDeactiveListAction(Request $request, $user_id, $permission, $page, $country, $option, $term, $field){
+        $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository('UserBundle:User')->findOneById($user_id);
 
         if($user){
@@ -420,7 +419,7 @@ class PartnerController extends Controller {
             }
 
             $user->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
-            $user->setModifiedBy($this->get('security.context')->getToken()->getUser());
+            $user->setModifiedBy($this->getUser());
         }
         $em->persist($user);
         $em->flush();
