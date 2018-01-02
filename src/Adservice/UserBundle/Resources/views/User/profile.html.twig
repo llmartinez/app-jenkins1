@@ -21,6 +21,8 @@
     <img class="img_icon" src="{{ asset('bundles/util/images/icon/change_password.png') }}"> {% trans %} change_password {% endtrans %}</button>
     <input type="hidden" id="isNaN" value="{% trans %} isNaN {% endtrans %}">
     <input type="hidden" id="badpass" value="{% trans %} error.bad_password {% endtrans %}">
+    <input type="hidden" id="samepass" value="{{ 'error.same_password'|trans() }}">
+    <input type="hidden" id="forbiddenchars" value="{{ 'error.forbidden_password'|trans() }}">
 
     {# TODO: Solicitud de edición de datos #}
     {#
