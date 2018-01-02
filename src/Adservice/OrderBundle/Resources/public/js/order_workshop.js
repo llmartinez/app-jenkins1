@@ -87,7 +87,7 @@
             var text_error = $('#exist_cif').val();
              $.ajax({
                 type: "POST",
-                url: Routing.generate('search_cif', {'cif' : cif ,'_locale':'{{ app.session.locale }} ' }),
+                url: Routing.generate('search_cif', {'cif' : cif ,'_locale':'{{ app.request.locale }} ' }),
                 dataType: "json",
                 success: function (data) {
                     var find = JSON.parse(data);
@@ -112,7 +112,7 @@
             var text_error = $('#exist_cif').val();
              $.ajax({
                 type: "POST",
-                url: Routing.generate('search_cif', {'cif' : cif ,'_locale':'{{ app.session.locale }} ' }),
+                url: Routing.generate('search_cif', {'cif' : cif ,'_locale':'{{ app.request.locale }} ' }),
                 dataType: "json",
                 success: function (data) {
                     var find = JSON.parse(data);

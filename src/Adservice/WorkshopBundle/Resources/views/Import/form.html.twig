@@ -3,16 +3,16 @@
 {% block body %}
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
-      <li class="active">{% trans %} import {% endtrans %}</li>
+      <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
+      <li class="active">{{ 'import'|trans }}</li>
     </ol>
 
     <div style="width: 90%; margin-left: 5%;">
 
-        <legend>{% trans %} import {% endtrans %}</legend>
+        <legend>{{ 'import'|trans }}</legend>
 
         <div><p>
-            {% trans %} import {% endtrans %}:
+            {{ 'import'|trans }}:
                 Introduce un csv para importar talleres. Para que la importación se realice correctamente, los campos del fichero deben ser:<br>
                 - Codigo de Socio
                 - Tipologia
@@ -29,15 +29,14 @@
                 - email
         </p></div>
 
-        {% if app.session.hasFlash('error') %}
-            <p class="error">{{ app.session.getFlash('error') }}</p>
-        {% endif %}
+        {% for flashMessage in app.session.flashbag.get('error') %}
+            <p class="error">{{ flashMessage }}</p>
+        {% endfor %}
 
-        <form action="" method="post" {{ form_enctype(form) }}>
+        {{ form_start(form, {'action': ''}) }}
             {{ form_widget(form) }}
-
             <input type="submit" />
-        </form>
+        {{ form_end(form) }}
     </div>
 {% endblock %}
 

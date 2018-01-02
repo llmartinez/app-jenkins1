@@ -3,9 +3,9 @@
 {% block body %}
 
     <ol class="breadcrumb">
-        <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
-        {# <li><a href="{{ path('ticketWorkshopList') }}">{% trans %} menu.asign_user_to_ticket {% endtrans %}</a></li> #}
-        <li class="active">{% trans %} menu.asign_user_to_ticket {% endtrans %}</li>
+        <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
+        {# <li><a href="{{ path('ticketWorkshopList') }}">{{ 'menu.asign_user_to_ticket'|trans }}</a></li> #}
+        <li class="active">{{ 'menu.asign_user_to_ticket'|trans }}</li>
     </ol>
 
     {% if ticket|length > 0  %}
@@ -13,11 +13,11 @@
         <thead>
             <tr>
                 <th>#</th>
-                <th>{% trans %} description {% endtrans %}</th>
-                <th>{% trans %} created_by  {% endtrans %}</th>
-                <th>{% trans %} assigned    {% endtrans %}</th>
-                <th>{% trans %} assign_to   {% endtrans %}</th>
-                <th>{% trans %} action      {% endtrans %}</th>
+                <th>{{ 'description'|trans }}</th>
+                <th>{{ 'created_by'|trans }}</th>
+                <th>{{ 'assigned'|trans }}</th>
+                <th>{{ 'assign_to'|trans }}</th>
+                <th>{{ 'action'|trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -29,9 +29,9 @@
                     <td>{{ ticket.assignedTo  }}</td>
                     <td>
                         <select class="combobox btn-date" id="id_user" name="id_user">
-                            <option value="null">{% trans %} assign_not {% endtrans %}</option>
+                            <option value="null">{{ 'assign_not'|trans }}</option>
                             {% for user in users %}
-                                {% if is_granted('ROLE_SUPER_ADMIN') or user.country == app.security.getToken().getUser().getCountry() %} 
+                                {% if is_granted('ROLE_SUPER_ADMIN') or user.country == app.user.getCountry() %}
                                     {% if ticket.assignedTo == user %}
                                         <option selected="selected" value={{ user.id }} >{{ user }}</option>
                                     {% else %}
@@ -43,7 +43,7 @@
                     </td>
                     <td>
                         <input type="hidden" name="id_ticket" value={{ ticket.id }}>
-                        <button type="submit" class="btn btn-primary" id="submitAssingTickets"><img class="img_icon" src="{{ asset('bundles/util/images/icon/assign_.png') }}"> {% trans %} assign_to {% endtrans %}</button>
+                        <button type="submit" class="btn btn-primary" id="submitAssingTickets"><img class="img_icon" src="{{ asset('bundles/util/images/icon/assign_.png') }}"> {{ 'assign_to'|trans }}</button>
                     </td>
                 </tr>
             </form>
@@ -51,7 +51,7 @@
     </table>
 
     {% else %}
-        {% trans %} any.ticket {% endtrans %}
+        {{ 'any.ticket'|trans }}
     {% endif %}
 
 {% endblock %}

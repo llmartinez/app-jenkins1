@@ -3,11 +3,11 @@
 namespace Adservice\OrderBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class ShopNewOrderType extends AbstractType
 {
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
         if (isset($_SESSION['id_partner'])) { $id_partner = $_SESSION['id_partner'];unset($_SESSION['id_partner']);} else { $id_partner = ' != 0';}
@@ -20,8 +20,8 @@ class ShopNewOrderType extends AbstractType
             ->add('partner', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\PartnerBundle\Entity\Partner',
-                  'property' => 'name',
-                  'empty_value' => '',
+                  'choice_label' => 'name',
+                  'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_partner, $id_catserv) {
                                                 return $er->createQueryBuilder('s')
                                                           ->leftJoin('s.users ', 'u')
@@ -38,8 +38,8 @@ class ShopNewOrderType extends AbstractType
             ->add('country', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
-                  'property' => 'country',
-                  'empty_value' => '',
+                  'choice_label' => 'country',
+                  'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC')
@@ -58,7 +58,7 @@ class ShopNewOrderType extends AbstractType
         ;
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'shopOrder_newOrder';
     }

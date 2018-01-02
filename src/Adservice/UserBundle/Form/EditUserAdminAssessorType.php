@@ -3,13 +3,13 @@
 namespace Adservice\UserBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Security\Core\SecurityContext;
 
 class EditUserAdminAssessorType extends AbstractType {
 
 
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
@@ -23,7 +23,7 @@ class EditUserAdminAssessorType extends AbstractType {
             ->add('country', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
-                  'property' => 'country',
+                  'choice_label' => 'country',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC'); }))
@@ -44,7 +44,7 @@ class EditUserAdminAssessorType extends AbstractType {
         return $builder;
     }
 
-    public function getName() {
+    public function getBlockPrefix() {
 //        return 'adservice_userbundle_usertype';
         return 'admin_assessor_type';
     }

@@ -1,24 +1,24 @@
 {% extends '::layout.html.twig' %}
-{% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
-    {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+{% if app.user.getCategoryService().getId() is defined %}
+    {% set id_catserv = app.user.getCategoryService().getId() %}
 {% else %} 
     {% set id_catserv = '0' %}
 {% endif %}
 {% block body %}
     <ol class="breadcrumb">
-        <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
-        <li class="active"> {% trans %} menu.list_statistics {% endtrans %} </li>
+        <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
+        <li class="active"> {{ 'menu.list_statistics'|trans }} </li>
     </ol>
 
 <div>
 {# FILTROS GENERALES #}
     <div class="col-xs-5 col-md-5 form-group">
-        <legend>{% trans %} filter_general {% endtrans %}</legend>
+        <legend>{{ 'filter_general'|trans }}</legend>
         <div class="col-xs-12 col-md-12 form-group">
             <table style="margin: 0 auto;">
             <tr>
-                <td><label> {% trans %} date.start {% endtrans %} </label></td>
-                <td><label style="margin-left: 30px;"> {% trans %} date.end   {% endtrans %} </label></td>
+                <td><label> {{ 'date.start'|trans }} </label></td>
+                <td><label style="margin-left: 30px;"> {{ 'date.end'|trans }} </label></td>
             </tr>
             <tr><td>
                 <input id="from_d" type="number" {% if from_d != '0' %} value="{{ from_d | date ('d')}}" {% endif %} class='form-control w25 fl' style="padding: 5px 0 5px 5px;">
@@ -32,10 +32,10 @@
             </td></tr>
             </table>
         </div>
-        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} category_service {% endtrans %}</label>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {{ 'category_service'|trans }}</label>
            {% if is_granted('ROLE_SUPER_ADMIN') %}
                     <select id="flt_catserv" name="flt_category_service_statistics" class='form-control'>
-                    <option value="0">{% trans %} all {% endtrans %}</option>
+                    <option value="0">{{ 'all'|trans }}</option>
                         {% for catserv in catservices %}
                             <option value="{{ catserv.id }}">{{ catserv }}</option>
                         {% endfor %}
@@ -46,60 +46,60 @@
                         </select>
                 {% endif %}
         </div>
-        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} partner {% endtrans %}</label>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {{ 'partner'|trans }}</label>
             <select id="flt_partner" name="flt_partner" class='form-control'>
-                    <option value="0">{% trans %} all {% endtrans %}</option>
+                    <option value="0">{{ 'all'|trans }}</option>
                 {% for partner in partners %}
                     <option value="{{ partner.id }}">{{ partner }}</option>
                 {% endfor %}
             </select>
         </div>
         {% if is_granted('ROLE_SUPER_ADMIN') %}
-        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} country {% endtrans %}</label>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {{ 'country'|trans }}</label>
             <select id="flt_country" class='form-control'>
-                <option value="0">{% trans %} all {% endtrans %}</option>
+                <option value="0">{{ 'all'|trans }}</option>
                 {% for country in countries %}
                     <option value="{{ country.id }}">{{ country | trans }}</option>
                 {% endfor %}
             </select>
         </div>
         {% endif %}
-        <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} raport {% endtrans %}</label>
+        <div class="col-xs-6 col-md-6 form-group"> <label> {{ 'raport'|trans }}</label>
             <select id="flt_raport" class='form-control'>
 
-                <option value="0"                             >{% trans %} any                        {% endtrans %}</option>
+                <option value="0"                             >{{ 'any'|trans }}</option>
                 
                 {# Facturación ADService #}
-                <option value="billing"                       >{% trans %} billing                    {% endtrans %}</option>
+                <option value="billing"                       >{{ 'billing'|trans }}</option>
 
-                <option value="historical"                    >{% trans %} historical                 {% endtrans %}</option>
+                <option value="historical"                    >{{ 'historical'|trans }}</option>
 
                 {# Talleres sin tickets #}
-                <option value="no-ticket"                     >{% trans %} statistic.no_ticket        {% endtrans %}</option>
+                <option value="no-ticket"                     >{{ 'statistic.no_ticket'|trans }}</option>
 
                 {# Últimos tickets de los talleres #}
-                <option value="last-tickets"                  >{% trans %} statistic.last_tickets     {% endtrans %}</option>
+                <option value="last-tickets"                  >{{ 'statistic.last_tickets'|trans }}</option>
 
                 {# TOP TEN de talleres por socio #}
-                <option value="numworkshopbypartner"          >{% trans %} numworkshopbypartner       {% endtrans %}</option>
+                <option value="numworkshopbypartner"          >{{ 'numworkshopbypartner'|trans }}</option>
 
                 {# TOP TEN de tickets de talleres por socio #}
-                <option value="ticketbyworkshopforpartner"    >{% trans %} ticketbyworkshopforpartner {% endtrans %}</option>
+                <option value="ticketbyworkshopforpartner"    >{{ 'ticketbyworkshopforpartner'|trans }}</option>
 
                 {# TOP TEN de tickets por socio #}
-                <option value="numticketsbypartner"           >{% trans %} numticketsbypartner        {% endtrans %}</option>
+                <option value="numticketsbypartner"           >{{ 'numticketsbypartner'|trans }}</option>
 
                 {# TOP TEN de tickets por sistema/subsistema #}
-                <option value="numticketsbysystem"            >{% trans %} numticketsbysystem         {% endtrans %}</option>
+                <option value="numticketsbysystem"            >{{ 'numticketsbysystem'|trans }}</option>
 
                 {# TOP TEN de tickets por marca #}
-                <option value="numticketsbybrand"             >{% trans %} numticketsbybrand          {% endtrans %}</option>
+                <option value="numticketsbybrand"             >{{ 'numticketsbybrand'|trans }}</option>
 
                 {# TOP TEN de tickets por modelo #}
-                <option value="numticketsbymodel"             >{% trans %} numticketsbymodel          {% endtrans %}</option>
+                <option value="numticketsbymodel"             >{{ 'numticketsbymodel'|trans }}</option>
 
                 {# TOP TEN de tickets por año de fabricacion #}
-                <option value="numticketsbyfabyear"           >{% trans %} numticketsbyfabyear        {% endtrans %}</option>
+                <option value="numticketsbyfabyear"           >{{ 'numticketsbyfabyear'|trans }}</option>
              </select>
         </div>
     </div>
@@ -107,87 +107,87 @@
     <div class="col-xs-7 col-md-7 form-group">
 {# FILTROS DE TICKET #}
         <div class="col-xs-6 col-md-6 form-group">
-            <legend>{% trans %} filter_ticket {% endtrans %}</legend>
-            <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} workshop {% endtrans %}</label>
+            <legend>{{ 'filter_ticket'|trans }}</legend>
+            <div class="col-xs-6 col-md-6 form-group"> <label> {{ 'workshop'|trans }}</label>
                 <select id="flt_tck_workshop" class='form-control'>
-                        <option value="0">{% trans %} all {% endtrans %}</option>
+                        <option value="0">{{ 'all'|trans }}</option>
                      {% for workshop in workshops %}
                         <option value="{{ workshop.id }}">{{ workshop.codePartner }}-{{ workshop.codeWorkshop }}: {{ workshop.name|length > 15 ? workshop.name|slice(0, 15) ~ '...' : workshop.name  }}</option>
                     {% endfor %}
                 </select>
             </div>
-            <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} status {% endtrans %}</label>
+            <div class="col-xs-6 col-md-6 form-group"> <label> {{ 'status'|trans }}</label>
                 <select id="flt_tck_status" class='form-control'>
-                    <option value="0"         >{% trans %} all    {% endtrans %}</option>
-                    <option value="open"      >{% trans %} open   {% endtrans %}</option>
-                    <option value="closed"    >{% trans %} closed {% endtrans %}</option>
-                    <option value="inactive"  >{% trans %} inactive  {% endtrans %}</option>
-                    <option value="expirated" >{% trans %} expirated {% endtrans %}</option>
+                    <option value="0"         >{{ 'all'|trans }}</option>
+                    <option value="open"      >{{ 'open'|trans }}</option>
+                    <option value="closed"    >{{ 'closed'|trans }}</option>
+                    <option value="inactive"  >{{ 'inactive'|trans }}</option>
+                    <option value="expirated" >{{ 'expirated'|trans }}</option>
                  </select>
              </div>
-            <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} assessor {% endtrans %}</label>
+            <div class="col-xs-6 col-md-6 form-group"> <label> {{ 'assessor'|trans }}</label>
                 <select id="flt_tck_assessor" class='form-control'>
-                    <option value="0">{% trans %} all {% endtrans %}</option>
+                    <option value="0">{{ 'all'|trans }}</option>
                     {% for assessor in assessors %}
                         <option value="{{ assessor.id }}">{{ assessor.username }}</option>
                     {% endfor %}
                 </select>
             </div>
-            <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} created_by {% endtrans %}</label>
+            <div class="col-xs-6 col-md-6 form-group"> <label> {{ 'created_by'|trans }}</label>
                 <select id="flt_tck_created_by" class='form-control'>
-                    <option value="0">  {% trans %} all {% endtrans %}</option>
-                    <option value="tel">{% trans %} tel {% endtrans %}</option>
-                    <option value="app">{% trans %} ticket {% endtrans %}</option>
+                    <option value="0">  {{ 'all'|trans }}</option>
+                    <option value="tel">{{ 'tel'|trans }}</option>
+                    <option value="app">{{ 'ticket'|trans }}</option>
                 </select>
             </div>
             <div class="col-xs-12 col-md-12 form-group">
                 <button class="btn btn-primary btn100" id="btn_search_ticket" style="margin-top: 4px;">
-                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/download.png') }}"> {% trans %} generate.ticket {% endtrans %}</button>
+                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/download.png') }}"> {{ 'generate.ticket'|trans }}</button>
             </div>
         </div>
 
 {# FILTROS DE TALLER #}
         <div class="col-xs-6 col-md-6 form-group">
-        <legend>{% trans %} filter_workshop {% endtrans %}</legend>
+        <legend>{{ 'filter_workshop'|trans }}</legend>
             {% if id_catserv != 3 %}
-                <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} shop {% endtrans %}</label>
-                    <input type="hidden" id="lbl_all" value="{% trans %} all {% endtrans %}">
+                <div class="col-xs-6 col-md-6 form-group"> <label> {{ 'shop'|trans }}</label>
+                    <input type="hidden" id="lbl_all" value="{{ 'all'|trans }}">
                     <select id="flt_wks_shop" class='form-control'>
-                            <option value="0">{% trans %} all {% endtrans %}</option>
+                            <option value="0">{{ 'all'|trans }}</option>
                         {% for shop in shops %}
                             <option value="{{ shop.id }}">{{ shop }}</option>
                         {% endfor %}
                     </select>
                 </div>
             {% endif %}
-            <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} typology {% endtrans %}</label>
+            <div class="col-xs-6 col-md-6 form-group"> <label> {{ 'typology'|trans }}</label>
                 <select id="flt_wks_typology" class='form-control'>
-                        <option value="0">{% trans %} all {% endtrans %}</option>
+                        <option value="0">{{ 'all'|trans }}</option>
                     {% for typology in typologies %}
                         <option value="{{ typology.id }}">{{ typology }}</option>
                     {% endfor %}
                 </select>
             </div>
-            <div class="col-xs-6 col-md-6 form-group"> <label> {% trans %} status {% endtrans %}</label>
+            <div class="col-xs-6 col-md-6 form-group"> <label> {{ 'status'|trans }}</label>
                 <select id="flt_wks_status" class='form-control'>
-                    <option value="all"     >{% trans %} all      {% endtrans %}</option>
-                    <option value="active"  >{% trans %} active   {% endtrans %}</option>
-                    <option value="deactive">{% trans %} inactive {% endtrans %}</option>
-                    <option value="test"    >{% trans %} testing  {% endtrans %}</option>
-                    <option value="adsplus" >{% trans %} adsplus  {% endtrans %}</option>
-                    <option value="check"   >{% trans %} haschecks{% endtrans %}</option>
-                    <option value="infotech">{% trans %} infotech {% endtrans %}</option>
+                    <option value="all"     >{{ 'all'|trans }}</option>
+                    <option value="active"  >{{ 'active'|trans }}</option>
+                    <option value="deactive">{{ 'inactive'|trans }}</option>
+                    <option value="test"    >{{ 'testing'|trans }}</option>
+                    <option value="adsplus" >{{ 'adsplus'|trans }}</option>
+                    <option value="check"   >{{ 'haschecks'|trans }}</option>
+                    <option value="infotech">{{ 'infotech'|trans }}</option>
                     {# <option value="noticket">Without Tickets</option> #}
                  </select>
              </div>
             <div class="col-xs-12 col-md-12 form-group">
                 <button class="btn btn-primary btn100" id="btn_search_workshop" style="margin-top: 4px;">
-                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/download.png') }}"> {% trans %} generate.workshop {% endtrans %}</button>
+                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/download.png') }}"> {{ 'generate.workshop'|trans }}</button>
             </div>
             {% if is_granted('ROLE_SUPER_ADMIN') %}
                 <div class="col-xs-12 col-md-12 form-group">
                     <button class="btn btn-primary btn100" id="btn_search_partner" style="margin-top: 4px;">
-                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/download.png') }}"> {% trans %} generate.partner {% endtrans %}</button>
+                        <img class="img_icon" src="{{ asset('bundles/util/images/icon/download.png') }}"> {{ 'generate.partner'|trans }}</button>
                 </div>
             {% endif %}
         </div>
@@ -200,24 +200,24 @@
 
         {% if type == 'ticket' %}
 
-            <legend id="statistics_legend" data-type="ticket"> {% trans %} statistic.tickets  {% endtrans %}
-                {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
-                {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
+            <legend id="statistics_legend" data-type="ticket"> {{ 'statistic.tickets'|trans }}
+                {% if is_granted('ROLE_SUPER_ADMIN')  %} {{ 'statistic.from_adservice'|trans }}
+                {% else %}                               {{ 'statistic.from_country'|trans }}
                 {% endif %}
                 ({{ length }})
-                <img id="doExcel_ticket" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/export_excel.png') }}" title="{% trans %} statistics.download {% endtrans %}">
+                <img id="doExcel_ticket" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/export_excel.png') }}" title="{{ 'statistics.download'|trans }}">
             </legend>
 
             <table class="table table-hover table-list-search">
                 <thead>
                     <tr>
                         <th> #           </th>
-                        <th>{% trans %} car                {% endtrans %}</th>
-                        <th>{% trans %} ticket.assigned_to {% endtrans %}</th>
-                        <th>{% trans %} description        {% endtrans %}</th>
-                        <th>{% trans %} status             {% endtrans %}</th>
+                        <th>{{ 'car'|trans }}</th>
+                        <th>{{ 'ticket.assigned_to'|trans }}</th>
+                        <th>{{ 'description'|trans }}</th>
+                        <th>{{ 'status'|trans }}</th>
                         <th>                                             </th>
-                        <th>{% trans %} date               {% endtrans %}</th>
+                        <th>{{ 'date'|trans }}</th>
                     </tr>
                 </thead>
                 <tbody id="ticketBody">
@@ -228,7 +228,7 @@
                             <td>{{ ticket.assignedTo                }}</td>
                             <td title="{{ticket.description}}">   {{ ticket.description|length > 25 ? ticket.description|slice(0, 25) ~ '...' : ticket.description }}</td>
                             <td>{{ ticket.status | trans            }}</td>
-                            <td><a href="{{ path('showTicket', {'id': ticket.id}) }}" title="{% trans %} ticket.show {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_show.png') }}"></a></td>
+                            <td><a href="{{ path('showTicket', {'id': ticket.id}) }}" title="{{ 'ticket.show'|trans }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_show.png') }}"></a></td>
                             <td>{{ ticket.createdAt | date("d/m/y") }}</td>
                         </tr>
                     {% endfor %}
@@ -239,22 +239,22 @@
 
         {% elseif type == 'workshop' %}
 
-            <legend id="statistics_legend" data-type="workshops"> {% trans %} statistic.workshops {% endtrans %}
-                {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
-                {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
+            <legend id="statistics_legend" data-type="workshops"> {{ 'statistic.workshops'|trans }}
+                {% if is_granted('ROLE_SUPER_ADMIN')  %} {{ 'statistic.from_adservice'|trans }}
+                {% else %}                               {{ 'statistic.from_country'|trans }}
                 {% endif %}
                 ({{ length }})
-               <img id="doExcel_workshop" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/export_excel.png') }}" title="{% trans %} statistics.download {% endtrans %}">
+               <img id="doExcel_workshop" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/export_excel.png') }}" title="{{ 'statistics.download'|trans }}">
             </legend>
 
             <table class="table table-hover table-list-search">
                 <thead>
                     <tr>
-                        <th>{% trans %} code     {% endtrans %}</th>
-                        <th>{% trans %} workshop {% endtrans %}</th>
-                        <th>{% trans %} partner  {% endtrans %}</th>
-                        <th>{% trans %} email    {% endtrans %}</th>
-                        <th>{% trans %} tel      {% endtrans %}</th>
+                        <th>{{ 'code'|trans }}</th>
+                        <th>{{ 'workshop'|trans }}</th>
+                        <th>{{ 'partner'|trans }}</th>
+                        <th>{{ 'email'|trans }}</th>
+                        <th>{{ 'tel'|trans }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -262,7 +262,7 @@
                     <tr>
                         <td>{{ workshop.partner.codePartner }} - {{ workshop.codeWorkshop }}</td>
                         <td>{{ workshop.name|length > 15 ? workshop.name|slice(0, 15) ~ '...' : workshop.name  }}
-                            {% if workshop.active == false %}<span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}</td>
+                            {% if workshop.active == false %}<span class="label label-danger">{{ 'inactive'|trans }}</span>{% endif %}</td>
                         <td>{{ workshop.partner}}</td>
                         <td>{{ workshop.email1 }}</td>
                         <td>{{ workshop.phoneNumber1 }}</td>
@@ -275,24 +275,24 @@
 
         {% elseif type == 'no-ticket' %}
 
-            <legend> {% trans %} statistic.general {% endtrans %}
+            <legend> {{ 'statistic.general'|trans }}
 
-            {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
-            {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
+            {% if is_granted('ROLE_SUPER_ADMIN')  %} {{ 'statistic.from_adservice'|trans }}
+            {% else %}                               {{ 'statistic.from_country'|trans }}
             {% endif %}</legend>
 
-            <legend> {% trans %} statistic.no_ticket {% endtrans %} ({{ length }}) -- <button class="btn btn-primary" id="btn_search_last_ticket" >
-                <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"> {% trans %} statistic.last_tickets {% endtrans %}</button></a>
-                <img id="doExcel_no_ticket" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/export_excel.png') }}" title="{% trans %} statistics.download {% endtrans %}">
+            <legend> {{ 'statistic.no_ticket'|trans }} ({{ length }}) -- <button class="btn btn-primary" id="btn_search_last_ticket" >
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"> {{ 'statistic.last_tickets'|trans }}</button></a>
+                <img id="doExcel_no_ticket" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/export_excel.png') }}" title="{{ 'statistics.download'|trans }}">
             </legend>
 
             <table class="table table-hover table-list-search">
                 <thead>
                     <tr>
-                        <th>{% trans %} code       {% endtrans %}</th>
-                        <th>{% trans %} workshop   {% endtrans %}</th>
-                        <th>{% trans %} partner    {% endtrans %}</th>
-                        <th>{% trans %} created_at {% endtrans %}</th>
+                        <th>{{ 'code'|trans }}</th>
+                        <th>{{ 'workshop'|trans }}</th>
+                        <th>{{ 'partner'|trans }}</th>
+                        <th>{{ 'created_at'|trans }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -300,7 +300,7 @@
                     <tr>
                         <td>{{ workshop.partner.codePartner }} - {{ workshop.codeWorkshop }}</td>
                         <td>{{ workshop.name|length > 25 ? workshop.name|slice(0, 25) ~ '...' : workshop.name }}
-                            {% if workshop.active == false %}<span class="label label-danger">{% trans %}inactive{% endtrans %}</span>{% endif %}
+                            {% if workshop.active == false %}<span class="label label-danger">{{ 'inactive'|trans }}</span>{% endif %}
                         </td>
                         <td title="{{workshop.partner}}">
                             {{ workshop.partner|length > 25 ? workshop.partner|slice(0, 25) ~ '...' : workshop.partner }}
@@ -315,27 +315,27 @@
 
         {% elseif type == 'last-tickets' %}
 
-            <legend> {% trans %} statistic.general {% endtrans %}
+            <legend> {{ 'statistic.general'|trans }}
 
-            {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
-            {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
+            {% if is_granted('ROLE_SUPER_ADMIN')  %} {{ 'statistic.from_adservice'|trans }}
+            {% else %}                               {{ 'statistic.from_country'|trans }}
             {% endif %}</legend>
 
-            <legend> {% trans %} statistic.last_tickets {% endtrans %} ({{ length }}) -- <button class="btn btn-primary" id="btn_search_no_ticket" >
-                <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"> {% trans %} statistic.no_ticket {% endtrans %}</button></a>
-                <img id="doExcel_last_ticket" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/export_excel.png') }}" title="{% trans %} statistics.download {% endtrans %}">
+            <legend> {{ 'statistic.last_tickets'|trans }} ({{ length }}) -- <button class="btn btn-primary" id="btn_search_no_ticket" >
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"> {{ 'statistic.no_ticket'|trans }}</button></a>
+                <img id="doExcel_last_ticket" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/export_excel.png') }}" title="{{ 'statistics.download'|trans }}">
             </legend>
 
             <table class="table table-hover table-list-search">
                 <thead>
                     <tr>
-                        <th>{% trans %} code     {% endtrans %}</th>
-                        <th>{% trans %} workshop {% endtrans %}</th>
-                        <th>{% trans %} partner  {% endtrans %}</th>
-                        <th>{% trans %} ticket   {% endtrans %}</th>
-                        <th>{% trans %} status   {% endtrans %}</th>
+                        <th>{{ 'code'|trans }}</th>
+                        <th>{{ 'workshop'|trans }}</th>
+                        <th>{{ 'partner'|trans }}</th>
+                        <th>{{ 'ticket'|trans }}</th>
+                        <th>{{ 'status'|trans }}</th>
                         <th>                                   </th>
-                        <th>{% trans %} date     {% endtrans %}</th>
+                        <th>{{ 'date'|trans }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -343,14 +343,14 @@
                     <tr>
                         <td>{{ ticket.workshop.partner.codePartner }} - {{ ticket.workshop.codeWorkshop }}</td>
                         <td>{{ ticket.workshop.name|length > 25 ? ticket.workshop.name|slice(0, 25) ~ '...' : ticket.workshop.name }}
-                            {% if ticket.workshop.active == false %}<span class="label label-danger">{% trans %}inactive{% endtrans %}</span>{% endif %}
+                            {% if ticket.workshop.active == false %}<span class="label label-danger">{{ 'inactive'|trans }}</span>{% endif %}
                         </td>
                         <td title="{{ticket.workshop.partner}}">
                             {{ ticket.workshop.partner|length > 25 ? ticket.workshop.partner|slice(0, 25) ~ '...' : ticket.workshop.partner }}
                         </td>
                         <td title="{{ticket.description}}">   {{ ticket.description|length > 25 ? ticket.description|slice(0, 25) ~ '...' : ticket.description }}</td>
                         <td>{{ ticket.status | trans            }}</td>
-                        <td><a href="{{ path('showTicket', {'id': ticket.id}) }}" title="{% trans %} ticket.show {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_show.png') }}"></a></td>
+                        <td><a href="{{ path('showTicket', {'id': ticket.id}) }}" title="{{ 'ticket.show'|trans }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_show.png') }}"></a></td>
                         <td>{{ ticket.createdAt | date("d/m/y") }}</td>
                     </tr>
                         {% endfor %}
@@ -360,32 +360,32 @@
             <div class="col-xs-12 col-md-12 form-group">{% include 'UtilBundle:Pagination:pagination_statistic.html.twig' %}</div>
 
         {% else %}
-            <legend> {% trans %} statistic.general {% endtrans %}
+            <legend> {{ 'statistic.general'|trans }}
 
-            {% if is_granted('ROLE_SUPER_ADMIN')  %} {% trans %} statistic.from_adservice {% endtrans %}
-            {% else %}                               {% trans %} statistic.from_country   {% endtrans %}
+            {% if is_granted('ROLE_SUPER_ADMIN')  %} {{ 'statistic.from_adservice'|trans }}
+            {% else %}                               {{ 'statistic.from_country'|trans }}
             {% endif %}</legend>
 
             <div class="col-xs-12 col-md-12 form-group">
-                <div class="col-xs-3 col-md-3 form-group"> <label>{% trans %} statistic.num_users          {% endtrans %}</label></div>
+                <div class="col-xs-3 col-md-3 form-group"> <label>{{ 'statistic.num_users'|trans }}</label></div>
                 <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumUsers         }}            </div>
-                <div class="col-xs-3 col-md-3 form-group"> <label>{% trans %} statistic.num_workshops      {% endtrans %}</label></div>
+                <div class="col-xs-3 col-md-3 form-group"> <label>{{ 'statistic.num_workshops'|trans }}</label></div>
                 <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumWorkshops     }}            </div>
-                <div class="col-xs-3 col-md-3 form-group"> <label>{% trans %} statistic.num_tickets        {% endtrans %}</label></div>
+                <div class="col-xs-3 col-md-3 form-group"> <label>{{ 'statistic.num_tickets'|trans }}</label></div>
                 <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumTickets       }}            </div>
 
-                <div class="col-xs-3 col-md-3 form-group"> <label>{% trans %} statistic.num_partners       {% endtrans %}</label></div>
+                <div class="col-xs-3 col-md-3 form-group"> <label>{{ 'statistic.num_partners'|trans }}</label></div>
                 <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumPartners      }}            </div>
-                <div class="col-xs-3 col-md-3 form-group"> <label>{% trans %} statistic.num_tickets.open   {% endtrans %}</label></div>
+                <div class="col-xs-3 col-md-3 form-group"> <label>{{ 'statistic.num_tickets.open'|trans }}</label></div>
                 <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumOpenTickets   }}            </div>
-                <div class="col-xs-3 col-md-3 form-group"> <label>{% trans %} statistic.num_tickets_tel {% endtrans %}</label></div>
+                <div class="col-xs-3 col-md-3 form-group"> <label>{{ 'statistic.num_tickets_tel'|trans }}</label></div>
                 <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumTicketsTel    }}            </div>
 
-                <div class="col-xs-3 col-md-3 form-group"> <label>{% trans %} statistic.num_shops          {% endtrans %}</label></div>
+                <div class="col-xs-3 col-md-3 form-group"> <label>{{ 'statistic.num_shops'|trans }}</label></div>
                 <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumShops         }}            </div>
-                <div class="col-xs-3 col-md-3 form-group"> <label>{% trans %} statistic.num_tickets.closed {% endtrans %}</label></div>
+                <div class="col-xs-3 col-md-3 form-group"> <label>{{ 'statistic.num_tickets.closed'|trans }}</label></div>
                 <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumClosedTickets }}            </div>
-                <div class="col-xs-3 col-md-3 form-group"> <label>{% trans %} statistic.num_tickets_app    {% endtrans %}</label></div>
+                <div class="col-xs-3 col-md-3 form-group"> <label>{{ 'statistic.num_tickets_app'|trans }}</label></div>
                 <div class="col-xs-1 col-md-1 form-group">                 {{ statistic.getNumTicketsApp    }}            </div>
             </div>
         {% endif %}

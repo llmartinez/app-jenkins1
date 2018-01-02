@@ -3,36 +3,35 @@
 {% block body %}
 
     <ol class="breadcrumb">
-        <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
-        <li><a href="{{ path('typology_list') }}">{% trans %} menu.list_typologies {% endtrans %}</a></li>
-        <li class="active">{% if typology.name != '' %}{% trans %} edit.typology {% endtrans %} ({{ typology.name|length > 15 ? typology.name|slice(0, 15) ~ '...' : typology.name  }})
-                           {% else                   %}{% trans %} new.typology  {% endtrans %} {% endif %}</li>
+        <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
+        <li><a href="{{ path('typology_list') }}">{{ 'menu.list_typologies'|trans }}</a></li>
+        <li class="active">{% if typology.name != '' %}{{ 'edit.typology'|trans }} ({{ typology.name|length > 15 ? typology.name|slice(0, 15) ~ '...' : typology.name  }})
+                           {% else                   %}{{ 'new.typology'|trans }} {% endif %}</li>
     </ol>
 
-    <form action="{{ path("typology_edit", { 'id':typology.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
-
+    {{ form_start(form, {'action': path("typology_edit", { 'id':typology.id })}) }}
         <div class="container">
-            <legend>{% trans %} typology {% endtrans %}</legend>
+            <legend>{{ 'typology'|trans }}</legend>
 
             <div class="col-xs-12 col-md-12 form-group">
-                {% if app.session.hasFlash('error') %}
-                    <p class="error">{{ app.session.getFlash('error') }}</p>
-                {% endif %}
+                {% for flashMessage in app.session.flashbag.get('error') %}
+                    <p class="error">{{ flashMessage }}</p>
+                {% endfor %}
             </div>
 
             <div class="grid w30 fl">
-                <label for="adservice_workshopbundle_typologytype_name">{% trans %} name {% endtrans %} *</label>
+                <label for="adservice_workshopbundle_typologytype_name">{{ 'name'|trans }} *</label>
                     {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'name' | trans } }) }}
             </div>
 
            {# <div class="grid w15 fl">
-                <label for="adservice_workshopbundle_typologytype_country">{% trans %} country {% endtrans %} *</label>
+                <label for="adservice_workshopbundle_typologytype_country">{{ 'country'|trans }} *</label>
                 {{ form_widget(form.country, { 'attr': {'class': 'form-control'} }) }}
             </div>#}
 
             {% if form.category_service is defined %}
              <div class="grid w15 fl">
-                <label>{% trans %} category_service {% endtrans %} *</label> 
+                <label>{{ 'category_service'|trans }} *</label>
                 
                 
                 
@@ -51,14 +50,14 @@
             {% endif %}
 
             <div class="grid w15 fl">
-                <label for="adservice_workshopbundle_typologytype_active">{% trans %} active {% endtrans %}</label>
+                <label for="adservice_workshopbundle_typologytype_active">{{ 'active'|trans }}</label>
                 {{ form_widget(form.active) }}
             </div>
 
             {{ form_rest(form) }}
 
-            <button class="btn btn-primary pull-right" id="btn_create" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.send {% endtrans %}</button>
+            <button class="btn btn-primary pull-right" id="btn_create" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {{ 'btn.send'|trans }}</button>
         </div>
-    </form>
+    {{ form_end(form) }}
 
 {% endblock %}

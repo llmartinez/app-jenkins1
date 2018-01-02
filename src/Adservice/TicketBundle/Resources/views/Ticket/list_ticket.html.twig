@@ -1,5 +1,5 @@
 
-    <legend class="grid w85" style="clear: both;"> {% trans %} ticket.title.from_workshop {% endtrans %}</legend>
+    <legend class="grid w85" style="clear: both;"> {{ 'ticket.title.from_workshop'|trans }}</legend>
 
         <input type="hidden" id='slct_historyTickets' value={{ option }}>
 
@@ -9,14 +9,14 @@
             <thead>
                 <tr>
                     <th> #                                           </th>
-                    <th>{% trans %} status             {% endtrans %}</th>
+                    <th>{{ 'status'|trans }}</th>
 
-                    {% if is_granted('ROLE_ASSESSOR') %} <th>{% trans %} ticket.assigned_to {% endtrans %}</th> {% endif %}
+                    {% if is_granted('ROLE_ASSESSOR') %} <th>{{ 'ticket.assigned_to'|trans }}</th> {% endif %}
 
-                    <th>{% trans %} car                {% endtrans %}</th>
-                    <th>{% trans %} description        {% endtrans %}</th>
+                    <th>{{ 'car'|trans }}</th>
+                    <th>{{ 'description'|trans }}</th>
                     <th></th>
-                    <th>{% trans %} date               {% endtrans %}</th>
+                    <th>{{ 'date'|trans }}</th>
                 </tr>
             </thead>
             <tbody id="ticketBody">
@@ -56,10 +56,10 @@
                         <td title="{{ticket.description}}">   {{ ticket.description|length > len ? ticket.description|slice(0, len) ~ '...' : ticket.description  }}</td>
 
                         <td>
-                            <a href="{{ path('showTicket', { 'id': ticket.id }) }}" title="{% trans %} ticket.show {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_show.png') }}" {% if is_granted('ROLE_ASSESSOR') %}target="_blank"{% endif %}></a>
+                            <a href="{{ path('showTicket', { 'id': ticket.id }) }}" title="{{ 'ticket.show'|trans }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket_show.png') }}" {% if is_granted('ROLE_ASSESSOR') %}target="_blank"{% endif %}></a>
 
                             {% if is_granted('ROLE_ADMIN') %}
-                                <a href="{{ path('deleteTicket', { 'id': ticket.id }) }}" onClick="javascript: return confirm('{% trans %}ticket.delete.confirm{% endtrans %}');" title="{% trans %} ticket.delete {% endtrans %}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin.png') }}"></a>
+                                <a href="{{ path('deleteTicket', { 'id': ticket.id }) }}" onClick="javascript: return confirm('{{ 'ticket.delete.confirm'|trans }}');" title="{{ 'ticket.delete'|trans }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin.png') }}"></a>
                             {% endif %}
                         </td>
 

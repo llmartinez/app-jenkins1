@@ -1,13 +1,13 @@
 
-    <legend>{% trans %} ticket {% endtrans %} #{{ ticket.id }}</legend>
+    <legend>{{ 'ticket'|trans }} #{{ ticket.id }}</legend>
 
-	    {% if ticket.assignedTo != "" %}<p><b>{% trans %} assigned_to {% endtrans %}:</b>{{ ticket.assignedTo }} </p>{% endif %}
+	    {% if ticket.assignedTo != "" %}<p><b>{{ 'assigned_to'|trans }}:</b>{{ ticket.assignedTo }} </p>{% endif %}
 
-	    <legend>{% trans %} description {% endtrans %}</legend>
+	    <legend>{{ 'description'|trans }}</legend>
 	    <p> {{ ticket.description|nl2br }} </p>
 
 		{% if ticket.solution is defined %}
-		    <legend>{% trans %} solution {% endtrans %}</legend>
+		    <legend>{{ 'solution'|trans }}</legend>
 		    <p> {{ ticket.solution|nl2br }} </p>
 		{% endif %}
 

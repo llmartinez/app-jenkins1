@@ -4,6 +4,7 @@ namespace Adservice\WorkshopBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -17,13 +18,13 @@ class ImportWorkshopController extends Controller {
      * @return type
      * @throws AccessDeniedException
      */
-    public function importWorkshopAction() {
-        $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_ADMIN') === false)
+    public function importWorkshopAction(Request $request) {
+
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
-        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+
 
 		$form = $this->createFormBuilder()
 		        ->add('submitFile', 'file', array('label' => 'File to Submit'))
@@ -31,7 +32,7 @@ class ImportWorkshopController extends Controller {
 
 		if ($request->getMethod('post') == 'POST') {
 
-		    $form->bindRequest($request);
+		    $form->handleRequest($request);
 
 		    if ($form->isValid()) {
 

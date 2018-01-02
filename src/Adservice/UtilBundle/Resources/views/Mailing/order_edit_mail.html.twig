@@ -9,12 +9,12 @@
         {% set url_logo = route_logo_mail ~ '.png' %}
         <img src="{{ asset(url_logo) }}" style="height: 60px;">
         <br>
-        {% trans %} mail.editOrder.title {% endtrans %}
+        {{ 'mail.editOrder.title'|trans }}
     </td></tr>
 </table>
 <table style="width: 100%;border: 0;color: #000000;font-family: Verdana, Geneva, sans-serif;font-size: 12px;">
     <tr><td height="150" valign="middle" align="center">
-        {% if app.security.getToken().getUser() != "anon." and workshopOrder.categoryService != null %}
+        {% if app.user and workshopOrder.categoryService != null %}
             {% set url_logo_catserv = route_logo_mail ~ '_' ~ workshopOrder.categoryService.slug ~ '.png' %}
             <img src="{{ asset(url_logo_catserv) }}" style="height: 60px;">
         {% endif %}
@@ -22,61 +22,61 @@
 
     <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
 
-        {% if     workshopOrder.modifiedBy.roles[0] == 'ROLE_ADMIN'    %} {% trans %} mail.editOrder.createdby {% endtrans %}
-        {% elseif workshopOrder.modifiedBy.roles[0] == 'ROLE_AD'     %} {% trans %} mail.editOrder.createdby.user  {% endtrans %}
+        {% if     workshopOrder.modifiedBy.roles[0] == 'ROLE_ADMIN'    %} {{ 'mail.editOrder.createdby'|trans }}
+        {% elseif workshopOrder.modifiedBy.roles[0] == 'ROLE_AD'     %} {{ 'mail.editOrder.createdby.user'|trans }}
         {% endif %}
     </td></tr>
 
     <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
-        {% trans %} mail.editOrder.info {% endtrans %}"<b>{% trans %} menu.list_orders {% endtrans %}</b>".
+        {{ 'mail.editOrder.info'|trans|raw }}"<b>{{ 'menu.list_orders'|trans }}</b>".
     </td></tr>
     <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
-        {% trans %} mail.editOrder.info.id {% endtrans %}
+        {{ 'mail.editOrder.info.id'|trans }}
     </td></tr>
     <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
         <h2>{{ workshopOrder.id }}</h2>
     </td></tr>
     <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
         <table>
-            <h3>{% trans %} dataworkshop {% endtrans %}:</h3>
+            <h3>{{ 'dataworkshop'|trans }}:</h3>
             <tr><td valign="middle" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
-                <b>{% trans %} code {% endtrans %}:</b></td><td> {{ workshopOrder.codepartner }} - {{ workshopOrder.codeworkshop }}
+                <b>{{ 'code'|trans }}:</b></td><td> {{ workshopOrder.codepartner }} - {{ workshopOrder.codeworkshop }}
             </td></tr>
             <tr><td valign="middle" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
-                <b>{% trans %} workshop {% endtrans %}:</b></td>
+                <b>{{ 'workshop'|trans }}:</b></td>
                 {% if workshop.name != workshopOrder.name %}<td>
-                    <a style="color: #428bca">{% trans %} from {% endtrans %}</a> "{{ workshop.name }}"
-                    <a style="color: #428bca">{% trans %} to   {% endtrans %}</a> "{{ workshopOrder.name }}"
+                    <a style="color: #428bca">{{ 'from'|trans }}</a> "{{ workshop.name }}"
+                    <a style="color: #428bca">{{ 'to'|trans }}</a> "{{ workshopOrder.name }}"
                 </td>
                 {% else %} <td> {{ workshopOrder.name }}</td> {% endif %}
             </tr>
             <tr><td valign="middle" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
-                <b>{% trans %} contact {% endtrans %}:</b></td>
+                <b>{{ 'contact'|trans }}:</b></td>
                 {% if workshop.contact != workshopOrder.contact %}<td>
-                    <a style="color: #428bca">{% trans %} from {% endtrans %}</a> "{{ workshop.contact }}"
+                    <a style="color: #428bca">{{ 'from'|trans }}</a> "{{ workshop.contact }}"
                 </td>
                 <td>
-                    <a style="color: #428bca">{% trans %} to   {% endtrans %}</a> "{{ workshopOrder.contact }}"
+                    <a style="color: #428bca">{{ 'to'|trans }}</a> "{{ workshopOrder.contact }}"
                 </td>
                 {% else %} <td> {{ workshopOrder.contact }}</td> {% endif %}
             </tr>
             <tr><td valign="middle" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
-                <b>{% trans %} tel {% endtrans %}:</b></td>
+                <b>{{ 'tel'|trans }}:</b></td>
                 {% if workshop.phoneNumber1 != workshopOrder.phoneNumber1 %}<td>
-                    <a style="color: #428bca">{% trans %} from {% endtrans %}</a> "{{ workshop.phoneNumber1 }}"
+                    <a style="color: #428bca">{{ 'from'|trans }}</a> "{{ workshop.phoneNumber1 }}"
                 </td>
                 <td>
-                    <a style="color: #428bca">{% trans %} to   {% endtrans %}</a> "{{ workshopOrder.phoneNumber1 }}"
+                    <a style="color: #428bca">{{ 'to'|trans }}</a> "{{ workshopOrder.phoneNumber1 }}"
                 </td>
                 {% else %} <td> {{ workshopOrder.phoneNumber1 }}</td> {% endif %}
             </tr>
             <tr><td valign="middle" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
-                <b>{% trans %} mail {% endtrans %}:</b></td>
+                <b>{{ 'mail'|trans }}:</b></td>
                 {% if workshop.Email1 != workshopOrder.Email1 %}<td>
-                    <a style="color: #428bca">{% trans %} from {% endtrans %}</a> "{{ workshop.Email1 }}"
+                    <a style="color: #428bca">{{ 'from'|trans }}</a> "{{ workshop.Email1 }}"
                 </td>
                 <td>
-                    <a style="color: #428bca">{% trans %} to   {% endtrans %}</a> "{{ workshopOrder.Email1 }}"
+                    <a style="color: #428bca">{{ 'to'|trans }}</a> "{{ workshopOrder.Email1 }}"
                 </td>
                 {% else %} <td> {{ workshopOrder.Email1 }}</td> {% endif %}
 
@@ -84,13 +84,13 @@
         </table>
             <tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px;">
                 {% if workshopOrder.test == 1 %}
-                    <b>{% trans %} testing {% endtrans %}</b>
+                    <b>{{ 'testing'|trans }}</b>
                 {% endif %}
             </td></tr>
     </td></tr>
     {#<tr><td valign="middle" align="center" style="color: #428bca; font-family: Verdana, Geneva, sans-serif; font-size: 14px; padding-top: 20px;">
-        {% trans %} mail.info.more {% endtrans %}
-        <a href="https://adserviceticketing.com/{{__locale}}/help">{% trans %}adserviceticketing.com{% endtrans %}/{{__locale}}/help</a>
+        {{ 'mail.info.more'|trans }}
+        <a href="https://adserviceticketing.com/{{__locale}}/help">{{ 'adserviceticketing.com'|trans }}/{{__locale}}/help</a>
     </td></tr>#}
 </table>
 
@@ -99,13 +99,13 @@
 </table>
 <table width="100%" border="0" cellspacing="5" cellpadding="0" style="background-color: #FFF;">
     <tr><td valign="bottom" align="center" style="font-size: 10px; color: #428bca; font-family: Verdana, Geneva, sans-serif;">
-        {% trans %} footerText {% endtrans %}
+        {{ 'footerText'|trans }}
     </td></tr>
     <tr><td valign="bottom" align="center" style="font-size: 10px; color: #428bca; font-family: Verdana, Geneva, sans-serif;">
-        {% trans %} termsConditions {% endtrans %}
+        {{ 'termsConditions'|trans }}
     </td></tr>
     <tr><td valign="bottom" align="center" style="font-size: 10px; color: #428bca; font-family: Verdana, Geneva, sans-serif;">
-        {% trans %} mail.textDisclaimer {% endtrans %}
+        {{ 'mail.textDisclaimer'|trans }}
     </td></tr>
 </table>
 </body>

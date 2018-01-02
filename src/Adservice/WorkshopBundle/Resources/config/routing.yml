@@ -2,78 +2,78 @@
 #   APDO. RUTAS WORKSHOP     #
 ##############################
 workshop_list:
-    pattern:  /list/{page}/{w_idpartner}/{w_id}/{country}/{catserv}/{partner}/{status}/{term}/{field}
+    path:  /list/{page}/{w_idpartner}/{w_id}/{country}/{catserv}/{partner}/{status}/{term}/{field}
     defaults: { _controller: WorkshopBundle:Workshop:list, page: 1 , w_idpartner: '0', w_id: '0', country: '0', catserv: '0', partner: '0', status: '0', term: '0', field: '0'  }
     options:
         expose: true
 
 workshop_edit:
-    pattern: /edit/{id}
+    path: /edit/{id}
     defaults: { _controller: WorkshopBundle:Workshop:editWorkshop }
 
 workshop_delete:
-    pattern: /delete/{id}
+    path: /delete/{id}
     defaults: { _controller: WorkshopBundle:Workshop:deleteWorkshop }
 
 workshop_new:
-    pattern: /new
+    path: /new
     defaults: { _controller: WorkshopBundle:Workshop:newWorkshop }
 
 workshop_observation:
-    pattern: /observation/{id}/{id_ticket}
+    path: /observation/{id}/{id_ticket}
     defaults: { _controller: WorkshopBundle:Workshop:workshopObservation }
 
 workshop_activate_deactivate:
-    pattern: /activateDeactive/{workshop_id}
+    path: /activateDeactive/{workshop_id}
     defaults: { _controller: WorkshopBundle:Workshop:deactivateActivateWorkshop, workshop_id: 0 }
 
 workshop_deactivate_observation:
-    pattern: /deactivateObservation/{workshop_id}
+    path: /deactivateObservation/{workshop_id}
     defaults: { _controller: WorkshopBundle:Workshop:workshopDeactivateObservation, workshop_id: 0 }
 
 ##############################
 #   APDO. RUTAS DIAGNOSIS    #
 ##############################
 diagnosis_machine_list:
-    pattern:  /diag_list/{page}/{country}/{catserv}
+    path:  /diag_list/{page}/{country}/{catserv}
     defaults: { _controller: WorkshopBundle:DiagnosisMachine:listDiagnosisMachine, page: 1 , country: 'none', catserv: 0   }
     options:
         expose: true
 
 diagnosis_machine_edit:
-    pattern: /diag_edit/{id}
+    path: /diag_edit/{id}
     defaults: { _controller: WorkshopBundle:DiagnosisMachine:editDiagnosisMachine, id: null }
 
 # diagnosis_machine_new:
-#     pattern: /diag_new
+#     path: /diag_new
 #     defaults: { _controller: WorkshopBundle:DiagnosisMachine:newDiagnosisMachine }
 
 ##############################
 #   APDO. RUTAS TYPOLOGY     #
 ##############################
 typology_list:
-    pattern:  /typo_list/{page}/{country}/{catserv}
+    path:  /typo_list/{page}/{country}/{catserv}
     defaults: { _controller: WorkshopBundle:Typology:listTypology, page: 1, country: 'none', catserv: 0  }
     options:
         expose: true
 
 typology_edit:
-    pattern: /typo_edit/{id}
+    path: /typo_edit/{id}
     defaults: { _controller: WorkshopBundle:Typology:editTypology, id: null }
 
 # tipology_new:
-#     pattern: /typo_new
+#     path: /typo_new
 #     defaults: { _controller: WorkshopBundle:Typology:newTypology }
 
 ##############################
 #       RUTAS AJAX           #
 ##############################
 #user_provinces:
-#    pattern: /provincesFromRegion
+#    path: /provincesFromRegion
 #    defaults: { _controller: UtilBundle:Workshop:provincesFromRegion }
 
 search_cif:
-    pattern: /new/{cif}
+    path: /new/{cif}
     defaults: { _controller: WorkshopBundle:Workshop:findCif }
     options:
         expose: true

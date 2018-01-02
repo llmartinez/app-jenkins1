@@ -3,11 +3,11 @@
 namespace Adservice\OrderBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class WorkshopNewOrderType extends AbstractType
 {
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
         if (isset($_SESSION['id_partner'])) { $id_partner = $_SESSION['id_partner'];unset($_SESSION['id_partner']);} else { $id_partner = ' != 0';}
@@ -19,13 +19,13 @@ class WorkshopNewOrderType extends AbstractType
         $builder
             ->add('name')
             ->add('cif','text', array('required' => true))
-            // ->add('partner', 'choice' , array('required' => true, 'empty_value' => 'Selecciona un socio'))
+            // ->add('partner', 'choice' , array('required' => true, 'placeholder' => 'Selecciona un socio'))
             ->add('code_workshop')
             ->add('typology', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\WorkshopBundle\Entity\Typology',
-                  'property' => 'name',
-                  'empty_value' => '',
+                  'choice_label' => 'name',
+                  'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv) {
                                                 return $er->createQueryBuilder('t')
                                                           ->orderBy('t.name', 'ASC')
@@ -35,8 +35,8 @@ class WorkshopNewOrderType extends AbstractType
                   'required' => false,
                   'multiple' => true,
                   'class' => 'Adservice\WorkshopBundle\Entity\DiagnosisMachine',
-                  'property' => 'name',
-                  'empty_value' => '',
+                  'choice_label' => 'name',
+                  'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use (/*$id_country,*/ $id_catserv) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
@@ -54,8 +54,8 @@ class WorkshopNewOrderType extends AbstractType
             ->add('country', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
-                  'property' => 'country',
-                  'empty_value' => '',
+                  'choice_label' => 'country',
+                  'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC')
@@ -80,8 +80,8 @@ class WorkshopNewOrderType extends AbstractType
               ->add('shop', 'entity', array(
                     'required' => false,
                     'class' => 'Adservice\PartnerBundle\Entity\Shop',
-                    'property' => 'name',
-                    'empty_value' => $s_empty,
+                    'choice_label' => 'name',
+                    'placeholder' => $s_empty,
                     'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_country, $id_partner, $id_shop) {
                                                   return $er->createQueryBuilder('s')
                                                             ->orderBy('s.name', 'ASC')
@@ -94,7 +94,7 @@ class WorkshopNewOrderType extends AbstractType
         }
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'workshopOrder_newOrder';
     }

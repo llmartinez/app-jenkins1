@@ -73,8 +73,8 @@ class WorkshopRepository extends EntityRepository
             $where = 'WHERE w.id != 0 ';
             // $where = 'WHERE w.active = 1 ';
 
-            if($security != NULL AND $security->isGranted('ROLE_ASSESSOR') AND $security->getToken()->getUser()->getCategoryService() != NULL) {
-                $where .= "AND w.category_service = ".$security->getToken()->getUser()->getCategoryService()->getId()." ";
+            if($security != NULL AND $this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') AND $this->getUser()->getCategoryService() != NULL) {
+                $where .= "AND w.category_service = ".$this->getUser()->getCategoryService()->getId()." ";
             }
             if ($w_id          != 0) {  $where .= "AND w.code_workshop = ".$w_id." "; }
             if ($w_idpartner   != 0) {  $where .= "AND w.code_partner = ".$w_idpartner." "; }

@@ -3,43 +3,43 @@
 {% block body %}
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
-      <li><a href="{{ path('popup_list') }}">{% trans %} menu.list_popups {% endtrans %}</a></li>
-      <li class="active">{% trans %} edit.popup {% endtrans %} ({{ popup.name|length > 15 ? popup.name|slice(0, 15) ~ '...' : popup.name  }})</li>
+      <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
+      <li><a href="{{ path('popup_list') }}">{{ 'menu.list_popups'|trans }}</a></li>
+      <li class="active">{{ 'edit.popup'|trans }} ({{ popup.name|length > 15 ? popup.name|slice(0, 15) ~ '...' : popup.name  }})</li>
     </ol>
 
-    <legend>{% trans %} edit.popup {% endtrans %}</legend>
+    <legend>{{ 'edit.popup'|trans }}</legend>
 
-    <form action="{{ path("popup_edit", { 'id':popup.id }) }}" method="post" {{ form_enctype(form) }} name="{{ form_name }}" >
+    {{ form_start(form, {'action': path("popup_edit", {'id':popup.id })}) }}
         <div class="col-xs-3 col-md-3 form-group">
-            <label>{% trans %} name        {% endtrans %}*</label> {{ form_widget(form.name,         { 'attr': {'class': 'form-control', 'required': 'required', 'placeholder': 'name' | trans } }) }}
+            <label>{{ 'name'|trans }}*</label> {{ form_widget(form.name,         { 'attr': {'class': 'form-control', 'required': 'required', 'placeholder': 'name' | trans } }) }}
         </div>
         <div class="col-xs-3 col-md-3 form-group">
-            <label>{% trans %} role        {% endtrans %}*</label> {{ form_widget(form.role,         { 'attr': {'class': 'form-control', 'required': 'required' , 'placeholder': 'role' | trans} }) }}
+            <label>{{ 'role'|trans }}*</label> {{ form_widget(form.role,         { 'attr': {'class': 'form-control', 'required': 'required' , 'placeholder': 'role' | trans} }) }}
         </div>
         <div class="col-xs-3 col-md-3 form-group">
-            <label>{% trans %} category_service {% endtrans %}*</label> {{ form_widget(form.category_service, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+            <label>{{ 'category_service'|trans }}*</label> {{ form_widget(form.category_service, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
         </div>
         <div class="col-xs-3 col-md-3 form-group">
-            <label>{% trans %} country     {% endtrans %}*</label> {{ form_widget(form.country,      { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
+            <label>{{ 'country'|trans }}*</label> {{ form_widget(form.country,      { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
         </div>
         <div class="col-xs-4 col-md-4 form-group">
-            <label>{% trans %} date.start   {% endtrans %}*</label> {{ form_widget(form.startdate_at, { 'attr': {'required': 'required' } }) }}
+            <label>{{ 'date.start'|trans }}*</label> {{ form_widget(form.startdate_at, { 'attr': {'required': 'required' } }) }}
         </div>
         <div class="col-xs-4 col-md-4 form-group">
-            <label>{% trans %} date.end     {% endtrans %}*</label> {{ form_widget(form.enddate_at,   { 'attr': {'required': 'required' } }) }}
+            <label>{{ 'date.end'|trans }}*</label> {{ form_widget(form.enddate_at,   { 'attr': {'required': 'required' } }) }}
         </div>
         <div class="col-xs-4 col-md-4 form-group">
-            <label>{% trans %} active      {% endtrans %}*</label> {{ form_widget(form.active) }}
+            <label>{{ 'active'|trans }}*</label> {{ form_widget(form.active) }}
         </div>
         <div class="col-xs-12 col-md-12 form-group">
-            <label>{% trans %} description {% endtrans %}*</label> {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'required': 'required', 'rows': '3', 'placeholder': 'description' | trans } }) }}
+            <label>{{ 'description'|trans }}*</label> {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'required': 'required', 'rows': '3', 'placeholder': 'description' | trans } }) }}
         </div>
         {{ form_widget(form) }}
         <p>
-            <button class="btn btn-primary pull-right" id="btn_edit" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {% trans %} btn.send {% endtrans %}</button>
+            <button class="btn btn-primary pull-right" id="btn_edit" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {{ 'btn.send'|trans }}</button>
         </p>
-    </form>
+    {{ form_end(form) }}
     <script>
         $(document).ready(function() {
             $('select[id*=_at_date_').addClass('btn-date');

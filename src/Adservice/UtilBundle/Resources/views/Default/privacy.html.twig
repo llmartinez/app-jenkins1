@@ -3,16 +3,16 @@
 {% block body %}
 
 	<ol class="breadcrumb">
-		<li class="active"><a href="{{ path("_login")}}">{% trans %} home {% endtrans %}</a></li>
-		<li class="active">{% trans %} privacy {% endtrans %}</li>
+		<li class="active"><a href="{{ path("_login")}}">{{ 'home'|trans }}</a></li>
+		<li class="active">{{ 'privacy'|trans }}</li>
 	</ol>
 
-	<h1 class="tc">{% trans %}privacy.title{% endtrans %}</h1>
+	<h1 class="tc">{{ 'privacy.title'|trans }}</h1>
 
-    <div class="tc">{% trans %}privacy.text{% endtrans %}</div>
+    <div class="tc">{{ 'privacy.text'|trans|raw }}</div>
     
     <form class="tc" action="{{ path('privacy') }}" method="post" >
-        <button name="Return" class="btn btn-primary mt20" >{% trans %} volver {% endtrans %}</button>
+        <button name="Return" class="btn btn-primary mt20" >{{ 'volver'|trans }}</button>
     </form>
 
 {% endblock %}

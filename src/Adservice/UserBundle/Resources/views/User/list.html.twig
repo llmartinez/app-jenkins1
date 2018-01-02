@@ -5,19 +5,21 @@
     {% set route = 'user_list' %}
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
-      <li class="active">{% trans %} menu.list_users {% endtrans %}</li>
+      <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
+      <li class="active">{{ 'menu.list_users'|trans }}</li>
     </ol>
 
-    <legend>{% trans %} menu.list_users {% endtrans %}
-        <a id="user_new" href="{{ path('user_select_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {% trans %} new.user {% endtrans %}</a>
+    <legend>{{ 'menu.list_users'|trans }}
+        <a id="user_new" href="{{ path('user_select_new') }}" class="btn btn-primary"><img class="img_icon" src="{{ asset('bundles/util/images/icon/add.png') }}"> {{ 'new.user'|trans }}</a>
     </legend>
 
-    {% if app.session.hasFlash('alert') %}<p class="alert">{{ app.session.getFlash('alert') }}</p>{% endif %}
+    {% for flashMessage in app.session.flashbag.get('alert') %}
+        <p class="alert">{{ flashMessage }}</p>
+    {% endfor %}
 
     {% if is_granted('ROLE_ADMIN') %}
         <div class="col-xs-2 col-md-2 form-group">
-            <label> {% trans %} country {% endtrans %} </label>
+            <label> {{ 'country'|trans }} </label>
             <select id="slct_country" class="form-control"> <option value="0">...</option>
                 {% for country_ in countries %} <option value="{{ country_.id }}"
                                             {% if country is defined and country == country_.id %} selected {% endif %}
@@ -26,7 +28,7 @@
         </div>
     {% endif %}
     <div class="col-xs-2 col-md-2 form-group">
-        <label> {% trans %} role {% endtrans %} </label>
+        <label> {{ 'role'|trans }} </label>
         <select id="slct_role" class="form-control"> <option value="all">...</option>
             {% for role in roles %} <option value="{{ role.id }}"
                                         {% if option is defined and option == role.id %} selected {% endif %}
@@ -35,26 +37,26 @@
     </div>
 
     <div class="col-xs-2 col-md-2 form-group">
-        <label> {% trans %} category_service {% endtrans %} </label>
+        <label> {{ 'category_service'|trans }} </label>
         <select id="slct_catserv" class="form-control" {% if is_granted('ROLE_ADMIN') and not is_granted('ROLE_SUPER_ADMIN') %}disabled="disabled"{% endif %}>
             <option value="0">...</option>
             {% for _catserv in cat_services %}
-                <option value="{{ _catserv.id }}"{% if is_granted('ROLE_ADMIN') and not is_granted('ROLE_SUPER_ADMIN') and _catserv.id == app.security.getToken().getUser().getCategoryService().getId() %}selected{% elseif _catserv is defined and catserv == _catserv.id %} selected {% endif %}>{{ _catserv }}</option>
+                <option value="{{ _catserv.id }}"{% if is_granted('ROLE_ADMIN') and not is_granted('ROLE_SUPER_ADMIN') and _catserv.id == app.user.getCategoryService().getId() %}selected{% elseif _catserv is defined and catserv == _catserv.id %} selected {% endif %}>{{ _catserv }}</option>
             {% endfor %}
         </select>
     </div>
 
     <div class="col-xs-4 col-md-4 form-group">
         <div class="col-xs-5 col-md-5 form-group" style="margin-left: -15px;">
-            <label> {% trans %} find_by {% endtrans %} </label>
+            <label> {{ 'find_by'|trans }} </label>
             <select id="flt_search_term" name="flt_search_term" class='form-control'>
-                <option value="user" {% if term == 'user' %}selected{% endif %}>{% trans %} user  {% endtrans %}</option>
-                <option value="mail" {% if term == 'mail' %}selected{% endif %}>{% trans %} email {% endtrans %}</option>
-                <option value="tel"  {% if term == 'tel'  %}selected{% endif %}>{% trans %} tel   {% endtrans %}</option>
+                <option value="user" {% if term == 'user' %}selected{% endif %}>{{ 'user'|trans }}</option>
+                <option value="mail" {% if term == 'mail' %}selected{% endif %}>{{ 'email'|trans }}</option>
+                <option value="tel"  {% if term == 'tel'  %}selected{% endif %}>{{ 'tel'|trans }}</option>
              </select>
         </div>
         <div class="col-xs-7 col-md-7 form-group" style="margin-top: 21px;margin-left: -25px;">
-            <input type="text" id="flt_search_field" name="flt_search_field" class='form-control' placeholder="{% trans %} value {% endtrans %}" value="{% if field != '0' %}{{ field }}{% endif %}">
+            <input type="text" id="flt_search_field" name="flt_search_field" class='form-control' placeholder="{{ 'value'|trans }}" value="{% if field != '0' %}{{ field }}{% endif %}">
         </div>
         <div class="col-xs-1 col-md-1 form-group" style="margin-left:-16px;">
             <a type="button" id="btn_search_field" name="btn_search_field" class='btn btn-primary' style="margin-top:20px;margin-left:-20px;"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn.png') }}"></a>
@@ -65,14 +67,14 @@
         <thead>
             <tr>
                 <th>#</th>
-                <th>{% trans %} username {% endtrans %}</th>
-                <th>{% trans %}          {% endtrans %}</th>
-                <th>{% trans %} name     {% endtrans %}</th>
-                <th>{% trans %} surname  {% endtrans %}</th>
-                <th>{% trans %} email    {% endtrans %}</th>
-                <th>{% trans %} tel      {% endtrans %}</th>
-                <th>{% trans %} region   {% endtrans %}</th>
-                <th>{% trans %} actions  {% endtrans %}</th>
+                <th>{{ 'username'|trans }}</th>
+                <th></th>
+                <th>{{ 'name'|trans }}</th>
+                <th>{{ 'surname'|trans }}</th>
+                <th>{{ 'email'|trans }}</th>
+                <th>{{ 'tel'|trans }}</th>
+                <th>{{ 'region'|trans }}</th>
+                <th>{{ 'actions'|trans }}</th>
             </tr>
         </thead>
         <tbody>

@@ -10,14 +10,14 @@
                         <td align="left">
                         {#  
                             <h2 style="width: 322px;float: left;margin: 5px;color: white;">
-                                {% trans %} header.welcome {% endtrans %}
+                                {{ 'header.welcome'|trans }}
                             </h2>
                         #}
                             {% set url_logo = route_logo ~ '.png' %}
                             <img class="img_logo" src="{{ asset(url_logo) }}" style="margin-left: -15px;margin-right: 10px; float: left;">
                             
-                            {% if app.security.getToken().getUser() != "anon." and app.security.getToken().getUser().getCategoryService() != null %}
-                                {% set url_logo_catserv = route_logo ~ '_' ~ app.security.getToken().getUser().getCategoryService().getSlug() ~ '.png' %}
+                            {% if app.user and app.user.getCategoryService() != null %}
+                                {% set url_logo_catserv = route_logo ~ '_' ~ app.user.getCategoryService().getSlug() ~ '.png' %}
                                 <img class="img_logo" src="{{ asset(url_logo_catserv) }}">
                             {% endif %}
                         </td>
@@ -27,21 +27,21 @@
 
                             <!-- Split button -->
                             <div class="language fl">
-                                <input type="hidden" id="data_locale" value="{{ app.session.locale }}" data-locale="{{ app.session.locale }}">
+                                <input type="hidden" id="data_locale" value="{{ app.request.locale }}" data-locale="{{ app.request.locale }}">
                                 <img src="{{ asset('bundles/util/images/icon/language_icon.png') }}">
                                 <div class="btn-group" >
-                                    <button type="button" class="btn btn-default asr_slct-default" >{{ app.session.locale | trans }}</button>
+                                    <button type="button" class="btn btn-default asr_slct-default" >{{ app.request.locale | trans }}</button>
                                     <button type="button" class="btn btn-default asr_btn-default dropdown-toggle" data-toggle="dropdown">
                                         <span class="caret"></span>
                                         <span class="sr-only">Toggle Dropdown</span>
                                     </button>
                                     <ul class="dropdown-menu" role="menu" >
-                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'en','path': app.request.getPathInfo()}) }}">{% trans %} english         {% endtrans %}</a></li>
-                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'es','path': app.request.getPathInfo()}) }}">{% trans %} spanish {% endtrans %}</a></li>
+                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'en','path': app.request.getPathInfo()}) }}">{{ 'english'|trans }}</a></li>
+                                        <li><a class="btn pull-left" href="{{ path('changeLanguage', {'lang': 'es','path': app.request.getPathInfo()}) }}">{{ 'spanish'|trans }}</a></li>
 
-                                        <li><a class="btn pull-left"  href="{{ path('changeLanguage', {'lang': 'fr','path': app.request.getPathInfo()}) }}">{% trans %} french {% endtrans %}</a></li>
+                                        <li><a class="btn pull-left"  href="{{ path('changeLanguage', {'lang': 'fr','path': app.request.getPathInfo()}) }}">{{ 'french'|trans }}</a></li>
 
-                                        <li><a class="btn pull-left"  href="{{ path('changeLanguage', {'lang': 'pt','path': app.request.getPathInfo()}) }}">{% trans %} portuguese {% endtrans %}</a></li>
+                                        <li><a class="btn pull-left"  href="{{ path('changeLanguage', {'lang': 'pt','path': app.request.getPathInfo()}) }}">{{ 'portuguese'|trans }}</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -49,24 +49,24 @@
                             <div class="user fl">
                                 <img src="{{ asset('bundles/util/images/icon/user_icon.png') }}">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-default asr_slct-default">{{ app.security.getToken().getUser().getUsername() }}</button>
+                                    <button type="button" class="btn btn-default asr_slct-default">{{ app.user.getUsername() }}</button>
                                     <button type="button" class="btn btn-default asr_btn-default dropdown-toggle" data-toggle="dropdown">
                                         <span class="caret"></span>
                                         <span class="sr-only">Toggle Dropdown</span>
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
-                                        <li><a class="btn pull-left" href="{{ path('user_index'  ) }}">   {% trans %} home         {% endtrans %}</a></li>
+                                        <li><a class="btn pull-left" href="{{ path('user_index'  ) }}">   {{ 'home'|trans }}</a></li>
 
-                                        <li><a class="btn pull-left" href="{{ path('user_profile') }}">   {% trans %} menu.profile {% endtrans %}</a></li>
+                                        <li><a class="btn pull-left" href="{{ path('user_profile') }}">   {{ 'menu.profile'|trans }}</a></li>
                                         {% if not is_granted('ROLE_SUPER_AD') or is_granted('ROLE_USER') %}
-                                            <li><a class="btn pull-left"  href="{{ path("listTicket" ) }}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
+                                            <li><a class="btn pull-left"  href="{{ path("listTicket" ) }}">{{ 'menu.list_tickets'|trans }}</a></li>
                                         {% endif %}
                                         {% if is_granted('ROLE_ASSESSOR') and (workshop is not defined or (workshop != null and workshop.id == "") ) %}
-                                            <li><a class="btn pull-left" href="{{ path("newTicket"   ) }}">{% trans %} new.ticket {% endtrans %}</a></li>
+                                            <li><a class="btn pull-left" href="{{ path("newTicket"   ) }}">{{ 'new.ticket'|trans }}</a></li>
                                         {% endif %}
                                         <li><a href="#"></a></li>
                                         <li class="divider"></li>
-                                        <li><a id="logout" class="btn pull-left" href="{{ path('user_logout') }}" dats-url="{{ path('user_logout') }}">  {% trans %}logout       {% endtrans %}</a></li>
+                                        <li><a id="logout" class="btn pull-left" href="{{ path('user_logout') }}" dats-url="{{ path('user_logout') }}">  {{ 'logout'|trans }}</a></li>
                                     </ul>
                                 </div>
                             </div>

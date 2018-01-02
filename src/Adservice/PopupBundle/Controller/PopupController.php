@@ -4,6 +4,7 @@ namespace Adservice\PopupBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
@@ -11,6 +12,7 @@ use Adservice\PopupBundle\Entity\Popup;
 use Adservice\PopupBundle\Entity\PopupRepository;
 use Adservice\PopupBundle\Form\PopupType;
 use Adservice\UtilBundle\Entity\Pagination;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class PopupController extends Controller {
 
@@ -18,11 +20,11 @@ class PopupController extends Controller {
      * Busca en la BBDD si en la fecha de la peticion hay algun popup activo para mostrar
      * es una llamada AJAX
      */
-    public function getPopupAction() {
+    public function getPopupAction(Request $request) {
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $date_today = new \DateTime(\date("Y-m-d H:i:s"));
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $popups = $em->getRepository('PopupBundle:Popup')->findPopupByDate($date_today, $user);
 
         $json = array();
@@ -38,15 +40,14 @@ class PopupController extends Controller {
         return new Response(json_encode($json), $status = 200);
     }
 
-    public function popupListAction($page=1 , $category_service='none' , $country='none') {
+    public function popupListAction(Request $request, $page=1 , $category_service='none' , $country='none') {
 
-        $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_ADMIN') === false)
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') === false)
             throw new AccessDeniedException();
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
-        if($security->isGranted('ROLE_SUPER_ADMIN')) {
+        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
             if($country != 'none' OR $category_service != 'none')
             {
                 if ($country          != 'none') $params[] = array('country', ' = '.$country);
@@ -56,7 +57,7 @@ class PopupController extends Controller {
         }
         else {
             $id_superadmin = $em->getRepository('UserBundle:Role')->findOneByName('ROLE_SUPER_ADMIN')->getId();
-            $params[] = array('category_service', ' = '.$security->getToken()->getUser()->getCategoryService()->getId());
+            $params[] = array('category_service', ' = '.$this->getUser()->getCategoryService()->getId());
             $params[] = array('role', ' != '.$id_superadmin);
         }
 
@@ -68,7 +69,7 @@ class PopupController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        if($security->isGranted('ROLE_SUPER_ADMIN')) $catservices = $em->getRepository('UserBundle:CategoryService')->findAll();
+        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) $catservices = $em->getRepository('UserBundle:CategoryService')->findAll();
         else $catservices = array();
         $countries = $em->getRepository('UtilBundle:Country')->findAll();
 
@@ -81,41 +82,41 @@ class PopupController extends Controller {
                                                                                 ));
     }
 
-    public function newPopupAction(){
-        $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_ADMIN') === false){
+    public function newPopupAction(Request $request){
+
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
         $popup = new Popup();
-        $request = $this->getRequest();
+
 
         // Creamos variables de sesion para fitlrar los resultados del formulario
-        $role = $security->getToken()->getUser()->getRoles();
+        $role = $this->getUser()->getRoles();
         $role = $role[0]->getName();
         $_SESSION['role'] = ' = '.$role;
-        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
 
             //$_SESSION['id_country'] = ' != 0 ';
             $_SESSION['id_catserv'] = ' != 0 ';
 
-        }elseif ($security->isGranted('ROLE_SUPER_AD')) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
 
-            //$_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
-            $_SESSION['id_catserv'] = ' = '.$security->getToken()->getUser()->getCategoryService()->getId();
+            //$_SESSION['id_country'] = ' = '.$this->getCountry()->getId();
+            $_SESSION['id_catserv'] = ' = '.$this->getUser()->getCategoryService()->getId();
 
         }else {
             //$_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
-            $_SESSION['id_catserv'] = ' = '.$security->getToken()->getUser()->getCategoryService()->getId();
+            $_SESSION['id_catserv'] = ' = '.$this->getUser()->getCategoryService()->getId();
         }
         $form = $this->createForm(new PopupType(), $popup);
 
-        $form->bindRequest($request);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
 
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $popup->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
-            $popup->setCreatedBy($security->getToken()->getUser());
+            $popup->setCreatedBy($this->getUser());
             $this->savePopup($em, $popup);
 
             return $this->redirect($this->generateUrl('popup_list'));
@@ -132,37 +133,36 @@ class PopupController extends Controller {
      * @Route("/edit/{id}")
      * @ParamConverter("popup", class="PopupBundle:Popup")
      */
-    public function editPopupAction($popup){
-        $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_ADMIN') === false){
+    public function editPopupAction(Request $request, $popup){
+
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
-        $petition = $this->getRequest();
         // Creamos variables de sesion para fitlrar los resultados del formulario
-        $role = $security->getToken()->getUser()->getRoles();
+        $role = $this->getUser()->getRoles();
         $role = $role[0]->getName();
         $_SESSION['role'] = $role;
-        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
 
             //$_SESSION['id_country'] = ' != 0 ';
             $_SESSION['id_catserv'] = ' != 0 ';
 
-        }elseif ($security->isGranted('ROLE_SUPER_AD')) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
 
-            //$_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
-            $_SESSION['id_catserv'] = ' = '.$security->getToken()->getUser()->getCategoryService()->getId();
+            //$_SESSION['id_country'] = ' = '.$this->getUser()->getCountry()->getId();
+            $_SESSION['id_catserv'] = ' = '.$this->getUser()->getCategoryService()->getId();
 
         }else {
             //$_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
-            $_SESSION['id_catserv'] = ' = '.$security->getToken()->getUser()->getCategoryService()->getId();
+            $_SESSION['id_catserv'] = ' = '.$this->getUser()->getCategoryService()->getId();
         }
         $form = $this->createForm(new PopupType(), $popup);
 
-        if ($petition->getMethod() == 'POST') {
-            $form->bindRequest($petition);
+        if ($request->getMethod() == 'POST') {
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
                 $this->savePopup($em, $popup); }
@@ -181,12 +181,12 @@ class PopupController extends Controller {
      * @throws AccessDeniedException
      * @throws CreateNotFoundException
      */
-    public function deletePopupAction($popup){
+    public function deletePopupAction(Request $request, $popup){
 
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === false){
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') === false){
             throw new AccessDeniedException();
         }
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $em->remove($popup);
         $em->flush();
 
@@ -199,7 +199,7 @@ class PopupController extends Controller {
      */
     private function savePopup($em, $popup){
         $popup->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
-        $popup->setModifiedBy($this->get('security.context')->getToken()->getUser());
+        $popup->setModifiedBy($this->getUser());
         $em->persist($popup);
         $em->flush();
     }

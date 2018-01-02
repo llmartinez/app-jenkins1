@@ -8,7 +8,7 @@
 ############################################################################
 
 autologin:
-    pattern: /autologin/
+    path: /autologin/
     defaults: { _controller: UtilBundle:Security:autologin }
 
 LockBundle:
@@ -52,14 +52,14 @@ UtilBundle:
     prefix:   /{_locale}/
 
 _login:
-    pattern:  /
+    path:  /
     defaults: { _controller: UserBundle:Login:goToLogin }
 
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
 
 #redirect:
-#    pattern: /{_locale}/{_location}/
+#    path: /{_locale}/{_location}/
 #    defaults:
 #         _controller: FrameworkBundle:Redirect:urlRedirect
 #         path: /{_locale}/{_location}/

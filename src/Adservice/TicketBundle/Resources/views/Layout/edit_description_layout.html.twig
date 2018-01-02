@@ -3,10 +3,10 @@
 {% block breadcrumb %}
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">{% trans %} home {% endtrans %}</a></li>
+      <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
       <li><a href="{% if is_granted('ROLE_ASSESSOR') and not is_granted('ROLE_ADMIN') %}{{ path("listTicket", { 'option': 'assessor_pending'}) }}
-                   {% else %}{{ path('listTicket') }}{% endif %}">{% trans %} menu.list_tickets {% endtrans %}</a></li>
-      <li class="active">{% trans %} ticket {% endtrans %} #{{ ticket.id }}</li>
+                   {% else %}{{ path('listTicket') }}{% endif %}">{{ 'menu.list_tickets'|trans }}</a></li>
+      <li class="active">{{ 'ticket'|trans }} #{{ ticket.id }}</li>
     </ol>
 
 {% endblock  %}
@@ -30,8 +30,8 @@
     <div class="form-group">
         <form action="{{ path('editDescription', {'id' : ticket.id }) }}" id="contact" class="form" role="form" method="post" enctype="multipart/form-data">
             <a class="btn btn-primary fr asr_form-control asr_btn return_btn" href="{% if is_granted('ROLE_ASSESSOR') and not is_granted('ROLE_ADMIN') %}{{ path("listTicket", { 'option': 'assessor_pending'}) }} {% else %}{{ path('listTicket') }}{% endif %}">
-              <img class="img_icon" src="{{ asset('bundles/util/images/icon/back_.png') }}" title ="{% trans %} ticket_return {% endtrans %}" alt="{% trans %} ticket_return {% endtrans %}">
-              {% trans %} ticket_return {% endtrans %}
+              <img class="img_icon" src="{{ asset('bundles/util/images/icon/back_.png') }}" title ="{{ 'ticket_return'|trans }}" alt="{{ 'ticket_return'|trans }}">
+              {{ 'ticket_return'|trans }}
             </a>
 
             {% include 'TicketBundle:Ticket:edit_description.html.twig'  %}

@@ -3,96 +3,96 @@
 ################################
 
 newTicket:
-    pattern:  /ticket/new/{id_workshop}/{einatech}/{reset}
+    path:  /ticket/new/{id_workshop}/{einatech}/{reset}
     defaults: { _controller: TicketBundle:Ticket:newTicket, id_workshop: null, einatech: 0, reset: 0 }
 editTicket:
-    pattern:  /ticket/edit/{id}
+    path:  /ticket/edit/{id}
     defaults: { _controller: TicketBundle:Ticket:editTicket }
 
 deleteTicket:
-    pattern:  /ticket/delete/{id}
+    path:  /ticket/delete/{id}
     defaults: { _controller: TicketBundle:Ticket:deleteTicket }
 
 findTicket:
-    pattern:  /ticket/find/
+    path:  /ticket/find/
     defaults: { _controller: TicketBundle:Ticket:findTicket }
 
 showTicket:
-    pattern:  /ticket/show/{id}
+    path:  /ticket/show/{id}
     defaults: { _controller: TicketBundle:Ticket:showTicket }
     options:
         expose: true
 
 findTicketById:
-    pattern:  /ticket/findTicketById/
+    path:  /ticket/findTicketById/
     defaults: { _controller: TicketBundle:Ticket:findTicketById }
 
 findTicketByIdAndWorkshop:
-    pattern:  /ticket/findTicketByIdAndWorkshop/
+    path:  /ticket/findTicketByIdAndWorkshop/
     defaults: { _controller: TicketBundle:Ticket:findTicketByIdAndWorkshop }
 
 findTicketByBMV:
-    pattern:  /ticket/findTicketByBMV/{page}/{brand}/{model}/{version}/{system}/{subsystem}/{num_rows}
+    path:  /ticket/findTicketByBMV/{page}/{brand}/{model}/{version}/{system}/{subsystem}/{num_rows}
     defaults: { _controller: TicketBundle:Ticket:findTicketByBMV, page: 1, brand: 0, model: 0, version: 0, system: 0, subsystem: 0, num_rows: 10 }
     options:
         expose: true
 
 findAssessorTicketByBMV:
-    pattern:  /ticket/findAssessorTicketByBMV/{page}
+    path:  /ticket/findAssessorTicketByBMV/{page}
     defaults: { _controller: TicketBundle:Ticket:findAssessorTicketByBMV, page: null }
     options:
         expose: true
 
 insert_cif:
-    pattern:  /insertcif/{workshop_id}
+    path:  /insertcif/{workshop_id}
     defaults: { _controller: WorkshopBundle:Workshop:insertCif, workshop_id: 0 , country: '0'}
 
 # listTicketFiltered:
-#     pattern:  /ticket/filtered/{page}/{id_workshop}/{id_ticket}/{status}/
+#     path:  /ticket/filtered/{page}/{id_workshop}/{id_ticket}/{status}/
 #     defaults: { _controller: TicketBundle:Ticket:listTicketFiltered, page: 1, id_workshop: 'none', id_ticket: 'none', status: 'all' }
 
 ticketWorkshopList:
-    pattern:  /ticket/workshopList/{page}/
+    path:  /ticket/workshopList/{page}/
     defaults: { _controller: TicketBundle:Ticket:workshopList, page: 1 }
 
 ticketsFromWorkshop:
-    pattern:  /ticket/getTicketsFromWorkshop/{id_workshop}/{page}/
+    path:  /ticket/getTicketsFromWorkshop/{id_workshop}/{page}/
     defaults: { _controller: TicketBundle:Ticket:getTicketsFromWorkshop, page: 1 }
 
 assignTicket:
-    pattern: /ticket/assignTicket/{id}/
+    path: /ticket/assignTicket/{id}/
     defaults: { _controller: TicketBundle:Ticket:assignTicketSelectUser }
 
 assignUserToTicket:
-    pattern:  /ticket/assign/{id}/
+    path:  /ticket/assign/{id}/
     defaults: { _controller: TicketBundle:Ticket:assignUserToTicket }
 
 blockTicket:
-    pattern: /ticket/assignAssesor/{id}/{id_user}
+    path: /ticket/assignAssesor/{id}/{id_user}
     defaults: { _controller: TicketBundle:Ticket:blockTicket, id_user: null }
 
 closeTicket:
-    pattern:  /ticket/close/{id}/{close}
+    path:  /ticket/close/{id}/{close}
     defaults: { _controller: TicketBundle:Ticket:closeTicket, id: null, close: '1' }
 
 editDescription:
-    pattern:  /ticket/editDescription/{id}
+    path:  /ticket/editDescription/{id}
     defaults: { _controller: TicketBundle:Ticket:editDescription, id: null }
 
 reopenTicket:
-    pattern: /ticket/reopen/{id}/
+    path: /ticket/reopen/{id}/
     defaults: { _controller: TicketBundle:Ticket:reopenTicket }
 
 listTicket:
-    pattern:  /ticket/{page}/{num_rows}/{country}/{lang}/{catserv}/{option}/{workshop_id}/{adviser_id}
+    path:  /ticket/{page}/{num_rows}/{country}/{lang}/{catserv}/{option}/{workshop_id}/{adviser_id}
     defaults: { _controller: TicketBundle:Ticket:listTicket, page: 1, num_rows: 10, country: 0, lang: 0, catserv: 0, option: null, workshop_id: null, adviser_id: null  }
 
 callTicket:
-    pattern:  /call/{code_partner}/{code_workshop}
+    path:  /call/{code_partner}/{code_workshop}
     defaults: { _controller: TicketBundle:Ticket:callTicket, code_partner: 0 , code_workshop: 0 }
 
 listMotors:
-    pattern:  /engines/
+    path:  /engines/
     defaults: { _controller: TicketBundle:Ticket:listMotors  }
 
 ################################
@@ -100,22 +100,22 @@ listMotors:
 ################################
 
 showPost:
-    pattern:  /ticket/posts/{id_ticket}
+    path:  /ticket/posts/{id_ticket}
     defaults: { _controller: TicketBundle:Ticket:showPost }
 
 post_edit:
-    pattern:  /ticket/edit_post/{id}/
+    path:  /ticket/edit_post/{id}/
     defaults: { _controller: TicketBundle:Ticket:editPost, id: null }
 
 ##############################
 #   APDO. RUTAS SENTENCE     #
 ##############################
 sentence_list:
-    pattern:  /sentence_list/{page}/{country}
+    path:  /sentence_list/{page}/{country}
     defaults: { _controller: TicketBundle:Sentence:listSentence, page: 1 , country: 'none'  }
     options:
         expose: true
 
 sentence_edit:
-    pattern: /sentence_edit/{id}
+    path: /sentence_edit/{id}
     defaults: { _controller: TicketBundle:Sentence:editSentence, id: null }

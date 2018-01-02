@@ -3,8 +3,8 @@
 {% block body %}
 
 <ol class="breadcrumb">
-    <li><a href="{{ path('user_index') }}"> {% trans %} home {% endtrans %}</a></li>
-    <li class="active">{% trans %} menu.asign_user_to_ticket {% endtrans %}</li>
+    <li><a href="{{ path('user_index') }}"> {{ 'home'|trans }}</a></li>
+    <li class="active">{{ 'menu.asign_user_to_ticket'|trans }}</li>
 </ol>
 
     {% if workshops|length > 0  %}
@@ -12,11 +12,11 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>{% trans %} workshop {% endtrans %}</th>
-                    <th>{% trans %}          {% endtrans %}</th>
-                    <th>{% trans %} email    {% endtrans %}</th>
-                    <th>{% trans %} contact  {% endtrans %}</th>
-                    <th>{% trans %} action   {% endtrans %}</th>
+                    <th>{{ 'workshop'|trans }}</th>
+                    <th></th>
+                    <th>{{ 'email'|trans }}</th>
+                    <th>{{ 'contact'|trans }}</th>
+                    <th>{{ 'action'|trans }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -24,12 +24,12 @@
                     <tr>
                         <td>{{ workshop.id }}</td>
                         <td>{{ workshop.name }}</td>
-                        <td>{% if workshop.active == false %} <span class="label label-danger">{% trans %} inactive {% endtrans %}</span>{% endif %}
-                            {# {% else %}                        <span class="label label-success">{% trans %} active   {% endtrans %}</span> {% endif %}#}</td>
+                        <td>{% if workshop.active == false %} <span class="label label-danger">{{ 'inactive'|trans }}</span>{% endif %}
+                            {# {% else %}                        <span class="label label-success">{{ 'active'|trans }}</span> {% endif %}#}</td>
                         <td>{{ workshop.email1}}</td>
                         <td>{{ workshop.contact }}</td>
                         <td>
-                            <a href="{{ path("ticketsFromWorkshop", { 'id_workshop':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tickets.png') }}"> {% trans %} menu.list_tickets {% endtrans %}</a>
+                            <a href="{{ path("ticketsFromWorkshop", { 'id_workshop':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tickets.png') }}"> {{ 'menu.list_tickets'|trans }}</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -39,7 +39,7 @@
         {% include 'UtilBundle:Pagination:pagination_workshoplist.html.twig' %}
 
     {% else %}
-        {% trans %} any.workshop {% endtrans %}
+        {{ 'any.workshop'|trans }}
     {% endif %}
 
 

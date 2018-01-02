@@ -3,21 +3,17 @@
 namespace Adservice\UtilBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
-
-use Adservice\UtilBundle\Controller\UtilController;
+use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller{
 
-    public function helpAction(){
+    public function helpAction(Request $request){
 
         return $this->render('UtilBundle:Default:help.html.twig');
     }
     
-    public function privacyAction(){
-        $request = $this->getRequest();
+    public function privacyAction(Request $request){
+
         
         if ($request->getMethod() == 'POST') {
             if ($request->request->has('Return')) {                

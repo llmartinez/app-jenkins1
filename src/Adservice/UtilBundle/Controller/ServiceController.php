@@ -4,6 +4,7 @@ namespace Adservice\UtilBundle\Controller;
 
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\HttpFoundation\Request;
 
 class ServiceController {
     protected $container;
@@ -15,7 +16,7 @@ class ServiceController {
     public function setDefaultLanguage(Event $event){
         $request = $event->getRequest();
         //obtenemos el defaultLocale que tenemos en Parameters.ini
-        $defaultLocale = $this->container->getParameter('session.default_locale');
+        $defaultLocale = $this->container->getParameter('locale');
         //seteamos el idioma
         //$request->setLocale($defaultLocale);
 
@@ -23,7 +24,7 @@ class ServiceController {
 //        //obtenemos el defaultLocale que tenemos en Parameters.ini
 //        $defaultLocale = $this->container->getParameter('session.default_locale');
 //        $session_locale = $request->getLocale();
-////        $user_locale = $this->get('security.context')->getToken()->getUser()->getLanguage()->getShortName();
+////        $user_locale = $this->getUser()->getLanguage()->getShortName();
 //        $token = $event->
 //        $user_locale = $token->getUser();
 //

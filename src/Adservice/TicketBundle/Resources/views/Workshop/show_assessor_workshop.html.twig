@@ -1,19 +1,19 @@
 
 {% if workshop.id         != "" %}
-	<legend>{% trans %} workshop {% endtrans %}
+	<legend>{{ 'workshop'|trans }}
 
 			{# {% if is_granted('ROLE_ASSESSOR')%}
 				<a href="{{ path('workshop_edit', { 'id': workshop.id }) }}">
 					<img class='img_icon' src='{{ asset('bundles/util/images/icon/pencil.png') }}'
-						 title="{% trans %} edit {% endtrans %}" alt="{% trans %} edit {% endtrans %}"></a>{% endif %} #}
+						 title="{{ 'edit'|trans }}" alt="{{ 'edit'|trans }}"></a>{% endif %} #}
 
 			{% if workshop.test == 1 %}
 				<img class='img_icon' src='{{ asset('bundles/util/images/icon/test.png') }}'
-					 title="{% trans %} testing {% endtrans %}" alt="{% trans %} testing {% endtrans %}">{% endif %}
+					 title="{{ 'testing'|trans }}" alt="{{ 'testing'|trans }}">{% endif %}
 
 			{% if adsplus.id is defined %}
 				<img class='img_icon' src='{{ asset('bundles/util/images/icon/adsplus.png') }}'
-					 title="{% trans %} adsplus {% endtrans %}" alt="{% trans %} adsplus {% endtrans %}">{% endif %}
+					 title="{{ 'adsplus'|trans }}" alt="{{ 'adsplus'|trans }}">{% endif %}
 
 
 			<a class="btn btn-primary fr asr_form-control asr_btn"
@@ -22,13 +22,15 @@
 			    	 href="{% if is_granted('ROLE_ASSESSOR') and not is_granted('ROLE_ADMIN') %}{{ path("listTicket", { 'option': 'assessor_pending'}) }}{% else %}{{ path('listTicket') }}{% endif %}"
 			    {% endif %} >
 
-				<img class="img_icon" src="{{ asset('bundles/util/images/icon/back_.png') }}" title ="{% trans %} ticket_return {% endtrans %}" alt="{% trans %} ticket_return {% endtrans %}"> {% trans %} ticket_return {% endtrans %}
+				<img class="img_icon" src="{{ asset('bundles/util/images/icon/back_.png') }}" title ="{{ 'ticket_return'|trans }}" alt="{{ 'ticket_return'|trans }}"> {{ 'ticket_return'|trans }}
 			</a>
 	</legend>
 
 	<input type="hidden" id="id_workshop" name="id_workshop" value="{{ workshop.id }}">
 
-	{% if app.session.hasFlash('error' ) %} <p class="grid-full w100 error">{{ app.session.getFlash('error' ) }}</p> {% endif %}
+	{% for flashMessage in app.session.flashbag.get('error') %}
+		<p class="grid-full w100 error">{{ flashMessage }}</p>
+	{% endfor %}
 
 	<div class="grid-full w100">
 		{# WORKSHOP #}
@@ -46,7 +48,7 @@
 
 		{# CONTACTO #}
 		<div class="grid-full w25" {% if workshop.contact != "" %}title="{{workshop.contact}}" alt="{{workshop.contact}}"{% endif %} >
-			{% if workshop.contact      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/user.png') }}'> <b>{% trans %} contact {% endtrans %}:  </b>{{ workshop.contact|length > 50 ? workshop.contact|slice(0, 50) ~ '...' : workshop.contact  }}  {% endif %}
+			{% if workshop.contact      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/user.png') }}'> <b>{{ 'contact'|trans }}:  </b>{{ workshop.contact|length > 50 ? workshop.contact|slice(0, 50) ~ '...' : workshop.contact  }}  {% endif %}
 		</div>
 	</div>
 
@@ -74,18 +76,18 @@
 
 		{# PARTNER #}
 		<div class="grid-full w25" {% if workshop.partner.name != "" %}title="{{workshop.partner.name}}" alt="{{workshop.partner.name}}"{% endif %}>
-			{% if workshop.partner      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/partner_.png') }}'> <b>{% trans %} partner {% endtrans %}</b>: {{ workshop.partner|length > 15 ? workshop.partner|slice(0, 15) ~ '...' : workshop.partner  }} {% endif %}
+			{% if workshop.partner      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/partner_.png') }}'> <b>{{ 'partner'|trans }}</b>: {{ workshop.partner|length > 15 ? workshop.partner|slice(0, 15) ~ '...' : workshop.partner  }} {% endif %}
 		</div>
 
 		{# TIPOLOGY #}
 		<div class="grid-full w25" {% if workshop.typology != "" %}title="{{workshop.typology}}" alt="{{workshop.typology}}"{% endif %}>
-			{% if workshop.typology      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/menu_typology_.png') }}'> <b>{% trans %} typology {% endtrans %}</b>: {{ workshop.typology|length > 15 ? workshop.typology|slice(0, 15) ~ '...' : workshop.typology  }} {% endif %}
+			{% if workshop.typology      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/menu_typology_.png') }}'> <b>{{ 'typology'|trans }}</b>: {{ workshop.typology|length > 15 ? workshop.typology|slice(0, 15) ~ '...' : workshop.typology  }} {% endif %}
 		</div>
 	</div>
 
 	{# CIF #}
 	{# <div style="float:left;margin-bottom:5px;width: 25%;" {% if workshop.cif != "" %}title="{{workshop.cif}}" alt="{{workshop.cif}}"{% endif %}>
-		{% if workshop.cif      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/cif.png') }}'> <b>{% trans %} cif {% endtrans %}</b>: {{ workshop.cif|length > 15 ? workshop.cif|slice(0, 15) ~ '...' : workshop.cif  }} {% endif %}
+		{% if workshop.cif      != "" %}<img class='img_icon' src='{{ asset('bundles/util/images/icon/cif.png') }}'> <b>{{ 'cif'|trans }}</b>: {{ workshop.cif|length > 15 ? workshop.cif|slice(0, 15) ~ '...' : workshop.cif  }} {% endif %}
 	</div> #}
 
 	<div class="w100">
@@ -101,18 +103,18 @@
 		<div class="form-group grid-full w50" title="{{observation}}" style="float:left;margin-bottom:5px;width: 50%;height: 40px;" {% if observation != "" %}title="{{observation}}" alt="{{observation}}"{% endif %}>
 			{% if is_granted('ROLE_ASSESSOR') and workshop.conflictive == 1 %}
 
-				<img class='img_icon' src='{{ asset('bundles/util/images/icon/exclamation.png') }}' title="{% trans %} conflictive {% endtrans %}" alt="{% trans %} conflictive {% endtrans %}">
+				<img class='img_icon' src='{{ asset('bundles/util/images/icon/exclamation.png') }}' title="{{ 'conflictive'|trans }}" alt="{{ 'conflictive'|trans }}">
 
 			{% else %}
 
-				<img class='img_icon' src='{{ asset('bundles/util/images/icon/info_.png') }}' title="{% trans %} observations {% endtrans %}" alt="{% trans %} observations {% endtrans %}">
+				<img class='img_icon' src='{{ asset('bundles/util/images/icon/info_.png') }}' title="{{ 'observations'|trans }}" alt="{{ 'observations'|trans }}">
 
 			{% endif %}
 
 			{% if observation != "" %}
-				<b>{% trans %} observations {% endtrans %}</b>: {{ observation|length > 200 ? observation|slice(0, 200) ~ '...' : observation  }}
+				<b>{{ 'observations'|trans }}</b>: {{ observation|length > 200 ? observation|slice(0, 200) ~ '...' : observation  }}
 			{% else %}
-				{% trans %} any_observation {% endtrans %}
+				{{ 'any_observation'|trans }}
 			{% endif %}
 
 			{% if is_granted('ROLE_ASSESSOR') and ticket is defined %}
@@ -124,7 +126,7 @@
 		{# DIAG MACHINE #}
 		<div class="grid-full w50" {% if workshop.diagnosisMachines is defined and workshop.diagnosisMachines[0] is defined %}title="{{workshop.diagnosisMachines[0].name}}" alt="{{workshop.diagnosisMachines[0].name}}"{% endif %}>
 			{% if workshop.diagnosisMachines is defined and workshop.diagnosisMachines[0] is defined %}
-				<img class='img_icon' src='{{ asset('bundles/util/images/icon/diagnostic_machines_.png') }}'> <b>{% trans %} diagnosis_machines {% endtrans %}</b>:
+				<img class='img_icon' src='{{ asset('bundles/util/images/icon/diagnostic_machines_.png') }}'> <b>{{ 'diagnosis_machines'|trans }}</b>:
 	            {% for diag_machine in workshop.diagnosisMachines %}
 	            	- {{ diag_machine.name }}
 				{% endfor %}

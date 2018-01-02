@@ -15,14 +15,14 @@
     <div id="pagination"  class="pagination_content">
 
 	    {# FLECHAS PAGINAS ANTERIORES #}
-    	<a id="firstpage"    class="page_number" title="{% trans %} page.first {% endtrans %}"
+    	<a id="firstpage"    class="page_number" title="{{ 'page.first'|trans }}"
             href="{{ path(route, { 'page': 1 , 'w_idpartner': w_idpartner, 'w_id': w_id, 'country': country, 'partner': partner, 'status': status, 'term': term, 'field': field }) }}">
             <img class="img_icon" src="{{ asset('bundles/util/images/icon/arrow_left_double.png') }}">
         </a>
 
         {% if page-1 <= 0 %} {% set this_prev_page = 1 %} {% else %} {% set this_prev_page = page-1 %}{% endif %}
 
-    	<a id="btn_anterior" class="page_number" title="{% trans %} page.prev {% endtrans %}"
+    	<a id="btn_anterior" class="page_number" title="{{ 'page.prev'|trans }}"
             href="{{ path(route, { 'page': this_prev_page, 'w_idpartner': w_idpartner, 'w_id': w_id, 'country': country, 'partner': partner, 'status': status, 'term': term, 'field': field }) }}">
             <img class="img_icon" src="{{ asset('bundles/util/images/icon/arrow_left.png') }}">
         </a>
@@ -33,7 +33,7 @@
 
                 {% set this_prev_page = page - prev_page %}
 
-                <a class="page_number change_page" title="{% trans %} page {% endtrans %} {{ this_prev_page }}"
+                <a class="page_number change_page" title="{{ 'page'|trans }} {{ this_prev_page }}"
                     href="{{ path(route, { 'page': this_prev_page, 'w_idpartner': w_idpartner, 'w_id': w_id, 'country': country, 'partner': partner, 'status': status, 'term': term, 'field': field }) }}">
                     {{ this_prev_page }}
                 </a>
@@ -41,7 +41,7 @@
     	{% endif %}
 
     	{# PAGINA ACTUAL #}
-	    <input  type="text"   id="page"  class="page_number page_selected" value="{{ page }}"  title="{% trans %} page.goto {% endtrans %} {{ page }}" disabled >
+	    <input  type="text"   id="page"  class="page_number page_selected" value="{{ page }}"  title="{{ 'page.goto'|trans }} {{ page }}" disabled >
 
 	    {# PAGINAS SIGUIENTES #}
     	{% if nextpages > 0 %}
@@ -49,7 +49,7 @@
 
                 {% set this_next_page = page + next_page %}
 
-                <a class="page_number change_page" title="{% trans %} page {% endtrans %} {{ this_next_page }}"
+                <a class="page_number change_page" title="{{ 'page'|trans }} {{ this_next_page }}"
                     href="{{ path(route, { 'page': this_next_page, 'w_idpartner': w_idpartner, 'w_id': w_id, 'country': country, 'partner': partner, 'status': status, 'term': term, 'field': field }) }}">
                     {{ this_next_page }}
                 </a>
@@ -60,11 +60,11 @@
 
         {% if page+1 >= totalpag %} {% set this_next_page = totalpag %} {% else %} {% set this_next_page = page+1 %}{% endif %}
 
-        <a id="btn_siguiente" class="page_number" title="{% trans %} page.next {% endtrans %}"
+        <a id="btn_siguiente" class="page_number" title="{{ 'page.next'|trans }}"
             href="{{ path(route, { 'page': this_next_page, 'w_idpartner': w_idpartner, 'w_id': w_id, 'country': country, 'partner': partner, 'status': status, 'term': term, 'field': field }) }}">
             <img class="img_icon" src="{{ asset('bundles/util/images/icon/arrow_right.png') }}">
         </a>
-        <a id="totalpage"    class="page_number" title="{% trans %} page.last {% endtrans %}({{ totalpag }})"
+        <a id="totalpage"    class="page_number" title="{{ 'page.last'|trans }}({{ totalpag }})"
             href="{{ path(route, { 'page': totalpag, 'w_idpartner': w_idpartner, 'w_id': w_id, 'country': country, 'partner': partner, 'status': status, 'term': term, 'field': field }) }}">
             <img class="img_icon" src="{{ asset('bundles/util/images/icon/arrow_right_double.png') }}">
         </a>

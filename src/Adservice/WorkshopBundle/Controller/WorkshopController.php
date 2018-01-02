@@ -5,6 +5,7 @@ namespace Adservice\WorkshopBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -28,13 +29,13 @@ class WorkshopController extends Controller {
      * @return type
      * @throws AccessDeniedException
      */
-    public function listAction($page = 1, $w_idpartner = '0', $w_id = '0', $country = '0', $catserv = '0', $partner = '0', $status = '0', $term = '0', $field = '0') {
+    public function listAction(Request $request, $page = 1, $w_idpartner = '0', $w_id = '0', $country = '0', $catserv = '0', $partner = '0', $status = '0', $term = '0', $field = '0') {
 
-        $em = $this->getDoctrine()->getEntityManager();
-        $security = $this->get('security.context');
+        $em = $this->getDoctrine()->getManager();
+
         $joins = array();
 
-        if ($security->isGranted('ROLE_ASSESSOR') === false and $security->isGranted('ROLE_AD') === false) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') === false and $this->get('security.authorization_checker')->isGranted('ROLE_AD') === false) {
             throw new AccessDeniedException();
         }
 
@@ -55,23 +56,23 @@ class WorkshopController extends Controller {
                 $params[] = array($term, " LIKE '%" . $field . "%'");
             }
         }
-        if ($security->isGranted('ROLE_ADMIN')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             if ($country != '0')
                 $params[] = array('country', ' = ' . $country);
         } else
-            $params[] = array('country', ' = ' . $security->getToken()->getUser()->getCountry()->getId());
+            $params[] = array('country', ' = ' . $this->getUser()->getCountry()->getId());
 
         if($catserv != 0)
         {
             $params[] = array('category_service', ' = '.$catserv.' ');
         }
 
-        if ($security->isGranted('ROLE_ADMIN') ) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') ) {
             
-            $catser = $this->get('security.context')->getToken()->getUser()->getCategoryService();
+            $catser = $this->getUser()->getCategoryService();
              
              
-            if(!$security->isGranted('ROLE_SUPER_ADMIN'))
+            if(!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN'))
                 $params[] = array('category_service', ' = ' . $catser->getId());
 
             if ($partner != '0')
@@ -97,8 +98,8 @@ class WorkshopController extends Controller {
                 $params[] = array('infotech', ' = 1');
             }
         }
-        elseif ($security->isGranted('ROLE_TOP_AD') ) {
-            $catser = $this->get('security.context')->getToken()->getUser()->getCategoryService();
+        elseif ($this->get('security.authorization_checker')->isGranted('ROLE_TOP_AD') ) {
+            $catser = $this->getUser()->getCategoryService();
             if($catser != null)
                 $catserv = $catser->getId();
             else
@@ -142,18 +143,18 @@ class WorkshopController extends Controller {
 
         $pagination->setTotalPagByLength($length);
 
-        if ($security->isGranted('ROLE_ADMIN')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             $countries = $em->getRepository('UtilBundle:Country')->findAll();
         }
         else
             $countries = array();
 
-        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
 
             if($catserv != 0) $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('category_service' => $catserv),array('name' => 'ASC'));
             else              $partners = $em->getRepository('PartnerBundle:Partner')->findAll(array('name' => 'ASC'));
         } else {
-            $country_id = $security->getToken()->getUser()->getCountry()->getId();
+            $country_id = $this->getUser()->getCountry()->getId();
             if($catserv != 0) $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('category_service' => $catserv, 'country' => $country_id),array('name' => 'ASC'));
             else              $partners = $em->getRepository('PartnerBundle:Partner')->findBy(array('country' => $country_id), array('name' => 'ASC'));
         }
@@ -177,32 +178,32 @@ class WorkshopController extends Controller {
                     'length'        => $length));
     }
 
-    public function newWorkshopAction() {
-        $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_TOP_AD') === false)
+    public function newWorkshopAction(Request $request) {
+
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_TOP_AD') === false)
             throw new AccessDeniedException();
-        $em = $this->getDoctrine()->getEntityManager();
-        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+
         $workshop = new Workshop();
 
-        if ($security->isGranted('ROLE_SUPER_AD')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
 
-            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
+            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $this->getUser()->getCountry()->getId(),
                 'active' => '1'));
         } else
             $partners = '0';
 
         // Creamos variables de sesion para fitlrar los resultados del formulario
-        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
 
             $_SESSION['id_partner'] = ' != 0 ';
             //$_SESSION['id_country'] = ' != 0 ';
             $_SESSION['id_catserv'] = ' != 0 ';
         }
-        elseif ($security->isGranted('ROLE_TOP_AD')) {
+        elseif ($this->get('security.authorization_checker')->isGranted('ROLE_TOP_AD')) {
             $_SESSION['id_catserv'] = ' = 3 ';
         }
-        elseif ($security->isGranted('ROLE_SUPER_AD')) {
+        elseif ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
             foreach ($partners as $p) {
@@ -210,7 +211,7 @@ class WorkshopController extends Controller {
             }
 
             $_SESSION['id_partner'] = ' IN (' . $partner_ids . ')';
-            $_SESSION['id_country'] = ' = ' . $security->getToken()->getUser()->getCountry()->getId();
+            $_SESSION['id_country'] = ' = ' . $this->getUser()->getCountry()->getId();
         }
        
         else {
@@ -218,14 +219,14 @@ class WorkshopController extends Controller {
             $_SESSION['id_country'] = ' = ' . $partner->getCountry()->getId();
         }
         
-        if ($security->isGranted('ROLE_ADMIN')) $_SESSION['code_billing'] = 'code_billing';
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) $_SESSION['code_billing'] = 'code_billing';
         else unset($_SESSION['code_billing']);
 
         $form = $this->createForm(new WorkshopType(), $workshop);
 
         if ($request->getMethod() == 'POST') {
             
-            $form->bindRequest($request);
+            $form->handleRequest($request);
             if($workshop->getRegion() == null){
                 $workshop->setRegion('-');
             }
@@ -258,7 +259,7 @@ class WorkshopController extends Controller {
             }
 
             if ($find == null and $findPhone[0]['1'] < 1 and $findPhone[1]['1'] < 1 and $findPhone[2]['1'] < 1 and $findPhone[3]['1'] < 1) {
-                $workshop = UtilController::newEntity($workshop, $security->getToken()->getUser());
+                $workshop = UtilController::newEntity($workshop, $this->getUser());
                 $workshop = UtilController::settersContact($workshop, $workshop);
                 $workshop->setCodePartner($partner->getCodePartner());
                 $workshop->setCodeWorkshop($code);
@@ -306,7 +307,7 @@ class WorkshopController extends Controller {
                 $role = $em->getRepository('UserBundle:Role')->findOneByName('ROLE_USER');
                 $lang = $em->getRepository('UtilBundle:Language')->findOneByLanguage($workshop->getCountry()->getLang());
 
-                $newUser = UtilController::newEntity(new User(), $security->getToken()->getUser());
+                $newUser = UtilController::newEntity(new User(), $this->getUser());
                 $newUser->setUsername($username);
                 $newUser->setPassword($pass);
                 $newUser->setName($workshop->getContact());
@@ -335,7 +336,7 @@ class WorkshopController extends Controller {
                 $token = UtilController::getRandomToken();
                 $newUser->setToken($token);
 
-                UtilController::saveEntity($em, $newUser, $this->get('security.context')->getToken()->getUser());
+                UtilController::saveEntity($em, $newUser, $this->getUser());
 
                 //$this->createHistoric($em, $workshop); /* Genera un historial de cambios del taller */
 
@@ -388,11 +389,11 @@ class WorkshopController extends Controller {
                 }
 
                 $flash = $this->get('translator')->trans('create') . ' ' . $this->get('translator')->trans('workshop') . ': ' . $username;
-                if ($security->isGranted('ROLE_ADMIN'))
+                if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
                 {
                     $flash = $flash . ' '. $this->get('translator')->trans('with_password') . ': ' . $pass;
                 }
-                $this->get('session')->setFlash('alert', $flash);
+                $this->get('session')->getFlashBag()->add('alert', $flash);
 
                 return $this->redirect($this->generateUrl('workshop_list'));
             } else {
@@ -416,17 +417,17 @@ class WorkshopController extends Controller {
                 } else {
                     $flash = $this->get('translator')->trans('error.code_workshop.used') . $code;
                 }
-                $this->get('session')->setFlash('error', $flash);
+                $this->get('session')->getFlashBag()->add('error', $flash);
             }
             
         }
 
-        if ($security->isGranted('ROLE_SUPER_ADMIN')){
-            //$country = $security->getToken()->getUser()->getCountry()->getId();
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')){
+            //$country = $this->getUser()->getCountry()->getId();
             $catserv = null;
         }
         else{
-            $catserv = $security->getToken()->getUser()->getCategoryService();
+            $catserv = $this->getUser()->getCategoryService();
         }
         //$typologies = TypologyRepository::findTypologiesList($em, $country);
         //$diagnosis_machines = DiagnosisMachineRepository::findDiagnosisMachinesList($em, $country);
@@ -448,33 +449,30 @@ class WorkshopController extends Controller {
      * Si la petición es GET  --> mostrar el formulario
      * Si la petición es POST --> save del formulario
      */
-    public function editWorkshopAction($workshop)
+    public function editWorkshopAction(Request $request, $workshop)
     {
-        $security = $this->get('security.context');
-        $request = $this->getRequest();
 
-        if ((!$security->isGranted('ROLE_ADMIN')) and ( $security->isGranted('ROLE_AD') and ( $security->getToken()->getUser()->getPartner() != null and $security->getToken()->getUser()->getPartner()->getId() == $workshop->getPartner()->getId()) === false)
-                and ( $security->isGranted('ROLE_SUPER_AD') and ( $security->getToken()->getUser()->getCountry()->getId() == $workshop->getCountry()->getId()) === false)) {
+        if ((!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) and ( $this->get('security.authorization_checker')->isGranted('ROLE_AD') and ( $this->getUser()->getPartner() != null and $this->getUser()->getPartner()->getId() == $workshop->getPartner()->getId()) === false)
+                and ( $this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD') and ( $this->getUser()->getCountry()->getId() == $workshop->getCountry()->getId()) === false)) {
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $partner = $workshop->getPartner();
 
-        $petition = $this->getRequest();
-        if ($security->isGranted('ROLE_SUPER_AD')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
 
-            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $security->getToken()->getUser()->getCountry()->getId(),
+            $partners = $em->getRepository("PartnerBundle:Partner")->findBy(array('country' => $this->getUser()->getCountry()->getId(),
                 'active' => '1'));
         } else
             $partners = '0';
 
         // Creamos variables de sesion para fitlrar los resultados del formulario
-        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
 
             $_SESSION['id_partner'] = ' != 0 ';
             $_SESSION['id_country'] = ' = ' . $workshop->getCountry()->getId();
-        } elseif ($security->isGranted('ROLE_SUPER_AD')) {
+        } elseif ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
             foreach ($partners as $p) {
@@ -482,13 +480,13 @@ class WorkshopController extends Controller {
             }
 
             $_SESSION['id_partner'] = ' IN (' . $partner_ids . ')';
-            $_SESSION['id_country'] = ' = ' . $security->getToken()->getUser()->getCountry()->getId();
+            $_SESSION['id_country'] = ' = ' . $this->getUser()->getCountry()->getId();
         } else {
             $_SESSION['id_partner'] = ' = ' . $partner->getId();
             $_SESSION['id_country'] = ' = ' . $partner->getCountry()->getId();
         }
         
-        if ($security->isGranted('ROLE_ADMIN')) $_SESSION['code_billing'] = 'code_billing';
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) $_SESSION['code_billing'] = 'code_billing';
         else unset($_SESSION['code_billing']);
         
         $form = $this->createForm(new WorkshopType(), $workshop);
@@ -496,9 +494,9 @@ class WorkshopController extends Controller {
         $actual_city = $workshop->getRegion();
         $actual_region = $workshop->getCity();
         $actual_test = $workshop->getTest();
-        if ($petition->getMethod() == 'POST') {
+        if ($request->getMethod() == 'POST') {
             $last_code = $workshop->getCodeWorkshop();
-            $form->bindRequest($petition);
+            $form->handleRequest($request);
             //if ($form->isValid()) {
             if($request->request->has("btn_reset_token")) {
                 
@@ -555,9 +553,9 @@ class WorkshopController extends Controller {
                     if($actual_test != $workshop->getTest()){
                         UtilController::createHistorical($em, $workshop, $status);
                     }
-                    if ($security->isGranted('ROLE_TOP_AD'))
+                    if ($this->get('security.authorization_checker')->isGranted('ROLE_TOP_AD'))
                         return $this->redirect($this->generateUrl('workshop_list'));
-                    elseif ($security->isGranted('ROLE_ASSESSOR'))
+                    elseif ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR'))
                         return $this->redirect($this->generateUrl('listTicket'));
                 }
                 else {
@@ -581,7 +579,7 @@ class WorkshopController extends Controller {
                         $code = UtilController::getCodeWorkshopUnused($em, $partner->getCodePartner());        /* OBTIENE EL PRIMER CODIGO DISPONIBLE */
                         $flash = $this->get('translator')->trans('error.code_workshop.used') . $code . ' (valor actual ' . $last_code . ').';
                     }
-                    $this->get('session')->setFlash('error', $flash);
+                    $this->get('session')->getFlashBag()->add('error', $flash);
                 }
             }
             //}
@@ -606,12 +604,12 @@ class WorkshopController extends Controller {
                     'form' => $form->createView()));
     }
 
-    public function deleteWorkshopAction($id) {
+    public function deleteWorkshopAction(Request $request, $id) {
 
-        if ($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN') === false) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN') === false) {
             throw new AccessDeniedException();
         }
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $workshop = $em->getRepository("WorkshopBundle:Workshop")->find($id);
         if (!$workshop)
             throw $this->createNotFoundException('Workshop no encontrado en la BBDD');
@@ -676,17 +674,17 @@ class WorkshopController extends Controller {
      * @ParamConverter("workshop", class="WorkshopBundle:Workshop")
      * @return url
      */
-    public function workshopObservationAction($workshop, $id_ticket) {
+    public function workshopObservationAction(Request $request, $workshop, $id_ticket) {
 
-        if ($this->get('security.context')->isGranted('ROLE_ASSESSOR') === false) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') === false) {
             throw new AccessDeniedException();
         }
-        $em = $this->getDoctrine()->getEntityManager();
-        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+
         $form = $this->createForm(new WorkshopObservationType(), $workshop);
 
         if ($request->getMethod() == 'POST') {
-            $form->bindRequest($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
 
@@ -701,28 +699,28 @@ class WorkshopController extends Controller {
                     'form' => $form->createView()));
     }
 
-    public function workshopDeactivateObservationAction($workshop_id)
+    public function workshopDeactivateObservationAction(Request $request, $workshop_id)
     {
-        if ($this->get('security.context')->isGranted('ROLE_TOP_AD') === false) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_TOP_AD') === false) {
             throw new AccessDeniedException();
         }
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneById($workshop_id);
         if($workshop)
         {
-            $request = $this->getRequest();
+
             $form = $this->createForm(new WorkshopDeactivateObservationType(), $workshop);
 
             if ($request->getMethod() == 'POST') {
-                $form->bindRequest($request);
+                $form->handleRequest($request);
 
                 if ($form->isValid()) {
 
                     $em->persist($workshop);
                     $em->flush();
 
-                    $this->deactivateActivateWorkshopAction($workshop->getId());
+                    $this->deactivateActivateWorkshopAction($workshop->getId(), $request);
 
                     return $this->redirect($this->generateUrl('workshop_list'));
                 }
@@ -737,9 +735,9 @@ class WorkshopController extends Controller {
         }
     }
 
-    public function deactivateActivateWorkshopAction($workshop_id)
+    public function deactivateActivateWorkshopAction($workshop_id, $request)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneById($workshop_id);
         if($workshop)
         {
@@ -773,7 +771,7 @@ class WorkshopController extends Controller {
                     //$consulta->getResult();
             }
             $workshop->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
-            $workshop->setModifiedBy($this->get('security.context')->getToken()->getUser());
+            $workshop->setModifiedBy($this->getUser());
         }
        
         if($workshop->getTest() && $status == 1){
@@ -785,7 +783,7 @@ class WorkshopController extends Controller {
         //Mail to workshop
         $mail = $workshop->getEmail1();
         $action = 'deactivate';
-        $locale = $this->getRequest()->getLocale();
+        $locale = $request->getLocale();
         $mailerUser = $this->get('cms.mailer');
         $mailerUser->setSubject($this->get('translator')->trans('mail.deactivateWorkshop.subject').$workshop->getName());
         if($workshop->getActive()== true)
@@ -800,11 +798,11 @@ class WorkshopController extends Controller {
         // echo $this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> $action, '__locale' => $locale));die;
         
 //        //Mail to Report
-//        if ($security->isGranted('ROLE_SUPER_ADMIN')){
+//        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')){
 //            $catserv = null;
 //        }
 //        else{
-//            $catserv = $security->getToken()->getUser()->getCategoryService();
+//            $catserv = $this->getUser()->getCategoryService();
 //        }
 
         if($workshop->getCategoryService()->getId() == 3) {
@@ -835,16 +833,16 @@ class WorkshopController extends Controller {
         return $this->redirect($this->generateUrl('workshop_list'));
     }
 
-    public function insertCifAction($workshop_id, $country) {
-        $request = $this->getRequest();
+    public function insertCifAction(Request $request, $workshop_id, $country) {
+
         if ($request->getMethod() == 'POST') {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $workshop = $em->getRepository("WorkshopBundle:Workshop")->findOneById($workshop_id);
             $locale = $workshop->getCountry()->getId();
             $CIF = $request->request->get('new_car_form_CIF');
             if ($CIF == '0' || empty($CIF)) {
                 $flash = $this->get('translator')->trans('workshop.cif_error2');
-                $this->get('session')->setFlash('error', $flash);
+                $this->get('session')->getFlashBag()->add('error', $flash);
             }
             else {
                 $result = 1;
@@ -858,7 +856,7 @@ class WorkshopController extends Controller {
                     if (count($tmp_workshop) > 0) {
                         //$flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('user').': '.$username;
                         $flash = $this->get('translator')->trans('workshop.cif_error');
-                        $this->get('session')->setFlash('error', $flash);
+                        $this->get('session')->getFlashBag()->add('error', $flash);
                     } else {
                         $workshop->setCIF($CIF);
                         $this->saveWorkshop($em, $workshop);
@@ -870,15 +868,15 @@ class WorkshopController extends Controller {
                     }
                 } else {
                     $flash = $this->get('translator')->trans('workshop.cif_no_valido');
-                    $this->get('session')->setFlash('error', $flash);
+                    $this->get('session')->getFlashBag()->add('error', $flash);
                 }
             }
         }
         return $this->render('TicketBundle:Workshop:insert_cif.html.twig', array('workshop_id' => $workshop_id, 'country' => $country));
     }
 
-    public function findCifAction($cif) {
-        $em = $this->getDoctrine()->getEntityManager();
+    public function findCifAction(Request $request, $cif) {
+        $em = $this->getDoctrine()->getManager();
         $workshop = $em->getRepository("WorkshopBundle:Workshop")->findOneByCif($cif);
         $find = false;
         if ($workshop) {
@@ -940,7 +938,7 @@ class WorkshopController extends Controller {
         }
 
         $workshop->setModifiedAt(new \DateTime(\date("Y-m-d H:i:s")));
-        $workshop->setModifiedBy($this->get('security.context')->getToken()->getUser());
+        $workshop->setModifiedBy($this->getUser());
 
         $em->persist($workshop);
         $em->flush();

@@ -3,6 +3,7 @@ namespace Adservice\TicketBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\Request;
 
 use Adservice\UtilBundle\Controller\UtilController as UtilController;
 use Adservice\UtilBundle\Entity\Pagination;
@@ -16,19 +17,19 @@ class SentenceController extends Controller
     /**
      * Devuelve la lista de sentencias
      */
-    public function listSentenceAction($page=1, $country='none') {
-        $em = $this->getDoctrine()->getEntityManager();
-        $security = $this->get('security.context');
+    public function listSentenceAction(Request $request, $page=1, $country='none') {
+        $em = $this->getDoctrine()->getManager();
 
-        if (! $security->isGranted('ROLE_ADMIN')) {
+
+        if (! $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
              throw new AccessDeniedException();
         }
         $params[] = array();
-//        if($security->isGranted('ROLE_SUPER_ADMIN')) {
+//        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
 //            if ($country != 'none') $params[] = array('country', ' = '.$country);
 //            else                    
 //        }
-//        else $params[] = array('country', ' = '.$security->getToken()->getUser()->getCountry()->getId());
+//        else $params[] = array('country', ' = '.$this->getUser()->getCountry()->getId());
 
         $pagination = new Pagination($page);
 
@@ -38,7 +39,7 @@ class SentenceController extends Controller
 
         $pagination->setTotalPagByLength($length);
 
-        if($security->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
+        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
         else $countries = array();
 
         return $this->render('TicketBundle:Sentence:list_sentence.html.twig', array( 'sentences'  => $sentences,
@@ -52,35 +53,34 @@ class SentenceController extends Controller
      * Si la petición es GET  --> mostrar el formulario
      * Si la petición es POST --> save del formulario
      */
-    public function editSentenceAction($id) {
-        $security = $this->get('security.context');
-        if (! $security->isGranted('ROLE_ADMIN')){
+    public function editSentenceAction(Request $request, $id) {
+
+        if (! $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')){
             throw new AccessDeniedException();
         }
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $sentence = new Sentence();
 
-        $petition = $this->getRequest();
         if ($id != null) {
                           $sentence = $em->getRepository("TicketBundle:Sentence")->find($id);
                           if (!$sentence) throw $this->createNotFoundException('Sentencia no encontrado en la BBDD');
         }
         // Creamos variables de sesion para fitlrar los resultados del formulario
-        if ($security->isGranted('ROLE_SUPER_ADMIN')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
 
             $_SESSION['id_partner'] = ' != 0 ';
 
-        }elseif ($security->isGranted('ROLE_SUPER_AD')) {
-            $_SESSION['id_country'] = ' = '.$security->getToken()->getUser()->getCountry()->getId();
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
+            $_SESSION['id_country'] = ' = '.$this->getUser()->getCountry()->getId();
 
         }else {
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
         $form = $this->createForm(new SentenceType(), $sentence);
 
-        if ($petition->getMethod() == 'POST') {
-            $form->bindRequest($petition);
+        if ($request->getMethod() == 'POST') {
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
 

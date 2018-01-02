@@ -1,25 +1,31 @@
 imports:
-    - { resource: parameters.ini }
+    - { resource: parameters.yml }
     - { resource: security.yml }
+
+parameters:
+    adservice.post.uploadpath: 'web/uploads/tickets'
 
 framework:
     #esi:             ~
-    translator:      { fallback: %locale% }
-    secret:          %secret%
-    charset:         UTF-8
+    translator:      { fallback: "%locale%" }
+    secret:          "%secret%"
+    #charset:         UTF-8
     router:          { resource: "%kernel.root_dir%/config/routing.yml" }
     form:            true
     csrf_protection: true
     validation:      { enable_annotations: true }
     templating:      { engines: ['twig'] } #assets_version: SomeVersionScheme
-    session:
-        default_locale: %locale%
-        auto_start:     true
+    default_locale: "%locale%"
+    trusted_proxies: ~
+    session: ~
+    fragments: ~
+    http_method_override: true
+
 
 # Twig Configuration
 twig:
-    debug:            %kernel.debug%
-    strict_variables: %kernel.debug%
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
     globals:
         env:             '%env%'
         route_logo:      '%route_logo%'
@@ -27,7 +33,7 @@ twig:
 
 # Assetic Configuration
 assetic:
-    debug:          %kernel.debug%
+    debug:          "%kernel.debug%"
     use_controller: false
     # java: /usr/bin/java
     filters:
@@ -42,28 +48,28 @@ doctrine:
     dbal:
         connections:
             default:
-                driver:   %database_driver%
-                host:     %database_host%
-                port:     %database_port%
-                dbname:   %database_name%
-                user:     %database_user%
-                password: %database_password%
+                driver:   "%database_driver%"
+                host:     "%database_host%"
+                port:     "%database_port%"
+                dbname:   "%database_name%"
+                user:     "%database_user%"
+                password: "%database_password%"
                 charset:  UTF8
             db_old:
-                driver:   %database_old_driver%
-                host:     %database_old_host%
-                port:     %database_old_port%
-                dbname:   %database_old_name%
-                user:     %database_old_user%
-                password: %database_old_password%
+                driver:   "%database_old_driver%"
+                host:     "%database_old_host%"
+                port:     "%database_old_port%"
+                dbname:   "%database_old_name%"
+                user:     "%database_old_user%"
+                password: "%database_old_password%"
                 charset:  UTF8
             db_lock:
-                driver:   %database_lock_driver%
-                host:     %database_lock_host%
-                port:     %database_lock_port%
-                dbname:   %database_lock_name%
-                user:     %database_lock_user%
-                password: %database_lock_password%
+                driver:   "%database_lock_driver%"
+                host:     "%database_lock_host%"
+                port:     "%database_lock_port%"
+                dbname:   "%database_lock_name%"
+                user:     "%database_lock_user%"
+                password: "%database_lock_password%"
                 charset:  UTF8
 
     orm:
@@ -92,7 +98,7 @@ doctrine:
                 mappings:
                     LockBundle: ~
                 # auto_mapping: true
-        auto_generate_proxy_classes: %kernel.debug%
+        auto_generate_proxy_classes: "%kernel.debug%"
         # auto_mapping: true
 
         # ORIGINAL #
@@ -101,30 +107,19 @@ doctrine:
 
 # Swiftmailer Configuration
 swiftmailer:
-    transport: %mailer_transport%
-    host:      %mailer_host%
-    username:  %mailer_user%
-    password:  %mailer_password%
+    transport: "%mailer_transport%"
+    host:      "%mailer_host%"
+    username:  "%mailer_user%"
+    password:  "%mailer_password%"
     spool:
-        type:                 file
-        path:                 "%kernel.root_dir%/spool"
-jms_security_extra:
-    secure_controllers:  true
-    secure_all_services: false
+        type: file
+        path: "%kernel.root_dir%/spool"
 
 services:
-    twig.extension.text:
-        class: Twig_Extensions_Extension_Text
-        tags:
-            - { name: twig.extension }
-
-    twig.extension.debug:
-        class: Twig_Extensions_Extension_Debug
-        tags:
-            - { name: twig.extension }
-
-parameters:
-    adservice.post.uploadpath: 'web/uploads/tickets'
+    #twig.extension.text:
+    #    class: Twig_Extensions_Extension_Text
+    #    tags:
+    #        - { name: twig.extension }
 
 knp_snappy:
     pdf:

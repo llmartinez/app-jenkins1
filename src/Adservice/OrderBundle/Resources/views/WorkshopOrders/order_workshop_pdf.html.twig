@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
-{% if app.security.getToken().getUser().getCategoryService().getId() is defined %}
-           {% set id_catserv = app.security.getToken().getUser().getCategoryService().getId() %}
+{% if app.user.getCategoryService().getId() is defined %}
+           {% set id_catserv = app.user.getCategoryService().getId() %}
 {% else %} {% set id_catserv = '0' %}
 {% endif %}
 
@@ -13,9 +13,9 @@
 
     <body>
         <h1 style="color:#fff;background-color:#428bca;padding: 10px 15px;">
-            <a style="width: 35%;">{% trans %} workshop {% endtrans %} {{ workshop.partner.codePartner }}, {{ workshop.codeWorkshop }}</a>
+            <a style="width: 35%;">{{ 'workshop'|trans }} {{ workshop.partner.codePartner }}, {{ workshop.codeWorkshop }}</a>
 
-            {% if app.security.getToken().getUser() != "anon." and workshop.categoryService != null %}
+            {% if app.user and workshop.categoryService != null %}
                 {% set url_logo_catserv = route_logo ~ '_' ~ workshop.categoryService.slug ~ '.png' %}
                 <img src="{{ asset(url_logo_catserv) }}" style="height: 40px;float:right;">
             {% endif %}
@@ -24,128 +24,128 @@
             <img src="{{ asset(url_logo) }}" style="height: 40px;float:right;margin-right: 10px;">
         </h1>
         {#
-        <h2>{% trans %} mail.welcome {% endtrans %}!!</h2>
-        <p>{% trans %} mail.changePassword.info {% endtrans %}</p>
+        <h2>{{ 'mail.welcome'|trans }}!!</h2>
+        <p>{{ 'mail.changePassword.info'|trans }}</p>
         <hr>
         #}
-        <h3>{% trans %} dataworkshop {% endtrans %}</h3>
+        <h3>{{ 'dataworkshop'|trans }}</h3>
         <table style="width: 90%;margin: 0 5%;">
             <tr>
-                <td style="width:40%;"><b>{% trans %} name {% endtrans %}</b></td>
+                <td style="width:40%;"><b>{{ 'name'|trans }}</b></td>
                 <td style="width:60%;">{{ workshop.name }}</td>
             </tr>
             <tr>
-                <td style="width:40%;"><b>{% trans %} code {% endtrans %}</b></td>
+                <td style="width:40%;"><b>{{ 'code'|trans }}</b></td>
                 <td style="width:60%;">{{ workshop.codePartner }}, {{ workshop.codeWorkshop }}</td>
             </tr>
             <tr>
-                <td style="width:40%;"><b>{% trans %} partner {% endtrans %}</b></td>
+                <td style="width:40%;"><b>{{ 'partner'|trans }}</b></td>
                 <td style="width:60%;">{{ workshop.partner }}</td>
             </tr>
             {% if id_catserv != 3 %}
             <tr>
-                <td style="width:40%;"><b>{% trans %} shop {% endtrans %}</b></td>
+                <td style="width:40%;"><b>{{ 'shop'|trans }}</b></td>
                 <td style="width:60%;">{% if workshop.shop != '' %}{{ workshop.shop }} {% else %} ... {% endif %}</td>
             </tr>
             {% endif %}
             <tr>
-                <td style="width:40%;"><b>{% trans %} typology        {% endtrans %}</b></td>
+                <td style="width:40%;"><b>{{ 'typology'|trans }}</b></td>
                 <td style="width:60%;">{% if workshop.typology      != '' %}{{ workshop.typology       }} {% else %} ... {% endif %}</td>
             </tr>
             <tr>
-                <td style="width:40%;"><b>{% trans %} cif             {% endtrans %}</b></td>
+                <td style="width:40%;"><b>{{ 'cif'|trans }}</b></td>
                 <td style="width:60%;">{% if workshop.cif           != '' %}{{ workshop.cif            }} {% else %} ... {% endif %}</td>
             </tr>
             <tr>
-                <td style="width:40%;"><b>{% trans %} internal_code   {% endtrans %}</b></td>
+                <td style="width:40%;"><b>{{ 'internal_code'|trans }}</b></td>
                 <td style="width:60%;">{% if workshop.InternalCode  != '' %}{{ workshop.InternalCode   }} {% else %} ... {% endif %}</td>
             </tr>
             <tr>
-                <td style="width:40%;"><b>{% trans %} commercial_code   {% endtrans %}</b></td>
+                <td style="width:40%;"><b>{{ 'commercial_code'|trans }}</b></td>
                 <td style="width:60%;">{% if workshop.CommercialCode != '' %}{{ workshop.CommercialCode }} {% else %} ... {% endif %}</td>
             </tr>
             {% if id_catserv != 3 %}
             <tr>
-                <td style="width:40%;"><b>{% trans %} ad_service_plus {% endtrans %}</b></td>
-                <td style="width:60%;">{% if workshop.adServicePlus == 1 %}{% trans %}yes{% endtrans %} {% else %} ... {% endif %}</td>
+                <td style="width:40%;"><b>{{ 'ad_service_plus'|trans }}</b></td>
+                <td style="width:60%;">{% if workshop.adServicePlus == 1 %}{{ 'yes'|trans }} {% else %} ... {% endif %}</td>
             </tr>
             {% endif %}
             <tr>
-                <td style="width:40%;"><b>{% trans %} test            {% endtrans %}</b></td>
-                <td style="width:60%;">{% if workshop.test          == 1 %}{% trans %}yes{% endtrans %} {% else %} ... {% endif %}</td>
+                <td style="width:40%;"><b>{{ 'test'|trans }}</b></td>
+                <td style="width:60%;">{% if workshop.test          == 1 %}{{ 'yes'|trans }} {% else %} ... {% endif %}</td>
             </tr>
             <tr>
-                <td style="width:40%;"><b>{% trans %} haschecks       {% endtrans %}</b></td>
-                <td style="width:60%;">{% if workshop.haschecks     == 1 %}{% trans %}yes{% endtrans %} {% else %} ... {% endif %}</td>
+                <td style="width:40%;"><b>{{ 'haschecks'|trans }}</b></td>
+                <td style="width:60%;">{% if workshop.haschecks     == 1 %}{{ 'yes'|trans }} {% else %} ... {% endif %}</td>
             </tr>
             <tr>
-                <td style="width:40%;"><b>{% trans %} numchecks       {% endtrans %}</b></td>
+                <td style="width:40%;"><b>{{ 'numchecks'|trans }}</b></td>
                 <td style="width:60%;">{% if workshop.numchecks    != '' %}{{ workshop.numchecks      }}{% else %} ... {% endif %}</td>
             </tr>
             {% if id_catserv != 3 %}
             <tr>
-                <td style="width:40%;"><b>{% trans %} infotech       {% endtrans %}</b></td>
-                <td style="width:60%;">{% if workshop.infotech     == 1 %}{% trans %}yes{% endtrans %} {% else %} ... {% endif %}</td>
+                <td style="width:40%;"><b>{{ 'infotech'|trans }}</b></td>
+                <td style="width:60%;">{% if workshop.infotech     == 1 %}{{ 'yes'|trans }} {% else %} ... {% endif %}</td>
             </tr>
             {% endif %}
             <tr>
-                <td style="width:40%;"><b>{% trans %} subscribed      {% endtrans %}</b></td>
+                <td style="width:40%;"><b>{{ 'subscribed'|trans }}</b></td>
                 <td style="width:60%;">{% if     workshop.updateAt != null %}{{workshop.updateAt|date("d-m-Y")}}
                                        {% elseif workshop.createdAt != null %}{{workshop.createdAt|date("d-m-Y")}}
                                        {% else %}...{% endif %}</td>
             </tr>
             <tr>
-                <td style="width:40%;"><b>{% trans %} unsubscribed      {% endtrans %}</b></td>
+                <td style="width:40%;"><b>{{ 'unsubscribed'|trans }}</b></td>
                 <td style="width:60%;">{% if     workshop.lowdateAt != null %}{{workshop.lowdateAt|date("d-m-Y")}}
                                        {% else %}...{% endif %}</td>
             </tr>
         </table>
-        <h3>{% trans %} contact {% endtrans %}</h3>
+        <h3>{{ 'contact'|trans }}</h3>
         <table style="width: 90%;margin: 0 5%;margin-bottom: 50px;">
             <tr>
-                <td style="width:40%;"><b>{% trans %} name            {% endtrans %}</b></td>
+                <td style="width:40%;"><b>{{ 'name'|trans }}</b></td>
                 <td style="width:60%;">{% if workshop.contact              != '' %}{{ workshop.contact         }}{% else %} ... {% endif %}</td>
             </tr><tr>
-                <td style="width:40%;"><b>{% trans %} phone_number_1  {% endtrans %}</b></td>
+                <td style="width:40%;"><b>{{ 'phone_number_1'|trans }}</b></td>
                 <td style="width:60%;">{% if workshop.phoneNumber1         != '' %}{{ workshop.phoneNumber1    }}{% else %} ... {% endif %}</td>
             </tr><tr>
-                <td style="width:40%;"><b>{% trans %} phone_number_2  {% endtrans %}</b></td>
+                <td style="width:40%;"><b>{{ 'phone_number_2'|trans }}</b></td>
                 <td style="width:60%;">{% if workshop.phoneNumber2         != '' %}{{ workshop.phoneNumber2    }}{% else %} ... {% endif %}</td>
             </tr><tr>
-                <td style="width:40%;"><b>{% trans %} mobile_number_1 {% endtrans %}</b></td>
+                <td style="width:40%;"><b>{{ 'mobile_number_1'|trans }}</b></td>
                 <td style="width:60%;">{% if workshop.mobileNumber1        != '' %}{{ workshop.mobileNumber1   }}{% else %} ... {% endif %}</td>
             </tr><tr>
-                <td style="width:40%;"><b>{% trans %} mobile_number_2 {% endtrans %}</b></td>
+                <td style="width:40%;"><b>{{ 'mobile_number_2'|trans }}</b></td>
                 <td style="width:60%;">{% if workshop.mobileNumber2        != '' %}{{ workshop.mobileNumber2   }}{% else %} ... {% endif %}</td>
             </tr><tr>
-                <td style="width:40%;"><b>{% trans %} fax             {% endtrans %}</b></td>
+                <td style="width:40%;"><b>{{ 'fax'|trans }}</b></td>
                 <td style="width:60%;">{% if workshop.fax                  != '' %}{{ workshop.fax             }}{% else %} ... {% endif %}</td>
             </tr><tr>
-                <td style="width:40%;"><b>{% trans %} email_1         {% endtrans %}</b></td>
+                <td style="width:40%;"><b>{{ 'email_1'|trans }}</b></td>
                 <td style="width:60%;">{% if workshop.email1               != '' %}{{ workshop.email1          }}{% else %} ... {% endif %}</td>
             </tr><tr>
-                <td style="width:40%;"><b>{% trans %} email_2         {% endtrans %}</b></td>
+                <td style="width:40%;"><b>{{ 'email_2'|trans }}</b></td>
                 <td style="width:60%;">{% if workshop.email2               != '' %}{{ workshop.email2          }}{% else %} ... {% endif %}</td>
             </tr><tr>
-                <td style="width:40%;"><b>{% trans %} country         {% endtrans %}</b></td>
+                <td style="width:40%;"><b>{{ 'country'|trans }}</b></td>
                 <td style="width:60%;">{% if workshop.country              != '' %}{{ workshop.country|trans   }}{% else %} ... {% endif %}</td>
             </tr><tr>
-                <td style="width:40%;"><b>{% trans %} region          {% endtrans %}</b></td>
+                <td style="width:40%;"><b>{{ 'region'|trans }}</b></td>
                 <td style="width:60%;">{% if workshop.region               != '' %}{{ workshop.region          }}{% else %} ... {% endif %}</td>
             </tr><tr>
-                <td style="width:40%;"><b>{% trans %} city            {% endtrans %}</b></td>
+                <td style="width:40%;"><b>{{ 'city'|trans }}</b></td>
                 <td style="width:60%;">{% if workshop.city                 != '' %}{{ workshop.city            }}{% else %} ... {% endif %}</td>
             </tr><tr>
-                <td style="width:40%;"><b>{% trans %} address         {% endtrans %}</b></td>
+                <td style="width:40%;"><b>{{ 'address'|trans }}</b></td>
                 <td style="width:60%;">{% if workshop.address              != '' %}{{ workshop.address         }}{% else %} ... {% endif %}</td>
             </tr><tr>
-                <td style="width:40%;"><b>{% trans %} postal_code     {% endtrans %}</b></td>
+                <td style="width:40%;"><b>{{ 'postal_code'|trans }}</b></td>
                 <td style="width:60%;">{% if workshop.postalCode           != '' %}{{ workshop.postalCode      }}{% else %} ... {% endif %}</td>
             </tr>
         </table>
         <hr>
         <footer style="color: #888;font-size: 10px;font-style: italic;text-align: center;">
-            <p>{{ "now"|date("Y") }} {% trans %} footerText {% endtrans %}.</p>
+            <p>{{ "now"|date("Y") }} {{ 'footerText'|trans }}.</p>
         </footer>
 
     </body>

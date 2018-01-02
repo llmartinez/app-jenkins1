@@ -2,6 +2,8 @@
 
 namespace Adservice\StatisticBundle\Entity;
 
+use SensioLabs\Security\SecurityChecker;
+
 /**
  * Adservice\StatisticBundle\Entity\Statistic
  */
@@ -110,7 +112,7 @@ class Statistic {
         if($security->isGranted('ROLE_SUPER_ADMIN')){
             $filter_country = '';
         }else{
-            $filter_country = 'AND u.country = '.$security->getToken()->getUser()->getCountry()->getId();
+            $filter_country = 'AND u.country = '.$this->getUser()->getCountry()->getId();
         }
         $query = $em->createQuery("SELECT COUNT(u) FROM UserBundle:User u WHERE u.active = 1 ".$filter_country);
         return $query->getSingleScalarResult();
@@ -125,7 +127,7 @@ class Statistic {
         if($security->isGranted('ROLE_SUPER_ADMIN')){
             $filter_country = '';
         }else{
-            $filter_country = 'AND p.country = '.$security->getToken()->getUser()->getCountry()->getId();
+            $filter_country = 'AND p.country = '.$this->getUser()->getCountry()->getId();
         }
         $query = $em->createQuery("SELECT COUNT(p) FROM PartnerBundle:Partner p WHERE p.active = 1 ".$filter_country);
         return $query->getSingleScalarResult();
@@ -139,7 +141,7 @@ class Statistic {
         if($security->isGranted('ROLE_SUPER_ADMIN')){
             $filter_country = '';
         }else{
-            $filter_country = 'AND s.country = '.$security->getToken()->getUser()->getCountry()->getId();
+            $filter_country = 'AND s.country = '.$this->getUser()->getCountry()->getId();
         }
         $query = $em->createQuery("SELECT COUNT(s) FROM PartnerBundle:Shop s WHERE s.active = 1 ".$filter_country);
         return $query->getSingleScalarResult();
@@ -154,7 +156,7 @@ class Statistic {
         if($security->isGranted('ROLE_SUPER_ADMIN')){
             $filter_country = '';
         }else{
-            $filter_country = 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId();
+            $filter_country = 'AND w.country = '.$this->getUser()->getCountry()->getId();
         }
         $query = $em->createQuery("SELECT COUNT(w) FROM WorkshopBundle:Workshop w WHERE w.active = 1 ".$filter_country);
         return $query->getSingleScalarResult();
@@ -169,7 +171,7 @@ class Statistic {
         if($security->isGranted('ROLE_SUPER_ADMIN')){
             $filter_country = '';
         }else{
-            $filter_country = 'JOIN t.workshop w WHERE w.country = '.$security->getToken()->getUser()->getCountry()->getId();
+            $filter_country = 'JOIN t.workshop w WHERE w.country = '.$this->getUser()->getCountry()->getId();
         }
         $query = $em->createQuery("SELECT COUNT(t) FROM TicketBundle:Ticket t ".$filter_country);
         return $query->getSingleScalarResult();
@@ -187,7 +189,7 @@ class Statistic {
             $filter_country = '';
         }else{
             $filter_country = 'JOIN t.workshop w ';
-            $and = 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId();
+            $and = 'AND w.country = '.$this->getUser()->getCountry()->getId();
         }
         $query = $em->createQuery("SELECT COUNT(t) FROM TicketBundle:Ticket t ".$join.$filter_country.$where.$and);
         return $query->getSingleScalarResult();
@@ -206,7 +208,7 @@ class Statistic {
             $filter_country = '';
         }else{
             $filter_country = 'JOIN t.workshop w ';
-            $and = 'AND w.country = '.$security->getToken()->getUser()->getCountry()->getId();
+            $and = 'AND w.country = '.$this->getUser()->getCountry()->getId();
         }
 
         $query = $em->createQuery("SELECT COUNT(t) FROM TicketBundle:Ticket t ".$join.$filter_country.$where.$and);
@@ -225,7 +227,7 @@ class Statistic {
             $filter_country = '';
         }else{
             $join_country   = ' JOIN t.workshop w ';
-            $filter_country = ' AND w.country = '.$security->getToken()->getUser()->getCountry()->getId();
+            $filter_country = ' AND w.country = '.$this->getUser()->getCountry()->getId();
         }
         $query = $em->createQuery("SELECT COUNT(t.id) FROM TicketBundle:Ticket t
                                   ".$join_country."

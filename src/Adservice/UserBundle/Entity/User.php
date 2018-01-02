@@ -133,7 +133,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      *
      * @var type
-     * @ORM\ManyToOne(targetEntity="Adservice\WorkshopBundle\Entity\Workshop", inversedBy="workshops")
+     * @ORM\ManyToOne(targetEntity="Adservice\WorkshopBundle\Entity\Workshop", inversedBy="users")
      */
     private $workshop;
 

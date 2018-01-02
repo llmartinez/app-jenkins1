@@ -3,17 +3,20 @@
 namespace Adservice\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\SecurityContext;
+
 //use Symfony\Component\HttpFoundation\Response;
 //use Adservice\UserBundle\Form\UserType;
 use Adservice\UserBundle\Entity\User;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-class LoginController extends Controller {
+class LoginController extends Controller
+{
 
-    public function loginAction() {
-
-        $request = $this->getRequest();
-        $session = $request->getSession();
+    public function loginAction(Request $request)
+    {
+        $authenticationUtils = $this->get('security.authentication_utils');
 
         $u_agent = $_SERVER['HTTP_USER_AGENT'];
         $_SESSION['lang'] = null;
@@ -25,23 +28,28 @@ class LoginController extends Controller {
         //     $ub = "MSIE";
         // }
 
-        if(!$this->get('isMSIE')->isMSIE($request)
-        or (strpos($u_agent,'Trident/7.0') != false and strpos($u_agent,' rv:11') != false)
-        ){
-            // obtiene el error de inicio de sesión si lo hay
-            if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
-                $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
-            } else {
-                $error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
-            }
-            return $this->render('UserBundle:Login:login.html.twig', array('last_username'  => $session->get(SecurityContext::LAST_USERNAME),
-                                                                           'error'          => $error));
-        }else{
+        if (!$this->get('isMSIE')->isMSIE($request)
+            or (strpos($u_agent, 'Trident/7.0') != false and strpos($u_agent, ' rv:11') != false)
+        ) {
+            $error = $authenticationUtils->getLastAuthenticationError();
+
+            $lastUsername = $authenticationUtils->getLastUsername();
+
+            return $this->render(
+                'UserBundle:Login:login.html.twig',
+                array(
+                    'last_username' => $lastUsername,
+                    'error' => $error,
+                )
+            );
+
+        } else {
             return $this->render('UserBundle:Login:error_explorer.html.twig');
         }
     }
 
-    public function goToLoginAction() {
+    public function goToLoginAction(Request $request)
+    {
         return $this->redirect($this->generateUrl('user_index'));
     }
 }

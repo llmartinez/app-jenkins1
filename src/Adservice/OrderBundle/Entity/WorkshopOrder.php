@@ -744,7 +744,7 @@ class WorkshopOrder {
         return $this->action;
     }
 
-    public function setAction($action) {
+    public function setAction( $action) {
         $this->action = $action;
     }
 

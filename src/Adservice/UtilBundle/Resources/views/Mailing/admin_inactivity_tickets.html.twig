@@ -10,7 +10,7 @@
     <div style="width: 100%; {{style}}">
         <table>
             <h3></h3>
-            <th>{% trans %}advanced_diagnostics{% endtrans %} ({{count_pending}})</th>
+            <th>{{ 'advanced_diagnostics'|trans }} ({{count_pending}})</th>
             {% for id in pending_tickets %}
                 <tr><td valign="middle" style="{{style}}"><b>{{id}}</b></td></tr>
             {% endfor %}
@@ -21,7 +21,7 @@
     <div style="width: 100%; {{style}}">
         <table>
             <h3></h3>
-            <th>{% trans %}information{% endtrans %} ({{count_closed}})</th>
+            <th>{{ 'information'|trans }} ({{count_closed}})</th>
             {% for id in closed_tickets %}
                 <tr><td valign="middle" style="{{style}}"><b>{{id}}</b></td></tr>
             {% endfor %}
@@ -32,7 +32,7 @@
     <div style="width: 100%; {{style}}">
         <table>
             <h3></h3>
-            <th>{% trans %}mail.inactivity_warning.title{% endtrans %} ({{count_warning}})</th>
+            <th>{{ 'mail.inactivity_warning.title'|trans }} ({{count_warning}})</th>
             {% for id in warning_tickets %}
                 <tr><td valign="middle" style="{{style}}"><b>{{id}}</b></td></tr>
             {% endfor %}
@@ -44,7 +44,7 @@
 
 <table width="100%" border="0" cellspacing="5" cellpadding="0" style="background-color: #FFF;">
     <tr><td valign="bottom" align="center" style="font-size: 10px; color: #428bca; font-family: Verdana, Geneva, sans-serif;">
-        {% trans %} footerText {% endtrans %}
+        {{ 'footerText'|trans }}
     </td></tr>
 </table>
 </body>

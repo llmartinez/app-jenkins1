@@ -4,18 +4,20 @@
     {# Definicion de la ruta al listado para usar en paginacion #}
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('accept_privacy') }}">{% trans %} home {% endtrans %}</a></li>
+      <li><a href="{{ path('accept_privacy') }}">{{ 'home'|trans }}</a></li>
     </ol>
 
     <div style="width: 90%; margin-left: 5%;">
 
-            <legend>{% trans %} user.policy_privacy {% endtrans %}</legend>
+            <legend>{{ 'user.policy_privacy'|trans }}</legend>
 
-            <label style="width: 100%;">{% trans %} user.accept_privacy {% endtrans %} <a href="{{ path('privacy') }}">{% trans %} user.policy_privacy {% endtrans %}</a> ?</label>
-            {% if app.session.hasFlash('error') %} <p style="color:red">{{ app.session.getFlash('error') }}</p> {% endif %}
+            <label style="width: 100%;">{{ 'user.accept_privacy'|trans }} <a href="{{ path('privacy') }}">{{ 'user.policy_privacy'|trans }}</a> ?</label>
+            {% for flashMessage in app.session.flashbag.get('error') %}
+                <p style="color:red">{{ flashMessage }}</p>
+            {% endfor %}
             <form action="{{ path('accept_privacy') }}" method="post" >
-                <button name="Accept" class="btn btn-primary pull-left ml15" >{% trans %} accept {% endtrans %}</button>
-                <button name="Cancel" class="btn btn-primary pull-left ml15" >{% trans %} user.cancel {% endtrans %}</button>
+                <button name="Accept" class="btn btn-primary pull-left ml15" >{{ 'accept'|trans }}</button>
+                <button name="Cancel" class="btn btn-primary pull-left ml15" >{{ 'user.cancel'|trans }}</button>
             </form>
     </div>
 

@@ -3,11 +3,11 @@
 namespace Adservice\UserBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class EditUserSuperPartnerType extends AbstractType {
 
-    public function buildForm(FormBuilder $builder, array $options) {
+    public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder = $this->getbasicUserType($builder);
     }
 
@@ -28,7 +28,7 @@ class EditUserSuperPartnerType extends AbstractType {
             ->add('country', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
-                  'property' => 'country',
+                  'choice_label' => 'country',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC'); }))
@@ -50,7 +50,7 @@ class EditUserSuperPartnerType extends AbstractType {
         return $builder;
     }
 
-    public function getName() {
+    public function getBlockPrefix() {
 //        return 'adservice_userbundle_usertype';
         return 'super_partner_type';
     }

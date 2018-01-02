@@ -2,11 +2,11 @@
 namespace Adservice\TicketBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class NewTicketType extends AbstractType
 {
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         if ($_SESSION['einatech'] == 1) {
             $importance =' =5'; 
@@ -24,21 +24,21 @@ class NewTicketType extends AbstractType
                 ->add('importance', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\TicketBundle\Entity\Importance',
-                  'property' => 'importance',
+                  'choice_label' => 'importance',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($importance){
                                                 return $er->createQueryBuilder('s')
                   ->where('s.id'.$importance);}))
                 ->add('subsystem', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\TicketBundle\Entity\Subsystem',
-                  'property' => 'name',
-                  'empty_value' => '',
+                  'choice_label' => 'name',
+                  'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) {
                                                 return $er->createQueryBuilder('s')
                                                           ->where('s.id = 0'); }))
                 ;
     }
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'ticket_form';
     }

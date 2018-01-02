@@ -3,13 +3,13 @@
 namespace Adservice\UserBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Security\Core\SecurityContext;
 
 class UserAssessorType extends AbstractType {
 
 
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
@@ -34,8 +34,8 @@ class UserAssessorType extends AbstractType {
             ->add('country_service', 'entity', array(
                   'required' => false,
                   'class' => 'Adservice\UtilBundle\Entity\CountryService',
-                  'property' => 'country',
-                  'empty_value' => $all,
+                  'choice_label' => 'country',
+                  'placeholder' => $all,
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC')
@@ -43,8 +43,8 @@ class UserAssessorType extends AbstractType {
             ->add('category_service', 'entity', array(
                   'required' => false,
                   'class' => 'Adservice\UserBundle\Entity\CategoryService',
-                  'property' => 'category_service',
-                  'empty_value' => $all,
+                  'choice_label' => 'category_service',
+                  'placeholder' => $all,
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv) {
                                                 return $er->createQueryBuilder('cs')
                                                           ->orderBy('cs.category_service', 'ASC')
@@ -54,8 +54,8 @@ class UserAssessorType extends AbstractType {
             ->add('country', 'entity', array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
-                  'property' => 'country',
-                  'empty_value' => '',
+                  'choice_label' => 'country',
+                  'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC'); }))
@@ -73,15 +73,15 @@ class UserAssessorType extends AbstractType {
             ->add('email_2','email', array('required' => false))
             ->add('language','entity', array(
                   'class' => 'Adservice\UtilBundle\Entity\Language',
-                  'property' => 'language',
+                  'choice_label' => 'language',
                   'required' => true,
-                  'empty_value' => ''))
+                  'placeholder' => ''))
         ;
 
         return $builder;
     }
 
-    public function getName() {
+    public function getBlockPrefix() {
 //        return 'adservice_userbundle_usertype';
         return 'admin_assessor_type';
     }

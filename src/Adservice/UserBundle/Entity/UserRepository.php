@@ -47,8 +47,8 @@ class UserRepository extends EntityRepository
 
         $query = 'SELECT u FROM UserBundle:user u JOIN u.user_role r WHERE r.name = :role';
 
-        if(!$security->isGranted('ROLE_ADMIN')) {
-            $query = $query.' AND u.country = '.$security->getToken()->getUser()->getCountry()->getId();
+        if(!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+            $query = $query.' AND u.country = '.$this->getUser()->getCountry()->getId();
         }
         else{
             if ($country != 0 ) {
@@ -104,8 +104,8 @@ class UserRepository extends EntityRepository
     {
         $query = 'SELECT count(u) FROM UserBundle:user u JOIN u.user_role r WHERE r.name = :role';
 
-        if(!$security->isGranted('ROLE_SUPER_ADMIN')) {
-            $query = $query.' AND u.country = '.$security->getToken()->getUser()->getCountry()->getId();
+        if(!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
+            $query = $query.' AND u.country = '.$this->getUser()->getCountry()->getId();
         }
         else{
             if ($country != 0 ) {

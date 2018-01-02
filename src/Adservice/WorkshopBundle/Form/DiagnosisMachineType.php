@@ -3,11 +3,11 @@
 namespace Adservice\WorkshopBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class DiagnosisMachineType extends AbstractType
 {
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
 //        if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
@@ -17,7 +17,7 @@ class DiagnosisMachineType extends AbstractType
 //            ->add('country', 'entity', array(
 //                  'required' => true,
 //                  'class' => 'Adservice\UtilBundle\Entity\Country',
-//                  'property' => 'country',
+//                  'choice_label' => 'country',
 //                  'empty_value' => '',
 //                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
 //                                                return $er->createQueryBuilder('c')
@@ -26,8 +26,8 @@ class DiagnosisMachineType extends AbstractType
             ->add('category_service', 'entity', array(
                   'required' => false,
                   'class' => 'Adservice\UserBundle\Entity\CategoryService',
-                  'property' => 'category_service',
-                  'empty_value' => '',
+                  'choice_label' => 'category_service',
+                  'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) {
                                                 return $er->createQueryBuilder('cs')
                                                           ->orderBy('cs.category_service', 'ASC')
@@ -39,7 +39,7 @@ class DiagnosisMachineType extends AbstractType
         ;
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'adservice_workshopbundle_diagnosis_machinetype';
     }

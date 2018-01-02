@@ -3,20 +3,20 @@
 {% block body %}
     <ol class="breadcrumb">
       <li><a href="{{ path('list_incidences', { 'page': 1, 'id_taller': incidence.idTaller, 'id_socio': incidence.idSocio }) }}">
-      					 {% trans %} lock.list_incidences {% endtrans %}</a></li>
-      <li class="active">{% trans %} incidence 			  {% endtrans %}</li>
+      					 {{ 'lock.list_incidences'|trans }}</a></li>
+      <li class="active">{{ 'incidence'|trans }}</li>
     </ol>
 
 <div class="info">
 
-<legend>{% trans %} info {% endtrans %}</legend>
+<legend>{{ 'info'|trans }}</legend>
 
 	{% if incidence.taller != "" %}<div class="form-group"><img class='img_icon' src='{{ asset('bundles/util/images/icon/workshop_.png') }}'> {{ incidence.taller 		}}</div>{% endif %}
 	{% if incidence.coche  != "" %}<div class="form-group"><img class='img_icon' src='{{ asset('bundles/util/images/icon/car.png') }}'> {{ incidence.coche  		}}</div>{% endif %}
-	{% if incidence.socio  != "" %}<div class="form-group"><img class='img_icon' src='{{ asset('bundles/util/images/icon/partner_.png') }}'> <b>{% trans %} partner     {% endtrans %}</b>:{{ incidence.socio  }}</div>{% endif %}
-	{% if incidence.asesor != "" %}<div class="form-group"><img class='img_icon' src='{{ asset('bundles/util/images/icon/assign.png') }}'> <b>{% trans %} assigned_to {% endtrans %}:</b>
+	{% if incidence.socio  != "" %}<div class="form-group"><img class='img_icon' src='{{ asset('bundles/util/images/icon/partner_.png') }}'> <b>{{ 'partner'|trans }}</b>:{{ incidence.socio  }}</div>{% endif %}
+	{% if incidence.asesor != "" %}<div class="form-group"><img class='img_icon' src='{{ asset('bundles/util/images/icon/assign.png') }}'> <b>{{ 'assigned_to'|trans }}:</b>
 																							{% if incidence.asesor	!= 0 %} {{ incidence.asesor 	}}
-																							{% else %} {% trans %} anonimo {% endtrans %}{% endif %}
+																							{% else %} {{ 'anonimo'|trans }}{% endif %}
 																							</div> {% endif %}
 	{% if incidence.oper   != "" %}<div class="form-group"><img class='img_icon' src='{{ asset('bundles/util/images/icon/cog.png') }}'> {{ incidence.oper   		}}</div>{% endif %}
 </div>
@@ -25,16 +25,16 @@
 
 <div class="content">
     <div class="form-group">
-    <legend>{% trans %} incidence {% endtrans %} #{{ incidence.id }} <a class="txtComment">({{ incidence.date }})</a></legend>{# | date("d/m/Y") #}
+    <legend>{{ 'incidence'|trans }} #{{ incidence.id }} <a class="txtComment">({{ incidence.date }})</a></legend>{# | date("d/m/Y") #}
 
-	    <legend>{% trans %} description {% endtrans %}</legend>
+	    <legend>{{ 'description'|trans }}</legend>
 
 		{% if incidence.description	!= "" %}<div class="col-xs-12 col-md-12 form-group"></b>{{ incidence.description }} </div> {% endif %}
 
-	    <legend>{% trans %} tracing {% endtrans %}</legend>
+	    <legend>{{ 'tracing'|trans }}</legend>
 	    {% if incidence.tracing  	!= "" %}<div class="col-xs-12 col-md-12 form-group"></b>{{ incidence.tracing 	}} </div> {% endif %}
 
-	    <legend>{% trans %} solution {% endtrans %}</legend>
+	    <legend>{{ 'solution'|trans }}</legend>
 	    {% if incidence.solution  	!= "" %}<div class="col-xs-12 col-md-12 form-group"></b>{{ incidence.solution 	}} </div> {% endif %}
 	</div>
 </div>

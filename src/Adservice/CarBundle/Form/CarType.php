@@ -2,13 +2,13 @@
 namespace Adservice\CarBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 // use Adservice\CarBundle\Form\BrandType;
 
 
 class CarType extends AbstractType
 {
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
                 // ->add('brand', 'choice', array('expanded'=>false, 'multiple'=>true))
@@ -22,7 +22,7 @@ class CarType extends AbstractType
                 ->add('plateNumber', 'text', array('required'=>'true'))                
                 ;
     }
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'new_car_form';
     }

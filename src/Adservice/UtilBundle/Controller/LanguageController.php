@@ -4,12 +4,13 @@ namespace Adservice\UtilBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class LanguageController extends Controller{
 
-    public function changeLanguageAction($lang){
+    public function changeLanguageAction(Request $request, $lang){
         // Cambio el idioma
-        $request = $this->getRequest();
+
         $currentLocale = $request->getLocale();
         $request->setLocale($lang);
         $currentPath = $_SERVER['HTTP_REFERER'];
@@ -19,7 +20,7 @@ class LanguageController extends Controller{
         return new RedirectResponse($currentPath);
 
         // Cambio el idioma
-        // $request = $this->getRequest();
+        //
         // $request->setLocale($lang);
         // $path = substr($request->get('path'), 3);
         // $url = $request->getBaseUrl().'/'.$request->getLocale().$path;

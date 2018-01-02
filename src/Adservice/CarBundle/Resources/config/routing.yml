@@ -3,5 +3,5 @@
 ###########################
 
 editCar:
-    pattern:  /car/edit/{id}
+    path:  /car/edit/{id}
     defaults: { _controller: CarBundle:Car:editCar }
