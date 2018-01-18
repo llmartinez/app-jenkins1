@@ -128,7 +128,7 @@ class OrderController extends Controller
         }
         foreach ($orders as $order)
         {
-            if(($order->getWantedAction() == 'activate' || $order->getWantedAction() == 'deactivate') && $order instanceof WorkshopOrder)                
+            if($order instanceof WorkshopOrder && ($order->getWantedAction() == 'activate' || $order->getWantedAction() == 'deactivate'))                
             {
                 $id = $order->getIdWorkshop();
 
