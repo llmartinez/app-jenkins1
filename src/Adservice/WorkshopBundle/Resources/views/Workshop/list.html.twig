@@ -70,7 +70,7 @@
                 <select id="flt_partner" class='form-control'>
                         <option value="0">{{ 'all'|trans }}</option>
                     {% for partner in partners %}
-                        <option value="{{ partner.id }}">{{ partner.codePartner }} - {{ partner | trans }}</option>
+                        <option value="{{ partner.id }}">{{ partner.codePartner }} - {{ partner }}</option>
                     {% endfor %}
             </select></div>
 

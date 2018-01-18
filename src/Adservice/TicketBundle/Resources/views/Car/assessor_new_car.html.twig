@@ -29,20 +29,20 @@
         <div class="grid-33">
             <label for="new_car_form_plateNumber">{{ 'plate_number'|trans }} *<a id="txt_plateNumber"></a></label>
             <a class="pull-right" id="filter_plate_number" title="{{ 'filter_by_plate_number'|trans }}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>
-            {{ form_widget(formC.plateNumber, { 'attr': { 'onkeypress': 'return checkEnterInFilterFields(event, this.id);', 'class': 'form-control asr_form-control', 'required': 'required', 'placeholder': 'plate_number' | trans } }) }}
+            {{ form_widget(formC.plateNumber, { 'attr': { 'onkeypress': 'return checkEnterInFilterFields(event, this.id);', 'class': 'form-control asr_form-control', 'required': 'required', 'placeholder': 'plate_number'} }) }}
         </div>
         
         <div class="grid-33">
             <label for="new_car_form_vin">{{ 'vin'|trans }} *</label>
             <a class="pull-right" id="filter_vin" title="{{ 'filter_by_vin'|trans }}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>
-            {{ form_widget(formC.vin, { 'attr': { 'onkeypress': 'return checkEnterInFilterFields(event, this.id);', 'class': 'form-control asr_form-control', 'required': 'required', 'placeholder': 'vin' | trans } }) }}
+            {{ form_widget(formC.vin, { 'attr': { 'onkeypress': 'return checkEnterInFilterFields(event, this.id);', 'class': 'form-control asr_form-control', 'required': 'required', 'placeholder': 'vin'} }) }}
         </div>
 
         <div class="grid-33">
             <label for="new_car_form_motor">{{ 'motor'|trans }} *</label>
             <a class="pull-right" id="filter_motor" title="{{ 'filter_by_motor'|trans }}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>
             {# <a class="pull-right" id="list_motor" title="{{ 'motor'|trans }}" href="{{ path('listMotors') }}" target="_blank"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn_.png') }}"></a> #}
-            {{ form_widget(formC.motor, { 'attr': { 'onkeypress': 'return checkEnterInFilterFields(event, this.id);', 'class': 'form-control asr_form-control', 'required': 'required', 'placeholder': 'motor' | trans } }) }}
+            {{ form_widget(formC.motor, { 'attr': { 'onkeypress': 'return checkEnterInFilterFields(event, this.id);', 'class': 'form-control asr_form-control', 'required': 'required', 'placeholder': 'motor'} }) }}
             <input type="hidden" id="id_mts" value="">
         </div>
     </div>
@@ -73,18 +73,18 @@
         <div class="grid-33">
             <label for="new_car_form_year">{{ 'year'|trans }} *</label>
             <a class="pull-right" id="filter_year" title="{{ 'filter_by_year'|trans }}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>
-            {{ form_widget(formC.year, { 'attr': { 'onkeypress': 'return checkEnterInFilterFields(event, this.id);', 'class': 'form-control asr_form-control', 'required': 'required', 'placeholder': 'year' | trans } }) }}
+            {{ form_widget(formC.year, { 'attr': { 'onkeypress': 'return checkEnterInFilterFields(event, this.id);', 'class': 'form-control asr_form-control', 'required': 'required', 'placeholder': 'year'} }) }}
             <input type="hidden" id="year_assessor" value="assessor">
         </div>
 
         <div class="grid-33">
             <label for="new_car_form_kW">{{ 'kw'|trans }}</label>
-            {{ form_widget(formC.kW, { 'attr': { 'class': 'form-control asr_form-control', 'placeholder': 'kw' | trans } }) }}
+            {{ form_widget(formC.kW, { 'attr': { 'class': 'form-control asr_form-control', 'placeholder': 'kw'} }) }}
         </div>
 
         <div class="grid-33">
             <label for="new_car_form_displacement">{{ 'displacement'|trans }}</label>
-            {{ form_widget(formC.displacement, { 'attr': { 'class': 'form-control asr_form-control', 'placeholder': 'displacement' | trans } }) }}
+            {{ form_widget(formC.displacement, { 'attr': { 'class': 'form-control asr_form-control', 'placeholder': 'displacement'} }) }}
         </div>
     </div>
 

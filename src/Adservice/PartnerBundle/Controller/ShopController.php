@@ -139,7 +139,7 @@ class ShopController extends Controller {
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
             $_SESSION['id_catserv'] = ' = '.$partner->getCategoryService()->getId();
         }
-        $form    = $this->createForm(new ShopType(), $shop);
+        $form    = $this->createForm(ShopType::class, $shop);
 
         if ($request->getMethod() == 'POST') {
             
@@ -210,7 +210,7 @@ class ShopController extends Controller {
             $_SESSION['id_partner'] = ' = '.$partner->getId();
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
-        $form = $this->createForm(new ShopType(), $shop);
+        $form = $this->createForm(ShopType::class, $shop);
 
         $actual_city   = $shop->getRegion();
         $actual_region = $shop->getCity();

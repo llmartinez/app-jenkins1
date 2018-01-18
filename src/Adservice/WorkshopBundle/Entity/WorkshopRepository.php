@@ -43,7 +43,7 @@ class WorkshopRepository extends EntityRepository
         return (int)$id;
     }
 
-    public function findWorkshopInfo($request, $security=null)
+    public function findWorkshopInfo($request, $catserv)
     {
         $em = $this->getEntityManager();
         $w_id        = $request->get('w_id'       );
@@ -73,8 +73,8 @@ class WorkshopRepository extends EntityRepository
             $where = 'WHERE w.id != 0 ';
             // $where = 'WHERE w.active = 1 ';
 
-            if($security != NULL AND $this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') AND $this->getUser()->getCategoryService() != NULL) {
-                $where .= "AND w.category_service = ".$this->getUser()->getCategoryService()->getId()." ";
+            if($catserv != NULL) {
+                $where .= "AND w.category_service = ".$catserv->getId()." ";
             }
             if ($w_id          != 0) {  $where .= "AND w.code_workshop = ".$w_id." "; }
             if ($w_idpartner   != 0) {  $where .= "AND w.code_partner = ".$w_idpartner." "; }

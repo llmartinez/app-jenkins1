@@ -254,6 +254,7 @@ edit.order.shop:		 "Editar Solicitud de la Tienda"
 edit.order.workshop:	 "Editar Solicitud del Taller"
 edit.sentence:			 "Editar Sentencia"
 edit.category_service:		 "Editar Categoría de Servicio"
+edit.description:                "Editar Descripción"
 
 #ANY
 not_found:				 "No se han encontrado resultados"
@@ -624,6 +625,8 @@ statistic.num_tickets.closed: "Número de Tickets cerrados"
 statistic.num_posts:              "Número de Posts"
 statistic.last_tickets:		  "Últimos tickets de los talleres"
 statistic.no_ticket:		  "Talleres sin tickets"
+billing:                          "Facturación"
+historical:                       "Histórico"
 
 update: "Días de Alta"
 lowdate: "Días de Baja"
@@ -661,6 +664,7 @@ list.workshop.rejected:			"Solicitudes de Talleres rechazadas"
 reject.reason:					"Motivo del rechazo"
 
 #PAGINATION
+page:                                                   "Página"
 page.first:						"Primera página"
 page.prev:						"Página anterior"
 page.goto:						"Ir a la página"

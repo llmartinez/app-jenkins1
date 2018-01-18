@@ -108,7 +108,7 @@ class PopupController extends Controller {
             //$_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
             $_SESSION['id_catserv'] = ' = '.$this->getUser()->getCategoryService()->getId();
         }
-        $form = $this->createForm(new PopupType(), $popup);
+        $form = $this->createForm(PopupType::class, $popup);
 
         $form->handleRequest($request);
 
@@ -159,7 +159,7 @@ class PopupController extends Controller {
             //$_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
             $_SESSION['id_catserv'] = ' = '.$this->getUser()->getCategoryService()->getId();
         }
-        $form = $this->createForm(new PopupType(), $popup);
+        $form = $this->createForm(PopupType::class, $popup);
 
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);

@@ -46,7 +46,7 @@
             <div class="col-xs-3 col-md-3">
                 <label>{{ 'name'|trans }}</label>
                 {{ form_widget(form.name, { 'attr': {'class': 'form-control',
-                                                     'placeholder': 'name' | trans } }) }}
+                                                     'placeholder': 'name' } }) }}
             </div>
             {% if is_granted('ROLE_SUPER_AD') %}
                 <div class="col-xs-3 col-md-3 form-group">
@@ -70,7 +70,7 @@
             <div class="col-xs-3 col-md-3">
                 <label>{{ 'cif'|trans }} * </label>
                 {{ form_widget(form.cif, { 'attr': {'class': 'form-control',
-                                                     'placeholder': 'cif' | trans,
+                                                     'placeholder': 'cif' ,
                                                      'required':'required' } }) }}
             </div>
         </div>
@@ -99,7 +99,7 @@
                 <label for="workshopOrder_newOrder_numchecks">{{ 'numchecks'|trans }}</label>
             </div>
             <div class="w35 fr mb15">
-                {{ form_widget(form.numchecks, { 'attr': {'class': 'form-control', 'min': '0' , 'max': '5', 'placeholder': 'max_num_checks' | trans }}) }}
+                {{ form_widget(form.numchecks, { 'attr': {'class': 'form-control', 'min': '0' , 'max': '5', 'placeholder': 'max_num_checks' }}) }}
             </div>
             {% if id_catserv != 3 %}
             <div class="w65 fl {{is_hidden}}">
@@ -117,11 +117,11 @@
             </div>
             <div class="col-xs-3 col-md-3">
                 <label>{{ 'internal_code'|trans }}</label>
-                {{ form_widget(form.internal_code, { 'attr': {'class': 'form-control', 'placeholder': 'internal_code' | trans } }) }}
+                {{ form_widget(form.internal_code, { 'attr': {'class': 'form-control', 'placeholder': 'internal_code' } }) }}
             </div>
             <div class="col-xs-3 col-md-3" {% if id_catserv == 3 %} hidden {% endif %}>
                 <label>{{ 'commercial_code'|trans }}</label>
-                {{ form_widget(form.commercial_code, { 'attr': {'class': 'form-control', 'placeholder': 'commercial_code' | trans } }) }}
+                {{ form_widget(form.commercial_code, { 'attr': {'class': 'form-control', 'placeholder': 'commercial_code' } }) }}
             </div>
             <div class="col-xs-3 col-md-3">
                 <label>{{ 'diagnosis_machines'|trans }} *</label> {{ form_widget(form.diagnosis_machines, { 'attr': {'class': 'form-control'} }) }}
@@ -144,7 +144,7 @@
 
         <div class="col-xs-12 col-md-12 form-group">
         <div class="col-xs-2 col-md-2 form-group">
-                <label>{{ 'contact'|trans }}</label> {{ form_widget(form.contact, { 'attr': {'class': 'form-control', 'placeholder': 'contact' | trans} }) }}
+                <label>{{ 'contact'|trans }}</label> {{ form_widget(form.contact, { 'attr': {'class': 'form-control', 'placeholder': 'contact' } }) }}
         </div>
         {% include 'UtilBundle:Default:contact_fields.html.twig' %}
 

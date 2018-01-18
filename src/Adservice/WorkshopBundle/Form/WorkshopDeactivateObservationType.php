@@ -4,12 +4,13 @@ namespace Adservice\WorkshopBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class WorkshopDeactivateObservationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('observationAdmin', 'textarea', array('required' => true));
+        $builder->add('observationAdmin',  TextareaType::class, array('required' => true));
     }
 
     public function getBlockPrefix()

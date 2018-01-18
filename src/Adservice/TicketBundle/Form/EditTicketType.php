@@ -3,6 +3,7 @@ namespace Adservice\TicketBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class EditTicketType extends AbstractType
 {
@@ -18,21 +19,17 @@ class EditTicketType extends AbstractType
         }
         unset($_SESSION['einatech']);
         $builder
-//                ->add('importance','entity', array(
-//                  'required' => true,
-//                  'class' => 'Adservice\TicketBundle\Entity\Importance',
-//                  'choice_label' => 'importance',
-//                  'empty_value' => '...'))
-                ->add('importance', 'entity', array(
+                ->add('importance', EntityType::class, array(
                   'required' => true,
                   'class' => 'Adservice\TicketBundle\Entity\Importance',
                   'choice_label' => 'importance',
+                  'choice_translation_domain' => null,
                   'placeholder' => '...',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($importance){
                                                 return $er->createQueryBuilder('s')
                   ->where('s.id'.$importance);}))
 
-                ->add('subsystem', 'entity', array(
+                ->add('subsystem', EntityType::class, array(
                   'required' => true,
                   'class' => 'Adservice\TicketBundle\Entity\Subsystem',
                   'choice_label' => 'name',

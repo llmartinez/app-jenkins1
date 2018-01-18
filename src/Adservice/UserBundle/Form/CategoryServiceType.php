@@ -4,6 +4,7 @@ namespace Adservice\UserBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class CategoryServiceType extends AbstractType
 {
@@ -12,9 +13,9 @@ class CategoryServiceType extends AbstractType
         $builder
             ->add('category_service')
             ->add('slug')
-            ->add('dis', 'text', array('required' => false))
-            ->add('vts', 'text', array('required' => false))
-            ->add('email', 'text', array('required' => false))
+            ->add('dis', TextType::class, array('required' => false))
+            ->add('vts', TextType::class, array('required' => false))
+            ->add('email', TextType::class, array('required' => false))
         ;
     }
 

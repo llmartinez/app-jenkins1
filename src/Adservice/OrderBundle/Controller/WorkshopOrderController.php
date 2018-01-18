@@ -218,7 +218,7 @@ class WorkshopOrderController extends Controller {
             unset($_SESSION['id_country']);
         }
 
-        $form    = $this->createForm(new WorkshopNewOrderType(), $workshopOrder);
+        $form    = $this->createForm(WorkshopNewOrderType::class, $workshopOrder);
 
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);
@@ -276,8 +276,8 @@ class WorkshopOrderController extends Controller {
                     }
 
                     if($workshopOrder->getAdServicePlus() == null) $workshopOrder->setAdServicePlus(0);
-
-                    if ($catserv != 3 ) $shop = $form['shop']->getClientData();
+                    
+                    if ($catserv != 3 ) $shop = $workshopOrder->getShop()->getId();
                     else                $shop = 0;
 
                     if($shop == 0) $workshopOrder->setShop(null);
@@ -491,7 +491,7 @@ class WorkshopOrderController extends Controller {
             $workshopOrder->addDiagnosisMachine($dm);
         }
 
-        $form = $this->createForm(new WorkshopEditOrderType(), $workshopOrder);
+        $form = $this->createForm(WorkshopEditOrderType::class, $workshopOrder);
 
         if ($request->getMethod() == 'POST')
         {
@@ -725,7 +725,7 @@ class WorkshopOrderController extends Controller {
         $em = $this->getDoctrine()->getManager();
 
 
-        $form = $this->createForm(new WorkshopRejectOrderType(), $workshopOrder);
+        $form = $this->createForm(WorkshopRejectOrderType::class, $workshopOrder);
 
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);

@@ -222,7 +222,7 @@ class WorkshopController extends Controller {
         if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) $_SESSION['code_billing'] = 'code_billing';
         else unset($_SESSION['code_billing']);
 
-        $form = $this->createForm(new WorkshopType(), $workshop);
+        $form = $this->createForm(WorkshopType::class, $workshop);
 
         if ($request->getMethod() == 'POST') {
             
@@ -489,7 +489,7 @@ class WorkshopController extends Controller {
         if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) $_SESSION['code_billing'] = 'code_billing';
         else unset($_SESSION['code_billing']);
         
-        $form = $this->createForm(new WorkshopType(), $workshop);
+        $form = $this->createForm(WorkshopType::class, $workshop);
 
         $actual_city = $workshop->getRegion();
         $actual_region = $workshop->getCity();
@@ -533,7 +533,7 @@ class WorkshopController extends Controller {
                     $workshop->setCodePartner($code_partner);
 
                     // Set default shop to NULL
-                    $shop = $form['shop']->getClientData();
+                    $shop = $workshop->getShop()->getId();
                     if ($shop == 0) {
                         $workshop->setShop(null);
                     }
@@ -681,7 +681,7 @@ class WorkshopController extends Controller {
         }
         $em = $this->getDoctrine()->getManager();
 
-        $form = $this->createForm(new WorkshopObservationType(), $workshop);
+        $form = $this->createForm(WorkshopObservationType::class, $workshop);
 
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);
@@ -710,7 +710,7 @@ class WorkshopController extends Controller {
         if($workshop)
         {
 
-            $form = $this->createForm(new WorkshopDeactivateObservationType(), $workshop);
+            $form = $this->createForm(WorkshopDeactivateObservationType::class, $workshop);
 
             if ($request->getMethod() == 'POST') {
                 $form->handleRequest($request);
@@ -735,7 +735,7 @@ class WorkshopController extends Controller {
         }
     }
 
-    public function deactivateActivateWorkshopAction($workshop_id, $request)
+    public function deactivateActivateWorkshopAction(Request $request,$workshop_id)
     {
         $em = $this->getDoctrine()->getManager();
         $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneById($workshop_id);

@@ -90,7 +90,7 @@ class TypologyController extends Controller {
 //            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
 //        }
 
-        $form = $this->createForm(new TypologyType(), $typology);
+        $form = $this->createForm(TypologyType::class, $typology);
 
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);

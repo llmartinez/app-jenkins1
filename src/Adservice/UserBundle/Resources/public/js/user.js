@@ -107,12 +107,12 @@
 
         $('#btn_create').click(function() {
             check_password();
-
             if ( isNaN($("input[id*='number_']").val())) {
                 $("input[id*='number_']").css('border-color','#FF0000');
                 alert($("#isNaN").val());
                 return false;
             }
+            return false;
         });
     });
 /**

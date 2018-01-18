@@ -48,7 +48,7 @@ class CategoryController extends Controller
         $category = new CategoryService();
 
         // Creamos variables de sesion para fitlrar los resultados del formulario
-        $form = $this->createForm(new CategoryServiceType(), $category);
+        $form = $this->createForm(CategoryServiceType::class, $category);
 
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);
@@ -81,7 +81,7 @@ class CategoryController extends Controller
         if (!$category) throw $this->createNotFoundException('Categoría de servicio no encontrado en la BBDD');
 
         // Creamos variables de sesion para fitlrar los resultados del formulario
-        $form = $this->createForm(new CategoryServiceType(), $category);
+        $form = $this->createForm(CategoryServiceType::class, $category);
 
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);

@@ -3,13 +3,14 @@ namespace Adservice\TicketBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class CloseTicketType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('solution', 'textarea')
+                ->add('solution', TextareaType::class)
                 ->add('importance')
                 ->add('subsystem')
                 ;
