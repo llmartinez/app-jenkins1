@@ -23,7 +23,7 @@ class CarController extends Controller {
         $em        = $this->getDoctrine()->getManager();
 
         $car = $ticket->getCar();
-        $formC = $this->createForm(new CarType(), $car);
+        $formC = $this->createForm(CarType::class, $car);
         // MAGIC: por algun motivo sin esto no carga nombre de Version en edit_car
         // mas info: http://imgur.com/gallery/YsbKHg1
         if($car->getVersion() != null) $version_name = $ticket->getCar()->getVersion()->getName();

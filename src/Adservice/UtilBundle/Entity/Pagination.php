@@ -23,6 +23,7 @@ class Pagination
         $this->setNumSidePages(5);
         $this->setLastRow($this->getMaxRows() * $page);
         $this->setFirstRow($this->getLastRow() - $this->getMaxRows()  );
+        $this->setTotalPag(1);
     }
 
     public function __toString() {

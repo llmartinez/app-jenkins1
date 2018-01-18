@@ -4,7 +4,11 @@ namespace Adservice\UserBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+
 
 class EditUserWorkshopType extends AbstractType {
 
@@ -22,9 +26,8 @@ class EditUserWorkshopType extends AbstractType {
             ->add('username')
             ->add('name')
             ->add('surname')
-            ->add('active', 'checkbox', array('required' => false))
-            ->add('language')
-            ->add('partner', 'entity', array(
+            ->add('active', CheckboxType::class, array('required' => false))
+            ->add('partner', EntityType::class, array(
                   'required' => true,
                   'class' => 'Adservice\PartnerBundle\Entity\Partner',
                   'choice_label' => 'name',
@@ -35,10 +38,11 @@ class EditUserWorkshopType extends AbstractType {
                                                           ->where('s.active = 1')
                                                           ->andWhere('s.category_service'.$id_catserv); }))
             //CONTACT
-            ->add('country', 'entity', array(
+            ->add('country', EntityType::class, array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
-                  'choice_label' => 'country',
+                  'choice_label' => 'country',            
+                  'choice_translation_domain' => null,
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC');}))
@@ -46,14 +50,20 @@ class EditUserWorkshopType extends AbstractType {
             ->add('city')
             ->add('address')
             ->add('postal_code')
-            ->add('phone_number_1' , 'text')
-            ->add('phone_number_2' , 'text', array('required' => false))
-            ->add('mobile_number_1', 'text', array('required' => false))
-            ->add('mobile_number_2', 'text', array('required' => false))
-            ->add('fax'            , 'text', array('required' => false))
-            ->add('email_1','email')
-            ->add('email_2','email', array('required' => false))
+            ->add('phone_number_1' , TextType::class)
+            ->add('phone_number_2' , TextType::class, array('required' => false))
+            ->add('mobile_number_1', TextType::class, array('required' => false))
+            ->add('mobile_number_2', TextType::class, array('required' => false))
+            ->add('fax'            , TextType::class, array('required' => false))
+            ->add('email_1',EmailType::class)
+            ->add('email_2',EmailType::class, array('required' => false))
             ->add('language')
+            ->add('language',EntityType::class, array(
+                  'class' => 'Adservice\UtilBundle\Entity\Language',
+                  'choice_label' => 'language',               
+                  'choice_translation_domain' => null,
+                  'required' => true,
+                  'placeholder' => ''))
         ;
 
         return $builder;

@@ -89,7 +89,7 @@
                 if(status == null || status == "") status = '0';
 
                 var locale = $(document).find("#data_locale").val();
-                var url = Routing.generate(route, {_locale: locale, page: 1, w_idpartner: '0', w_id: '0', country: country, partner: partner, status: status, term: term, field: field });
+                var url = Routing.generate(route, {_locale: locale, page: 1,catserv: catserv, w_idpartner: '0', w_id: '0', country: country, partner: partner, status: status, term: term, field: field });
 
                 window.open(url, "_self");
         });

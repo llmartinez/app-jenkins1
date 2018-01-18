@@ -52,7 +52,7 @@
             <div class="w70 fl">
                 <div class="col-xs-6 col-md-6 form-group">
                     <label for="adservice_workshopbundle_workshoptype_name">{{ 'workshop_name'|trans }} *</label>
-                    {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'name' | trans } }) }}
+                    {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'name'} }) }}
                 </div>
                  <div class="col-xs-3 col-md-3 form-group">
                     <label>{{ 'category_service'|trans }} *</label> <input type="text" id="flt_catserv" class="form-control" value="{{ workshop.categoryService }}" disabled="disabled">
@@ -69,12 +69,12 @@
                 <div class="col-xs-3 col-md-3 form-group">
                     <label for="new_car_form_vin">{{ 'code_workshop'|trans }} *</label>
                     {{ form_widget(form.code_workshop, {'attr': { 'class': 'form-control',
-                                                                  'placeholder': 'code_workshop' | trans,
+                                                                  'placeholder': 'code_workshop',
                                                                   'min': 1 } }) }}
                 </div>
                 <div class="col-xs-3 col-md-3 form-group">
                     <label for="adservice_workshopbundle_workshoptype_cif">{{ 'cif'|trans }} * </label>
-                    {{ form_widget(form.cif, { 'attr': {'class': 'form-control', 'placeholder': 'cif' | trans } }) }}
+                    {{ form_widget(form.cif, { 'attr': {'class': 'form-control', 'placeholder': 'cif'} }) }}
                 </div>
                 {% if is_granted('ROLE_ADMIN') and form.code_billing is defined %}
                     <div class="col-xs-2 col-md-2 form-group">
@@ -108,13 +108,13 @@
                     <div class="grid w45 fl">
                         <div class="grid-full w95">
                             <label for="adservice_workshopbundle_workshoptype_internal_code">{{ 'internal_code'|trans }}</label>
-                            {{ form_widget(form.internal_code, { 'attr': {'class': 'form-control', 'placeholder': 'internal_code' | trans } }) }}
+                            {{ form_widget(form.internal_code, { 'attr': {'class': 'form-control', 'placeholder': 'internal_code'} }) }}
                         </div>
                     </div>
                     <div class="grid w45 fl">
                         <div class="grid-full w95" {{is_hidden}}>
                             <label for="adservice_workshopbundle_workshoptype_commercial_code">{{ 'commercial_code'|trans }}</label>
-                            {{ form_widget(form.commercial_code, { 'attr': {'class': 'form-control mb15', 'placeholder': 'commercial_code' | trans } }) }}
+                            {{ form_widget(form.commercial_code, { 'attr': {'class': 'form-control mb15', 'placeholder': 'commercial_code'} }) }}
                         </div>
                     </div>
                 </div>
@@ -143,7 +143,7 @@
                     </div>
                     <div class="grid w45 fl">
                         <label for="adservice_workshopbundle_workshoptype_numchecks">{{ 'numchecks'|trans }}</label>
-                        {{ form_widget(form.numchecks, { 'attr': {'class': 'form-control', 'min': '0' , 'max': '5', 'placeholder': 'max_num_checks' | trans }}) }}
+                        {{ form_widget(form.numchecks, { 'attr': {'class': 'form-control', 'min': '0' , 'max': '5', 'placeholder': 'max_num_checks'}}) }}
                     </div>
                 </div>
                 <div class="grid w45 fl mt20" {{is_hidden}}>
@@ -169,7 +169,7 @@
         <div class="col-xs-12 col-md-12 form-group">
             <div class="col-xs-2 col-md-2 form-group">
                 <label>{{ 'contact'|trans }} *</label>
-                {{ form_widget(form.contact, { 'attr': {'class': 'form-control', 'placeholder': 'contact' | trans} }) }}
+                {{ form_widget(form.contact, { 'attr': {'class': 'form-control', 'placeholder': 'contact'} }) }}
             </div>
             {% include 'UtilBundle:Default:contact_fields.html.twig' %}
         </div>
@@ -183,15 +183,15 @@
 
         <div class="col-xs-4 col-md-4 form-group">
             <label for="adservice_workshopbundle_workshoptype_observation_workshop">{{ 'observations_workshop'|trans }}</label>
-            {{ form_widget(form.observation_workshop, { 'attr': {'class': 'form-control', 'rows': '3', 'placeholder': 'observations_workshop' | trans } }) }}
+            {{ form_widget(form.observation_workshop, { 'attr': {'class': 'form-control', 'rows': '3', 'placeholder': 'observations_workshop'} }) }}
         </div>
         <div class="col-xs-4 col-md-4 form-group">
             <label for="adservice_workshopbundle_workshoptype_observation_assessor">{{ 'observations_assessor'|trans }}</label>
-            {{ form_widget(form.observation_assessor, { 'attr': {'class': 'form-control', 'rows': '3', 'placeholder': 'observations_assessor' | trans } }) }}
+            {{ form_widget(form.observation_assessor, { 'attr': {'class': 'form-control', 'rows': '3', 'placeholder': 'observations_assessor'} }) }}
         </div>
         <div class="col-xs-4 col-md-4 form-group">
             <label for="adservice_workshopbundle_workshoptype_observation_admin">{{ 'observations_admin'|trans }}</label>
-            {{ form_widget(form.observation_admin, { 'attr': {'class': 'form-control', 'rows': '3', 'placeholder': 'observations_admin' | trans } }) }}
+            {{ form_widget(form.observation_admin, { 'attr': {'class': 'form-control', 'rows': '3', 'placeholder': 'observations_admin'} }) }}
         </div>
         <div hidden='hidden'>    
             {{ form_rest(form) }}

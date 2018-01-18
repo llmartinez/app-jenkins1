@@ -12,10 +12,10 @@
 
     {{ form_start(form, {'action': path("popup_new")}) }}
         <div class="col-xs-3 col-md-3 form-group">
-            <label>{{ 'name'|trans }}*</label> {{ form_widget(form.name,         { 'attr': {'class': 'form-control', 'required': 'required', 'placeholder': 'name' | trans } }) }}
+            <label>{{ 'name'|trans }}*</label> {{ form_widget(form.name,         { 'attr': {'class': 'form-control', 'required': 'required', 'placeholder': 'name' } }) }}
         </div>
         <div class="col-xs-3 col-md-3 form-group">
-            <label>{{ 'role'|trans }}*</label> {{ form_widget(form.role,         { 'attr': {'class': 'form-control', 'required': 'required' , 'placeholder': 'role' | trans} }) }}
+            <label>{{ 'role'|trans }}*</label> {{ form_widget(form.role,         { 'attr': {'class': 'form-control', 'required': 'required' , 'placeholder': 'role' } }) }}
         </div>
         <div class="col-xs-3 col-md-3 form-group">
             <label>{{ 'category_service'|trans }}*</label> {{ form_widget(form.category_service, { 'attr': {'class': 'form-control', 'required': 'required' } }) }}
@@ -33,7 +33,7 @@
             <label>{{ 'active'|trans }}*</label> {{ form_widget(form.active,       { 'attr': {'checked': 'checked' } }) }}
         </div>
         <div class="col-xs-12 col-md-12 form-group">
-            <label>{{ 'description'|trans }}*</label> {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'required': 'required', 'rows': '3', 'placeholder': 'description' | trans } }) }}
+            <label>{{ 'description'|trans }}*</label> {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'required': 'required', 'rows': '3', 'placeholder': 'description' } }) }}
         </div>
         {{ form_rest(form) }}
         <p>

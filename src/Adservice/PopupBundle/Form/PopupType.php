@@ -4,6 +4,9 @@ namespace Adservice\PopupBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class PopupType extends AbstractType {
 
@@ -17,16 +20,17 @@ class PopupType extends AbstractType {
         
         $builder
                 ->add('name')
-                ->add('description', 'textarea')
-                ->add('role', 'entity', array(
+                ->add('description', TextareaType::class)
+                ->add('role', EntityType::class, array(
                   'required' => true,
                   'class' => 'Adservice\UserBundle\Entity\Role',
                   'choice_label' => 'name',
+                  'choice_translation_domain' => null,
                   'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($role) {
                                                 return $er->createQueryBuilder('r')
                                                           ->where('r.name'.$role); }))
-                ->add('category_service', 'entity', array(
+                ->add('category_service', EntityType::class, array(
                   'required' => true,
                   'class' => 'Adservice\UserBundle\Entity\CategoryService',
                   'choice_label' => 'category_service',
@@ -35,10 +39,11 @@ class PopupType extends AbstractType {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.category_service', 'ASC')
                                                           ->where('c.id'.$id_catserv); }))
-                ->add('country', 'entity', array(
+                ->add('country', EntityType::class, array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
-                  'choice_label' => 'country',
+                  'choice_label' => 'country',                                
+                  'choice_translation_domain' => null,
                   'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
@@ -46,7 +51,7 @@ class PopupType extends AbstractType {
                                                           ->where('c.id'.$id_country); }))
                 ->add('startdate_at')
                 ->add('enddate_at')
-                ->add('active', 'checkbox', array('required' => false))
+                ->add('active', CheckboxType::class, array('required' => false))
         ;
     }
 

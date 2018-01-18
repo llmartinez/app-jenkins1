@@ -4,7 +4,12 @@ namespace Adservice\UserBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class UserWorkshopType extends AbstractType {
 
@@ -19,7 +24,7 @@ class UserWorkshopType extends AbstractType {
 
         $builder
             ->add('username')
-            ->add('password', 'repeated', array('type'            => 'password',
+            ->add('password', RepeatedType::class, array('type'            => PasswordType::class,
                                                 'invalid_message' => 'Las dos contraseñas deben coincidir',
                                                 'first_name'      => 'password1',
                                                 'second_name'     => 'password2',
@@ -27,8 +32,8 @@ class UserWorkshopType extends AbstractType {
             ))
             ->add('name')
             ->add('surname')
-            ->add('active', 'checkbox', array('required' => false))
-            ->add('workshop', 'entity', array(
+            ->add('active', CheckboxType::class, array('required' => false))
+            ->add('workshop', EntityType::class, array(
                   'required' => true,
                   'class' => 'Adservice\WorkshopBundle\Entity\Workshop',
                   'choice_label' => 'name',
@@ -39,7 +44,7 @@ class UserWorkshopType extends AbstractType {
                                                           ->where('s.active = 1')
                                                           ->andWhere('s.category_service'.$id_catserv); }))
             ->add('language')
-            ->add('partner', 'entity', array(
+            ->add('partner', EntityType::class, array(
                   'required' => true,
                   'class' => 'Adservice\PartnerBundle\Entity\Partner',
                   'choice_label' => 'name',
@@ -49,7 +54,7 @@ class UserWorkshopType extends AbstractType {
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
                                                           ->andWhere('s.category_service'.$id_catserv); }))
-            ->add('category_service', 'entity', array(
+            ->add('category_service', EntityType::class, array(
                   'required' => true,
                   'class' => 'Adservice\UserBundle\Entity\CategoryService',
                   'choice_label' => 'category_service',
@@ -60,10 +65,11 @@ class UserWorkshopType extends AbstractType {
                                                           ->where('cs.id'.$id_catserv)
                                                           ; }))
             //CONTACT
-            ->add('country', 'entity', array(
+            ->add('country', EntityType::class, array(
                   'required' => true,
                   'class' => 'Adservice\UtilBundle\Entity\Country',
-                  'choice_label' => 'country',
+                  'choice_label' => 'country',               
+                  'choice_translation_domain' => null,
                   'placeholder' => '',
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country) {
                                                 return $er->createQueryBuilder('c')
@@ -72,16 +78,17 @@ class UserWorkshopType extends AbstractType {
             ->add('city')
             ->add('address')
             ->add('postal_code')
-            ->add('phone_number_1' , 'text')
-            ->add('phone_number_2' , 'text', array('required' => false))
-            ->add('mobile_number_1', 'text', array('required' => false))
-            ->add('mobile_number_2', 'text', array('required' => false))
-            ->add('fax'            , 'text', array('required' => false))
-            ->add('email_1','email')
-            ->add('email_2','email', array('required' => false))
-            ->add('language','entity', array(
+            ->add('phone_number_1' , TextType::class)
+            ->add('phone_number_2' , TextType::class, array('required' => false))
+            ->add('mobile_number_1', TextType::class, array('required' => false))
+            ->add('mobile_number_2', TextType::class, array('required' => false))
+            ->add('fax'            , TextType::class, array('required' => false))
+            ->add('email_1',EmailType::class)
+            ->add('email_2',EmailType::class, array('required' => false))
+            ->add('language',EntityType::class, array(
                   'class' => 'Adservice\UtilBundle\Entity\Language',
-                  'choice_label' => 'language',
+                  'choice_label' => 'language',               
+                  'choice_translation_domain' => null,
                   'required' => true,
                   'placeholder' => ''))
         ;

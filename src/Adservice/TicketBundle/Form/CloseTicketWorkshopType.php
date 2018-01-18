@@ -3,13 +3,14 @@ namespace Adservice\TicketBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class CloseTicketWorkshopType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('solution', 'choice', array('choices'  => $this->getSolutions() , 'required' => false, 'placeholder' => false));
+                ->add('solution',  ChoiceType::class, array('choices'  => $this->getSolutions() , 'required' => false, 'placeholder' => false))
                 ;
     }
 

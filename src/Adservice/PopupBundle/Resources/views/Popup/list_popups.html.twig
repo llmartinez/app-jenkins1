@@ -50,7 +50,7 @@
                 <tr>
                     <td>{{ popup.id }}</td>
                     <td>{{ popup.name|length > 15 ? popup.name|slice(0, 15) ~ '...' : popup.name  }}{% if popup.active == false %}<span class="label label-danger">{{ 'inactive'|trans }}</span>{% endif %}</td>
-                    <td>{{ popup.categoryService|trans }} </td>
+                    <td>{{ popup.categoryService }} </td>
                     <td>{{ popup.country|trans }} </td>
                     <td>{{ popup.startDateAt|date('d-m-Y') }}</td>
                     <td>{{ popup.endDateAt|date('d-m-Y') }}</td>
@@ -58,7 +58,7 @@
                     <td>
                         <a href="{{ path("popup_edit", { 'id':popup.id }) }}" title="{{ 'edit.popup'|trans }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
 
-                        <a href="{{ path('popup_delete', {'id': popup.id}) }}" onClick="return confirm('{{ 'popup.delete.confirm'|trans }}');" target="_self" class="btn_remove" title="{{ 'delete'|trans }}" alt="{{ 'delete'|trans }}"><img class="img_icon delete_popup" src="{{ asset('bundles/util/images/icon/bin.png') }}"></a>
+                        <a href="{{ path('popup_delete', {'id': popup.id}) }}" onClick="return confirm('{{ 'popup.delete.confirm'|trans }}');" target="_self" class="btn_remove" title="{{ 'popup.delete'|trans }}" alt="{{ 'popup.delete'|trans }}"><img class="img_icon delete_popup" src="{{ asset('bundles/util/images/icon/bin.png') }}"></a>
 
                     </td>
                 </tr>

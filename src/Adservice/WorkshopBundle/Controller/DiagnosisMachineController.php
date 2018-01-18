@@ -91,7 +91,7 @@ class DiagnosisMachineController extends Controller {
 //            $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
 //        }
 
-        $form = $this->createForm(new DiagnosisMachineType(), $diagnosis_machine);
+        $form = $this->createForm(DiagnosisMachineType::class, $diagnosis_machine);
 
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);

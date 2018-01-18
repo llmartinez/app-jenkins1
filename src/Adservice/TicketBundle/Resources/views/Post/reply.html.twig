@@ -52,7 +52,7 @@
              {% if (today != "Saturday" and today != "Sunday") or env == "demo"  %}
                 {% if ticket.workshop.active != 0 %}
                 
-                    <div>{{ form_widget(formP.message, { 'attr': {'class': 'ac-message', 'rows': '6', 'placeholder': 'answer' | trans } }) }}</div>
+                    <div>{{ form_widget(formP.message, { 'attr': {'class': 'ac-message', 'rows': '6', 'placeholder': 'answer'} }) }}</div>
 
                     {{ form_widget(formD.file, { 'attr': {'class': 'ac-message'} })  }}
                     <label class="error" style="display: none;" id='alertFileSize'>{{ 'error.file_size'|trans }}10Mb</label>

@@ -110,7 +110,7 @@ class PartnerController extends Controller {
         if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) $_SESSION['code_billing'] = 'code_billing';
         else unset($_SESSION['code_billing']);
 
-        $form = $this->createForm(new PartnerType(), $partner);
+        $form = $this->createForm(PartnerType::class, $partner);
 
         if ($request->getMethod() == 'POST') {
 
@@ -241,7 +241,7 @@ class PartnerController extends Controller {
         if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) $_SESSION['code_billing'] = 'code_billing';
         else unset($_SESSION['code_billing']);
         
-        $form = $this->createForm(new PartnerType(), $partner);
+        $form = $this->createForm(PartnerType::class, $partner);
 
         $actual_city   = $partner->getRegion();
         $actual_region = $partner->getCity();

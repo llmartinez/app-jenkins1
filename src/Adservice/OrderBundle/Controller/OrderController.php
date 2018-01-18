@@ -126,10 +126,9 @@ class OrderController extends Controller
             $orders = $pagination->getRows($em, 'OrderBundle', 'ShopOrder'     , $shop_rejected    , $pagination);
             $pagination->setTotalPagByLength($length_shop_rejected);
         }
-
         foreach ($orders as $order)
         {
-            if($order->getWantedAction() == 'activate' || $order->getWantedAction() == 'deactivate')
+            if(($order->getWantedAction() == 'activate' || $order->getWantedAction() == 'deactivate') && $order instanceof WorkshopOrder)                
             {
                 $id = $order->getIdWorkshop();
 

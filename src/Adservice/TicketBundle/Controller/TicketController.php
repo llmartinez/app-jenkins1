@@ -67,7 +67,7 @@ class TicketController extends Controller {
     public function listTicketAction(Request $request, $page = 1, $num_rows = 10, $country = 0, $lang = 0, $catserv = 0, $option = null, $workshop_id = null, $adviser_id = null) {
         $em = $this->getDoctrine()->getManager();
 
-
+        
         $user = $this->getUser();
         $catservId = $catserv ;
        
@@ -94,7 +94,7 @@ class TicketController extends Controller {
         if ($option == null) {
             // Si se envia el codigo del taller se buscan los tickets en funcion de estos
             if ($request->getMethod() == 'POST') {
-                $workshops = $em->getRepository('WorkshopBundle:Workshop')->findWorkshopInfo($request, $security);
+                $workshops = $em->getRepository('WorkshopBundle:Workshop')->findWorkshopInfo($request, $this->getUser()->getCategoryService());
 
                 if (!empty($workshops)) {
                     if ($workshops[0]->getActive() == 0) {
@@ -268,10 +268,8 @@ class TicketController extends Controller {
                 }
             }
         }
-
         $pagination = new Pagination($page);
         $ordered = array('e.modified_at', 'DESC');
-
         if ($pagination->getMaxRows() != $num_rows)
             $pagination = $pagination->changeMaxRows($page, $num_rows);
 
@@ -383,7 +381,7 @@ class TicketController extends Controller {
         $inactive =  sizeof($t_inactive);
 
         if (sizeof($tickets) == 0)
-            $pagination = new Pagination(0);
+            $pagination = new Pagination(1);
         
         $array = array('workshop' => $workshops[0], 'pagination' => $pagination, 'tickets' => $tickets,
             'country' => $country, 'lang' => $lang, 'catserv' => $catserv, 'num_rows' => $num_rows, 'option' => $option, 'brands' => $brands,
@@ -396,8 +394,6 @@ class TicketController extends Controller {
         }else{
             $array['id_catserv'] = 0;
         }
-            
-
         if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
             return $this->render('TicketBundle:Layout:list_ticket_layout.html.twig', $array);
         elseif ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR')) {
@@ -587,9 +583,9 @@ class TicketController extends Controller {
         $adsplus = $em->getRepository('WorkshopBundle:ADSPlus')->findOneBy(array('idTallerADS' => $workshop->getId()));
 
         //Define Forms
-        $form = $this->createForm(new NewTicketType(), $ticket);
-        $formC = $this->createForm(new CarType(), $car);
-        $formD = $this->createForm(new DocumentType(), $document);
+        $form = $this->createForm(NewTicketType::class, $ticket);
+        $formC = $this->createForm(CarType::class, $car);
+        $formD = $this->createForm(DocumentType::class, $document);
         $textarea_content = "";
         if($einatech == 1){
              $textarea_content = $this->get('translator')->trans('einatech_textarea_default');
@@ -1081,7 +1077,7 @@ class TicketController extends Controller {
             $em = $this->getDoctrine()->getManager();
 
 
-            $form = $this->createForm(new EditTicketType(), $ticket);
+            $form = $this->createForm(EditTicketType::class, $ticket);
 
             if ($request->getMethod() == 'POST') {
 
@@ -1316,8 +1312,8 @@ class TicketController extends Controller {
             }
 
             //Define Forms
-            $formP = $this->createForm(new PostType(), $post);
-            $formD = $this->createForm(new DocumentType(), $document);
+            $formP = $this->createForm(PostType::class, $post);
+            $formD = $this->createForm(DocumentType::class, $document);
 
             $new_subsystem = $request->request->get('edit_ticket_form')['subsystem'];
             if ($new_subsystem != null) {
@@ -1350,7 +1346,7 @@ class TicketController extends Controller {
                 'id' => $id);
 
             if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR')) {
-                $form = $this->createForm(new EditTicketType(), $ticket);
+                $form = $this->createForm(EditTicketType::class, $ticket);
                 $array['form'] = $form->createView();
             }
             if ($request->getMethod() == 'POST') {
@@ -1578,7 +1574,7 @@ class TicketController extends Controller {
         $em = $this->getDoctrine()->getManager();
         $ticket = $post->getTicket();
 
-        $form = $this->createForm(new PostType(), $post);
+        $form = $this->createForm(PostType::class, $post);
 
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);
@@ -1614,7 +1610,7 @@ class TicketController extends Controller {
        ){
            $em = $this->getDoctrine()->getManager();
 
-           if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') === false)   $form = $this->createForm(new CloseTicketWorkshopType(), $ticket);
+           if ($this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR') === false)   $form = $this->createForm(CloseTicketWorkshopType::class, $ticket);
            else                                                   $form = $this->createForm(new CloseTicketType()        , $ticket);
 
            if ($request->getMethod() == 'POST') {
@@ -1740,7 +1736,7 @@ class TicketController extends Controller {
             $em = $this->getDoctrine()->getManager();
 
 
-            $form = $this->createForm(new EditDescriptionType(), $ticket);
+            $form = $this->createForm(EditDescriptionType::class, $ticket);
 
             if ($request->getMethod() == 'POST') {
                 $form->handleRequest($request);

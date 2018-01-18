@@ -42,19 +42,15 @@ class UserRepository extends EntityRepository
      *
      * @return string
      */
-    public function findByOption($em, $security, $country, $catserv, $option, $term, $field, $pagination)
+    public function findByOption($em, $country, $catserv, $option, $term, $field, $pagination)
     {
 
         $query = 'SELECT u FROM UserBundle:user u JOIN u.user_role r WHERE r.name = :role';
 
-        if(!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
-            $query = $query.' AND u.country = '.$this->getUser()->getCountry()->getId();
+        if ($country != 0 ) {
+            $query = $query.' AND u.country = '.$country;
         }
-        else{
-            if ($country != 0 ) {
-                $query = $query.' AND u.country = '.$country;
-            }
-        }
+        
         if ($catserv != 0 ) {
             $query = $query.' AND u.category_service = '.$catserv;
         }
@@ -100,18 +96,15 @@ class UserRepository extends EntityRepository
      *
      * @return string
      */
-    public function findLengthOption($em, $security, $country, $catserv, $option)
+    public function findLengthOption($em, $country, $catserv, $option)
     {
         $query = 'SELECT count(u) FROM UserBundle:user u JOIN u.user_role r WHERE r.name = :role';
 
-        if(!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
-            $query = $query.' AND u.country = '.$this->getUser()->getCountry()->getId();
+        
+        if ($country != 0 ) {
+            $query = $query.' AND u.country = '.$country;
         }
-        else{
-            if ($country != 0 ) {
-                $query = $query.' AND u.country = '.$country;
-            }
-        }
+
         if ($catserv != 0 ) {
             $query = $query.' AND u.category_service = '.$catserv;
         }

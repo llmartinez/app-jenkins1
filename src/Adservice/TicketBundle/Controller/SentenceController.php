@@ -24,22 +24,20 @@ class SentenceController extends Controller
         if (! $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
              throw new AccessDeniedException();
         }
-        $params[] = array();
-//        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
-//            if ($country != 'none') $params[] = array('country', ' = '.$country);
-//            else                    
-//        }
-//        else $params[] = array('country', ' = '.$this->getUser()->getCountry()->getId());
+        $params = array();
+        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
+            if ($country != 'none') $params[] = array('country', ' = '.$country);
+        }
+        else $params[] = array('country', ' = '.$this->getUser()->getCountry()->getId());
 
         $pagination = new Pagination($page);
 
         $sentences = $pagination->getRows($em, 'TicketBundle', 'Sentence', $params, $pagination);
-
         $length = $pagination->getRowsLength($em, 'TicketBundle', 'Sentence', $params);
 
         $pagination->setTotalPagByLength($length);
 
-        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findAll();
+        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) $countries = $em->getRepository('UtilBundle:Country')->findBy(array(), array('country' => 'ASC'));
         else $countries = array();
 
         return $this->render('TicketBundle:Sentence:list_sentence.html.twig', array( 'sentences'  => $sentences,
@@ -77,7 +75,7 @@ class SentenceController extends Controller
         }else {
             $_SESSION['id_country'] = ' = '.$partner->getCountry()->getId();
         }
-        $form = $this->createForm(new SentenceType(), $sentence);
+        $form = $this->createForm(SentenceType::class, $sentence);
 
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);

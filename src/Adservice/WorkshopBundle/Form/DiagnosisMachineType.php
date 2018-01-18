@@ -4,6 +4,8 @@ namespace Adservice\WorkshopBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class DiagnosisMachineType extends AbstractType
 {
@@ -23,7 +25,7 @@ class DiagnosisMachineType extends AbstractType
 //                                                return $er->createQueryBuilder('c')
 //                                                          ->orderBy('c.country', 'ASC')
 //                                                          ->where('c.id'.$id_country); }))
-            ->add('category_service', 'entity', array(
+            ->add('category_service',EntityType::class, array(
                   'required' => false,
                   'class' => 'Adservice\UserBundle\Entity\CategoryService',
                   'choice_label' => 'category_service',
@@ -32,7 +34,7 @@ class DiagnosisMachineType extends AbstractType
                                                 return $er->createQueryBuilder('cs')
                                                           ->orderBy('cs.category_service', 'ASC')
                                                           ; }))
-            ->add('active', 'checkbox', array(
+            ->add('active',CheckboxType::class, array(
                   'required' => false,
                   'attr'     => array('checked'   => 'checked')
                 ))

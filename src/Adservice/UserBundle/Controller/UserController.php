@@ -233,10 +233,14 @@ class UserController extends Controller {
                 $params[] = array('category_service', ' = '.$catserv);
             }
         }else $params[] = array('category_service', ' = '.$this->getUser()->getCategoryService()->getId());
-
-         if($country != 0){
-                $params[] = array('country', ' = '.$country);
-            }
+ 
+        if(!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+            $country = $this->getUser()->getCountry()->getId();
+        }
+        if($country != 0){
+            $params[] = array('country', ' = '.$country);
+        }
+       
         if ($term != '0' and $field != '0') {
 
             if ($term == 'tel') {
@@ -257,8 +261,8 @@ class UserController extends Controller {
                 $role     = $em->getRepository("UserBundle:Role")->find($option);
                 $role_id  = $role->getId();
                 $role     = $role->getName();
-                $users    = $em->getRepository("UserBundle:User")->findByOption($em, $security, $country, $catserv, $role, $term, $field, $pagination);
-                $length   = $em->getRepository("UserBundle:User")->findLengthOption($em, $security, $country, $catserv, $role);
+                $users    = $em->getRepository("UserBundle:User")->findByOption($em, $country, $catserv, $role, $term, $field, $pagination);
+                $length   = $em->getRepository("UserBundle:User")->findLengthOption($em, $country, $catserv, $role);
         }
 
         //separamos los tipos de usuario...
@@ -479,24 +483,24 @@ class UserController extends Controller {
         if ($type == 'admin') {
             $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_ADMIN');
             $user->setUserRoles($rol);
-            $form = $this->createForm(new UserAdminAssessorType(), $user);
+            $form = $this->createForm(UserAdminAssessorType::class, $user);
         }elseif ($type == 'super_ad') {
             $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_SUPER_AD');
             $user->setUserRoles($rol);
-            $form = $this->createForm(new UserSuperPartnerType(), $user);
+            $form = $this->createForm(UserSuperPartnerType::class, $user);
         }elseif ($type == 'ad') {
             $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_AD');
             $user->setUserRoles($rol);
-            $form = $this->createForm(new UserPartnerType(), $user);
+            $form = $this->createForm(UserPartnerType::class, $user);
         }elseif ($type == 'commercial') {
             $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_COMMERCIAL');
             $user->setUserRoles($rol);
-            $form = $this->createForm(new UserCommercialType(), $user);
+            $form = $this->createForm(UserCommercialType::class, $user);
         } elseif ($type == 'assessor') {
             $_SESSION['all'] = $this->get('translator')->trans('all');
             $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_ASSESSOR');
             $user->setUserRoles($rol);
-            $form = $this->createForm(new UserAssessorType(), $user);
+            $form = $this->createForm(UserAssessorType::class, $user);
         }
 
 
@@ -662,18 +666,18 @@ class UserController extends Controller {
 
         $_SESSION['role'] = $this->getUser()->getRoles()[0]->getName();
 
-        if     ($role == "ROLE_SUPER_ADMIN" or $role == "ROLE_ADMIN") $form = $this->createForm(new EditUserAdminAssessorType(), $user);
+        if     ($role == "ROLE_SUPER_ADMIN" or $role == "ROLE_ADMIN") $form = $this->createForm(EditUserAdminAssessorType::class, $user);
         elseif ($role == "ROLE_ASSESSOR"){
-            $form = $this->createForm(new EditUserAssessorType() , $user);
+            $form = $this->createForm(EditUserAssessorType::class , $user);
             if ($user->getCategoryService() == null){
                 $user_role_id = 2;
             }
         }
-        elseif ($role == "ROLE_TOP_AD")     $form = $this->createForm(new EditUserSuperPartnerType() , $user);
-        elseif ($role == "ROLE_SUPER_AD")   $form = $this->createForm(new EditUserSuperPartnerType() , $user);
-        elseif ($role == "ROLE_AD")         $form = $this->createForm(new EditUserPartnerType()      , $user);
-        elseif ($role == "ROLE_COMMERCIAL") $form = $this->createForm(new EditCommercialType()       , $user);
-        elseif ($role == "ROLE_USER")       $form = $this->createForm(new EditUserWorkshopType()     , $user);
+        elseif ($role == "ROLE_TOP_AD")     $form = $this->createForm(EditUserSuperPartnerType::class , $user);
+        elseif ($role == "ROLE_SUPER_AD")   $form = $this->createForm(EditUserSuperPartnerType::class , $user);
+        elseif ($role == "ROLE_AD")         $form = $this->createForm(EditUserPartnerType::class      , $user);
+        elseif ($role == "ROLE_COMMERCIAL") $form = $this->createForm(EditCommercialType::class       , $user);
+        elseif ($role == "ROLE_USER")       $form = $this->createForm(EditUserWorkshopType::class     , $user);
 
         $actual_username = $user->getUsername();
         $actual_city   = $user->getRegion();
@@ -905,7 +909,7 @@ class UserController extends Controller {
      * @return boolean
      */
     private function savePassword($em, $user, $password){
-
+        $request = $this->getRequest();
         $user->setPassword($password);
         $this->saveUser($em, $user);
 

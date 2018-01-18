@@ -136,7 +136,7 @@ class ShopOrderController extends Controller {
             unset($_SESSION['id_country']);
         }
 
-        $form = $this->createForm(new ShopNewOrderType(), $shopOrder);
+        $form = $this->createForm(ShopNewOrderType::class, $shopOrder);
 
         if ($request->getMethod() == 'POST') {
 
@@ -259,7 +259,7 @@ class ShopOrderController extends Controller {
             $_SESSION['id_catserv'] = ' = '.$user->getCategoryService()->getId();
         }
 
-        $form = $this->createForm(new ShopEditOrderType(), $shopOrder);
+        $form = $this->createForm(ShopEditOrderType::class, $shopOrder);
 
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);
@@ -426,7 +426,7 @@ class ShopOrderController extends Controller {
         $em = $this->getDoctrine()->getManager();
 
 
-        $form = $this->createForm(new ShopRejectOrderType(), $shopOrder);
+        $form = $this->createForm(ShopRejectOrderType::class, $shopOrder);
 
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);
