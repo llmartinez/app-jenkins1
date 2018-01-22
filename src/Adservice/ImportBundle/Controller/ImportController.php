@@ -30,7 +30,6 @@ class ImportController extends Controller
     {
     	$session = $this->get('session');
 		$em 	 = $this->getDoctrine()->getManager('default');
-		$em_old  = $this->getDoctrine()->getManager('em_old');
 		$sa 	 = $em->getRepository('UserBundle:User')->find('1');	// SUPER_ADMIN
 
 //  ____   _    ____ _____ _   _ _____ ____
