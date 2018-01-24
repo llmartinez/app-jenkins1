@@ -57,7 +57,6 @@ class EditUserWorkshopType extends AbstractType {
             ->add('fax'            , TextType::class, array('required' => false))
             ->add('email_1',EmailType::class)
             ->add('email_2',EmailType::class, array('required' => false))
-            ->add('language')
             ->add('language',EntityType::class, array(
                   'class' => 'Adservice\UtilBundle\Entity\Language',
                   'choice_label' => 'language',               

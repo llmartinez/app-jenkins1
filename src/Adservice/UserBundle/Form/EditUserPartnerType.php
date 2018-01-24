@@ -35,8 +35,6 @@ class EditUserPartnerType extends AbstractType {
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
                                                           ->andWhere('s.category_service'.$id_catserv); }))
-            //->add('language')
-
             //CONTACT
             ->add('country', EntityType::class, array(
                   'required' => true,

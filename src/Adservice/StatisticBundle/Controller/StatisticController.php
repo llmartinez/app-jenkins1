@@ -53,16 +53,58 @@ class StatisticController extends Controller {
             $assessors  = $qa->getResult();
             $typologies = $qt->getResult();
         }
+
+        $checker = $this->get('security.authorization_checker');
+
         //Estadísticas generales de Ad-service
-        $statistic->setNumUsers        ($statistic->getNumUsersInAdservice    ($em, $this->get('security.authorization_checker')));
-        $statistic->setNumPartners     ($statistic->getNumPartnersInAdservice ($em, $this->get('security.authorization_checker')));
-        $statistic->setNumShops        ($statistic->getNumShopsInAdservice    ($em, $this->get('security.authorization_checker'))-1); //Tienda por defecto '...' no cuenta.
-        $statistic->setNumWorkshops    ($statistic->getNumWorkshopsInAdservice($em, $this->get('security.authorization_checker')));
-        $statistic->setNumTickets      ($statistic->getTicketsInAdservice     ($em, $this->get('security.authorization_checker')));
-        $statistic->setNumTicketsTel   ($statistic->getNumTicketsByTel        ($em, $this->get('security.authorization_checker')));
-        $statistic->setNumTicketsApp   ($statistic->getNumTicketsByApp        ($em, $this->get('security.authorization_checker')));
-        $statistic->setNumOpenTickets  ($statistic->getNumTicketsByStatus($em, 'open' , $this->get('security.authorization_checker')));
-        $statistic->setNumClosedTickets($statistic->getNumTicketsByStatus($em, 'close', $this->get('security.authorization_checker')));
+        $statistic->setNumUsers($statistic->getNumUsersInAdservice(
+            $em,
+            $checker->isGranted('ROLE_SUPER_ADMIN'),
+            $this->getUser()->getCountry()->getId()
+        ));
+        $statistic->setNumPartners($statistic->getNumPartnersInAdservice(
+            $em,
+            $checker->isGranted('ROLE_SUPER_ADMIN'),
+            $this->getUser()->getCountry()->getId()
+        ));
+        $statistic->setNumShops($statistic->getNumShopsInAdservice(
+                $em,
+                $checker->isGranted('ROLE_SUPER_ADMIN'),
+                $this->getUser()->getCountry()->getId()
+            )-1
+        ); //Tienda por defecto '...' no cuenta.
+        $statistic->setNumWorkshops($statistic->getNumWorkshopsInAdservice(
+            $em,
+            $checker->isGranted('ROLE_SUPER_ADMIN'),
+            $this->getUser()->getCountry()->getId()
+        ));
+        $statistic->setNumTickets($statistic->getTicketsInAdservice(
+            $em,
+            $checker->isGranted('ROLE_SUPER_ADMIN'),
+            $this->getUser()->getCountry()->getId()
+        ));
+        $statistic->setNumTicketsTel($statistic->getNumTicketsByTel(
+            $em,
+            $checker->isGranted('ROLE_SUPER_ADMIN'),
+            $this->getUser()->getCountry()->getId()
+        ));
+        $statistic->setNumTicketsApp($statistic->getNumTicketsByApp(
+            $em,
+            $checker->isGranted('ROLE_SUPER_ADMIN'),
+            $this->getUser()->getCountry()->getId()
+        ));
+        $statistic->setNumOpenTickets($statistic->getNumTicketsByStatus(
+            $em,
+            'open' ,
+            $checker->isGranted('ROLE_SUPER_ADMIN'),
+            $this->getUser()->getCountry()->getId()
+        ));
+        $statistic->setNumClosedTickets($statistic->getNumTicketsByStatus(
+            $em,
+            'close',
+            $checker->isGranted('ROLE_SUPER_ADMIN'),
+            $this->getUser()->getCountry()->getId()
+        ));
         $countries = $em->getRepository('UtilBundle:Country')->findAll();
         $catservices = $em->getRepository('UserBundle:CategoryService')->findAll();
 

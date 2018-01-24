@@ -2,6 +2,7 @@
 
 namespace Adservice\StatisticBundle\Entity;
 
+use Doctrine\ORM\EntityManager;
 use SensioLabs\Security\SecurityChecker;
 
 /**
@@ -106,13 +107,15 @@ class Statistic {
     /**
      * Devuelve el número de usuarios dentro de ADService
      * @param EntityManager $em
+     * @param bool $isSuperAdmin
+     * @param int|bool $countryId
      * @return Integer
      */
-    public function getNumUsersInAdservice($em, $security) {
-        if($security->isGranted('ROLE_SUPER_ADMIN')){
+    public function getNumUsersInAdservice($em, $isSuperAdmin = false, $countryId = null) {
+        if($isSuperAdmin){
             $filter_country = '';
         }else{
-            $filter_country = 'AND u.country = '.$this->getUser()->getCountry()->getId();
+            $filter_country = 'AND u.country = '.$countryId;
         }
         $query = $em->createQuery("SELECT COUNT(u) FROM UserBundle:User u WHERE u.active = 1 ".$filter_country);
         return $query->getSingleScalarResult();
@@ -121,13 +124,15 @@ class Statistic {
     /**
      * Devuelve el número de socios dentro de ADService
      * @param EntityManager $em
+     * @param bool $isSuperAdmin
+     * @param int|bool $countryId
      * @return Integer
      */
-    public function getNumPartnersInAdservice($em, $security) {
-        if($security->isGranted('ROLE_SUPER_ADMIN')){
+    public function getNumPartnersInAdservice($em, $isSuperAdmin = false, $countryId = null) {
+        if($isSuperAdmin){
             $filter_country = '';
         }else{
-            $filter_country = 'AND p.country = '.$this->getUser()->getCountry()->getId();
+            $filter_country = 'AND p.country = '.$countryId;
         }
         $query = $em->createQuery("SELECT COUNT(p) FROM PartnerBundle:Partner p WHERE p.active = 1 ".$filter_country);
         return $query->getSingleScalarResult();
@@ -135,13 +140,15 @@ class Statistic {
     /**
      * Devuelve el número de tiendas dentro de ADService
      * @param EntityManager $em
+     * @param bool $isSuperAdmin
+     * @param int|bool $countryId
      * @return Integer
      */
-    public function getNumShopsInAdservice($em, $security) {
-        if($security->isGranted('ROLE_SUPER_ADMIN')){
+    public function getNumShopsInAdservice($em, $isSuperAdmin = false, $countryId = null) {
+        if($isSuperAdmin){
             $filter_country = '';
         }else{
-            $filter_country = 'AND s.country = '.$this->getUser()->getCountry()->getId();
+            $filter_country = 'AND s.country = '.$countryId;
         }
         $query = $em->createQuery("SELECT COUNT(s) FROM PartnerBundle:Shop s WHERE s.active = 1 ".$filter_country);
         return $query->getSingleScalarResult();
@@ -150,13 +157,15 @@ class Statistic {
     /**
      * Devuelve el número de talleres dentro de ADService
      * @param EntityManager $em
+     * @param bool $isSuperAdmin
+     * @param int|bool $countryId
      * @return Integer
      */
-    public function getNumWorkshopsInAdservice($em, $security) {
-        if($security->isGranted('ROLE_SUPER_ADMIN')){
+    public function getNumWorkshopsInAdservice($em, $isSuperAdmin = false, $countryId = null) {
+        if($isSuperAdmin){
             $filter_country = '';
         }else{
-            $filter_country = 'AND w.country = '.$this->getUser()->getCountry()->getId();
+            $filter_country = 'AND w.country = '.$countryId;
         }
         $query = $em->createQuery("SELECT COUNT(w) FROM WorkshopBundle:Workshop w WHERE w.active = 1 ".$filter_country);
         return $query->getSingleScalarResult();
@@ -165,13 +174,15 @@ class Statistic {
     /**
      * Devuelve el número de tickets dentro de ADService
      * @param EntityManager $em
+     * @param bool $isSuperAdmin
+     * @param int|bool $countryId
      * @return Integer
      */
-    public function getTicketsInAdservice($em, $security) {
-        if($security->isGranted('ROLE_SUPER_ADMIN')){
+    public function getTicketsInAdservice($em, $isSuperAdmin = false, $countryId = null) {
+        if($isSuperAdmin){
             $filter_country = '';
         }else{
-            $filter_country = 'JOIN t.workshop w WHERE w.country = '.$this->getUser()->getCountry()->getId();
+            $filter_country = 'JOIN t.workshop w WHERE w.country = '.$countryId;
         }
         $query = $em->createQuery("SELECT COUNT(t) FROM TicketBundle:Ticket t ".$filter_country);
         return $query->getSingleScalarResult();
@@ -179,17 +190,19 @@ class Statistic {
     /**
      * Devuelve el número de tickets creados por telefono (Asesor) dentro de ADService
      * @param EntityManager $em
+     * @param bool $isSuperAdmin
+     * @param int|bool $countryId
      * @return Integer
      */
-    public function getNumTicketsByTel($em, $security) {
+    public function getNumTicketsByTel($em, $isSuperAdmin = false, $countryId = null) {
         $join = 'JOIN t.created_by u JOIN u.user_role ur ';
         $where = ' WHERE t.id != 0 ';
         $and   = ' AND ur.id != 4 '; //ROL 4 = ROLE_USER
-        if($security->isGranted('ROLE_SUPER_ADMIN')){
+        if($isSuperAdmin){
             $filter_country = '';
         }else{
             $filter_country = 'JOIN t.workshop w ';
-            $and = 'AND w.country = '.$this->getUser()->getCountry()->getId();
+            $and = 'AND w.country = '.$countryId;
         }
         $query = $em->createQuery("SELECT COUNT(t) FROM TicketBundle:Ticket t ".$join.$filter_country.$where.$and);
         return $query->getSingleScalarResult();
@@ -198,17 +211,19 @@ class Statistic {
     /**
      * Devuelve el número de tickets creados por la aplicacion (taller) dentro de ADService
      * @param EntityManager $em
+     * @param bool $isSuperAdmin
+     * @param int|bool $countryId
      * @return Integer
      */
-    public function getNumTicketsByApp($em, $security) {
+    public function getNumTicketsByApp($em, $isSuperAdmin = false, $countryId = null) {
         $join = 'JOIN t.created_by u JOIN u.user_role ur ';
         $where = ' WHERE t.id != 0 ';
         $and   = ' AND ur.id = 4 '; //ROL 4 = ROLE_USER
-        if($security->isGranted('ROLE_SUPER_ADMIN')){
+        if($isSuperAdmin){
             $filter_country = '';
         }else{
             $filter_country = 'JOIN t.workshop w ';
-            $and = 'AND w.country = '.$this->getUser()->getCountry()->getId();
+            $and = 'AND w.country = '.$countryId;
         }
 
         $query = $em->createQuery("SELECT COUNT(t) FROM TicketBundle:Ticket t ".$join.$filter_country.$where.$and);
@@ -219,15 +234,17 @@ class Statistic {
      * Devuelve el número de tickets segun su $status
      * @param EntityManager $em
      * @param String $status 'closed' o 'open'
+     * @param bool $isSuperAdmin
+     * @param int|bool $countryId
      * @return Integer
      */
-    public function getNumTicketsByStatus($em, $status, $security){
-        if($security->isGranted('ROLE_SUPER_ADMIN')){
+    public function getNumTicketsByStatus($em, $status, $isSuperAdmin = false, $countryId = null){
+        if($isSuperAdmin){
             $join_country   = '';
             $filter_country = '';
         }else{
             $join_country   = ' JOIN t.workshop w ';
-            $filter_country = ' AND w.country = '.$this->getUser()->getCountry()->getId();
+            $filter_country = ' AND w.country = '. $countryId;
         }
         $query = $em->createQuery("SELECT COUNT(t.id) FROM TicketBundle:Ticket t
                                   ".$join_country."
