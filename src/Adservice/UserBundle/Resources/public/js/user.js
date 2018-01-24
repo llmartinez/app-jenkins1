@@ -2,8 +2,8 @@
     $(document).ready(function() {
         $( "input[id*='_password_password1']" ).addClass( "form-control" );
         $( "input[id*='_password_password2']" ).addClass( "form-control" );
-        $( "label[for*='_password_password1']" ).text($('#pass_field1').val()+' *');
-        $( "label[for*='_password_password2']" ).text($('#pass_field2').val()+' *');
+        $( "label[for*='_password_password1']" ).text($( "label[for*='_password_password1']" ).text()+' *');
+        $( "label[for*='_password_password2']" ).text($( "label[for*='_password_password2']" ).text()+' *');
         var partner =$('#partner_id').val();
         if (partner != ""){
             populate_user_partner(partner);
@@ -105,14 +105,17 @@
             populate_shop(id_shop);
         });
 
-        $('#btn_create').click(function() {
-            check_password();
+        $('#btn_create').click(function(event) {
+
+            if (check_password() != 0) {
+                event.preventDefault();
+            }
+
             if ( isNaN($("input[id*='number_']").val())) {
                 $("input[id*='number_']").css('border-color','#FF0000');
                 alert($("#isNaN").val());
-                return false;
+                event.preventDefault();
             }
-            return false;
         });
     });
 /**

@@ -26,8 +26,6 @@ class EditUserSuperPartnerType extends AbstractType {
             ->add('name')
             ->add('surname')
             ->add('active' , CheckboxType::class, array('required' => false))
-            //->add('language')
-
             //CONTACT
             ->add('country', EntityType::class, array(
                   'required' => true,

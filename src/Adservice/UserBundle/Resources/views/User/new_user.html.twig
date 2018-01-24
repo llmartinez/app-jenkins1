@@ -47,9 +47,7 @@
                 </div>
             </div>
              <div class="col-xs-4 col-md-4 form-group">
-                <input type="hidden" id="pass_field1" value="{{ 'password'|trans }}">
-                <input type="hidden" id="pass_field2" value="{{ 'repeat_password'|trans }}">
-                {{ form_widget(form.password, { 'attr': { 'required': 'required' } }) }}
+                {{ form_widget(form.password) }}
             </div>
             {% if is_granted('ROLE_ADMIN') %}
                 {% if not is_granted('ROLE_SUPER_ADMIN') %}
@@ -125,7 +123,7 @@
 
             {{ form_rest(form) }}
 
-                <button class="btn btn-primary pull-right" id="confirm">
+                <button class="btn btn-primary pull-right" type="button" id="confirm">
                     <img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}">{{ 'btn.create'|trans }}
                 </button>
                 <button class="btn btn-primary pull-right" id="btn_create" type="submit" style="display:none;"></button>
@@ -148,17 +146,15 @@
 
             if(catserv != '') {
                 if(catserv != undefined){
-                    event.preventDefault();
                     confirm = window.confirm("{{ 'btn.confirm_catservice'|trans }}: "
                                             + $("select[id*='category_service'] option[value="+catserv+"]").text());
                 }else{
                     var catserv = $("#category_service_id").val();
-                    event.preventDefault();
                     confirm = window.confirm("{{ 'btn.confirm_catservice'|trans }}: "+ catserv);
                 }
             }
 
-            if(confirm) $('#btn_create').click();
+            if(confirm) $('#btn_create').trigger('click');
         });
     </script>
 {% endblock %}
