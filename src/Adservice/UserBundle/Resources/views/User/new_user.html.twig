@@ -47,7 +47,10 @@
                 </div>
             </div>
              <div class="col-xs-4 col-md-4 form-group">
-                {{ form_widget(form.password) }}
+                 <label>{{ 'password'|trans }} *</label>
+                 {{ form_widget(form.password.password1) }}
+                 <label>{{ 'repeat_password'|trans }} *</label>
+                 {{ form_widget(form.password.password2) }}
             </div>
             {% if is_granted('ROLE_ADMIN') %}
                 {% if not is_granted('ROLE_SUPER_ADMIN') %}

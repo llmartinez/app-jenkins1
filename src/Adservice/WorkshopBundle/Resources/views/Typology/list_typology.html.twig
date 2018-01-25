@@ -42,6 +42,8 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="{{ asset('bundles/util/js/util.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/pagination.js') }}"></script>
     <script src="{{ asset('bundles/workshop/js/typology.js') }}"></script>
     <script>
         $(document).ready(function() {
