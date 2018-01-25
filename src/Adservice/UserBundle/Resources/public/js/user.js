@@ -1,9 +1,5 @@
 
     $(document).ready(function() {
-        $( "input[id*='_password_password1']" ).addClass( "form-control" );
-        $( "input[id*='_password_password2']" ).addClass( "form-control" );
-        $( "label[for*='_password_password1']" ).text($( "label[for*='_password_password1']" ).text()+' *');
-        $( "label[for*='_password_password2']" ).text($( "label[for*='_password_password2']" ).text()+' *');
         var partner =$('#partner_id').val();
         if (partner != ""){
             populate_user_partner(partner);

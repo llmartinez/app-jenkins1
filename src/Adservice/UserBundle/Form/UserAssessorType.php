@@ -27,9 +27,9 @@ class UserAssessorType extends AbstractType {
             ->add('password', RepeatedType::class, array('type' => PasswordType::class,
                 'invalid_message' => 'Las dos contraseñas deben coincidir',
                 'first_name' => 'password1',
-                'first_options' => array('label' => 'password'),
+                'first_options' => array('attr' => array('class' => 'form-control')),
                 'second_name' => 'password2',
-                'second_options' => array('label' => 'repeat_password'),
+                'second_options' => array('attr' => array('class' => 'form-control')),
                 'required' => true,
             ))
             ->add('name')

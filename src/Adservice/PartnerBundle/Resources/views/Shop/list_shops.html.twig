@@ -38,7 +38,7 @@
         <select id="flt_partner" class='form-control' data-url="{{ path(route, { 'page': 'plc_page', 'country': 'plc_country', 'partner': 'plc_partner'}) }}">
                 <option value="0">{{ 'all'|trans }}</option>
             {% for _partner in partners %}
-                <option value="{{ _partner.id }}" {% if partner == _partner.id %} selected {% endif %} >{{ _partner.codePartner }} - {{ _partner | trans }}</option>
+                <option value="{{ _partner.id }}" {% if partner == _partner.id %} selected {% endif %} >{{ _partner.codePartner }} - {{ _partner }}</option>
             {% endfor %}
     </select></div>
     {% endif %}
