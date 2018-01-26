@@ -30,7 +30,7 @@
                                         {% set url_logo = route_logo ~ '.png' %}
                                         <img class="img_logo" src="{{ asset(url_logo) }}" style="margin-left: -15px;margin-right: 10px; float: left;">
 
-                                        {% if app.user != "anon." and app.user.getCategoryService() != null %}
+                                        {% if app.user != null and app.user.getCategoryService() != null %}
                                             {% set url_logo_catserv = route_logo ~ '_' ~ app.user.getCategoryService().getSlug() ~ '.png' %}
                                             <img class="img_logo" src="{{ asset(url_logo_catserv) }}">
                                         {% endif %}
