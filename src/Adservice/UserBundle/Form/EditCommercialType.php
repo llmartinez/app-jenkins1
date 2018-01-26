@@ -40,8 +40,6 @@ class EditCommercialType extends AbstractType {
                                                           ->where('s.active = 1')
                                                           ->andWhere('s.id'.$id_partner)
                                                           ->andWhere('s.category_service'.$id_catserv); }))
-            ->add('language')
-
             //CONTACT
             ->add('country', EntityType::class, array(
                   'required' => true,

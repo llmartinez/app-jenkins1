@@ -4,6 +4,8 @@
         {% endif %}
             <input type="hidden" id="isNaN" value="{{ 'isNaN'|trans }}">
             <input type="hidden" id="badpass" value="{{ 'error.bad_password'|trans }}">
+            <input type="hidden" id="samepass" value="{{ 'error.same_password'|trans }}">
+            <input type="hidden" id="forbiddenchars" value="{{ 'error.forbidden_password'|trans }}">
 
             <div class="col-xs-2 col-md-2 form-group">
                 <label> {{ 'phone_number_1'|trans }} *</label> {{ form_widget(form.phone_number_1,   { 'attr': {'class': 'form-control', 'placeholder': 'phone_number_1' } }) }}
@@ -93,5 +95,3 @@
             <input type="hidden" id="entity_region" value="">
             <input type="hidden" id="entity_city"   value="">
         {% endif %}
-
-    <script src="{{ asset('bundles/util/js/contact.js') }}"></script>

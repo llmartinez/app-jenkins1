@@ -15,7 +15,8 @@
     {# <input type="hidden" id="mail"     value="{{ mail     }}"> #}
 
     {% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ASSESSOR') and app.user.getCategoryService() == NULL %}
-        
+
+        {% set catserv = 0 %}
         {% if catserv.id is defined %}
             {% set catservId = catserv.id %}
         {% else %}

@@ -29,11 +29,14 @@ class UserCommercialType extends AbstractType {
 
         $builder
             ->add('username')
-            ->add('password', RepeatedType::class, array('type'            => PasswordType::class,
-                                                'invalid_message' => 'Las dos contraseñas deben coincidir',
-                                                'first_name'      => 'password1',
-                                                'second_name'     => 'password2',
-                                                'required'        => 'required' ))
+            ->add('password', RepeatedType::class, array('type' => PasswordType::class,
+                'invalid_message' => 'Las dos contraseñas deben coincidir',
+                'first_name' => 'password1',
+                'first_options' => array('attr' => array('class' => 'form-control')),
+                'second_name' => 'password2',
+                'second_options' => array('attr' => array('class' => 'form-control')),
+                'required' => true,
+            ))
             ->add('name')
             ->add('surname')
             ->add('active' , CheckboxType::class, array('required' => false))
@@ -47,8 +50,6 @@ class UserCommercialType extends AbstractType {
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.id '.$id_partner)
                                                          ; }))
-            ->add('language')
-
             //CONTACT
             ->add('country', EntityType::class, array(
                   'required' => true,
