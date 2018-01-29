@@ -39,22 +39,23 @@ class WorkshopController extends Controller {
             throw new AccessDeniedException();
         }
 
-        if ($term != '0' and $field != '0') {
-
-            if ($term == 'tel') {
-                $params[] = array('phone_number_1', " != '0' AND (e.phone_number_1 LIKE '%" . $field . "%' OR e.phone_number_2 LIKE '%" . $field . "%' OR e.mobile_number_1 LIKE '%" . $field . "%' OR e.mobile_number_2 LIKE '%" . $field . "%') ");
-            } elseif ($term == 'mail') {
-                $params[] = array('email_1', " != '0' AND (e.email_1 LIKE '%" . $field . "%' OR e.email_2 LIKE '%" . $field . "%') ");
-            } elseif ($term == 'name') {
-                $field = str_replace("'","''",$field);
-                $params[] = array($term, " LIKE '%" . $field . "%'");
-            } elseif ($term == 'cif') {
-                $params[] = array($term, " LIKE '%" . $field . "%'");
-            } elseif ($term == 'postal_code') {
-                $params[] = array($term, " LIKE '%" . $field . "%'");
-            } elseif ($term == 'city') {
-                $params[] = array($term, " LIKE '%" . $field . "%'");
-            }
+        if (in_array($term, array("tel","name","city","mail","internal_code","postal_code","cif","typology")) and $field != '0') {
+            switch($term){
+                case 'tel':
+                    $params[] = array('phone_number_1', " != '0' AND (e.phone_number_1 LIKE '%" . $field . "%' OR e.phone_number_2 LIKE '%" . $field . "%' OR e.mobile_number_1 LIKE '%" . $field . "%' OR e.mobile_number_2 LIKE '%" . $field . "%') ");
+                    break;
+                case 'mail':
+                    $params[] = array('email_1', " != '0' AND (e.email_1 LIKE '%" . $field . "%' OR e.email_2 LIKE '%" . $field . "%') ");
+                    break;
+                case 'typology':
+                    $joins[] = array('e.typology ty ', "ty.id = e.typology AND ty.name LIKE '%". $field."%'");
+                    break;
+                case 'name':
+                    $field = str_replace("'","''",$field);
+                default:
+                    $params[] = array($term, " LIKE '%" . $field . "%'");
+                    break;
+            }                   
         }
         if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             if ($country != '0')

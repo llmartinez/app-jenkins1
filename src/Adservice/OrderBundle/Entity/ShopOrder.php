@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Adservice\PartnerBundle\Entity\Partner;
 use Adservice\WorkshopBundle\Entity\Typology;
 use Adservice\WorkshopBundle\Entity\DiagnosisMachine;
-use Adservice\UtilBundle\Entity\Region;
 
 /**
  * Adservice\OrderBundle\Entity\ShopOrder

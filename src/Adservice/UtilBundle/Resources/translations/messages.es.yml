@@ -306,7 +306,7 @@ nicaragua:       "Nicaragua"
 costa rica:      "Costa Rica"
 ecuador:         "Ecuador"
 republica dominicana: "República Dominicana"
-
+netherland:     "Holanda"
 
 #LANGUAGE
 english:			"Inglés"
@@ -320,7 +320,8 @@ pt:						"Portugués"
 polish:                         "Polaco"
 danish:                         "Danés"
 romanian:                       "Rumano"
-
+dutch:                          "Holandés"
+nl:                             "Holandés"
 #IMPORTANCE
 information:			 "Información"
 specific_information:	 "Información específica"
@@ -411,7 +412,6 @@ shop.delete.confirm:	 "¿Estás seguro de que quieres eliminar esta tienda?"
 
 #WORKSHOP
 workshops:				 "Talleres"
-code_workshop:			 "Código de Taller"
 typology:				 "Tipología"
 cif:					 "CIF"
 internal_code:			 "Código Interno"
@@ -563,10 +563,8 @@ ticket_at:            "a fecha "
 ticket_reassign:			  "Desbloquea y reasigna"
 ticket_vin_error_length:      "El bastidor debe tener 17 caracteres"
 ticket_vin_error_o:           "El bastidor no puede contener la letra 'O' ni 'o' "
-
 ticket.call:                    "Llamada telefónica"
 ticket.weekend_closed:          "Sentimos no poder transferir su solicitud. Su horario para la generación y tramitación de tickets es de lunes a viernes ininterrumpidamente."
-
 filter:                 "Filtrar"
 filter_by_plate_number: "Filtrar por matrícula"
 filter_by_vin:          "Filtrar por bastidor"
@@ -850,3 +848,4 @@ msg_einatech: "Procedimiento para la reparación de unidades electrónicas, Eina
 einatech: "Reparación de módulo electrónico"
 einatech_textarea_default : "-Tipo elemento: \n-Referencia: \n-Descripción de la avería: \n-Máquina de diagnosis utilizada: \n-Códigos de avería y descripción: \n-Kilómetros del vehículo: "
 valoration: "Valoración de mantenimiento"
+welcome:    "Bienvenida"

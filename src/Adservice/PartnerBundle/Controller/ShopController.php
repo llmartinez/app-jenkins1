@@ -13,7 +13,6 @@ use Adservice\PartnerBundle\Entity\Partner;
 use Adservice\PartnerBundle\Form\PartnerType;
 use Adservice\PartnerBundle\Entity\Shop;
 use Adservice\PartnerBundle\Form\ShopType;
-use Adservice\UtilBundle\Entity\Region;
 use Adservice\UtilBundle\Entity\Pagination;
 use Adservice\UtilBundle\Controller\UtilController as UtilController;
 

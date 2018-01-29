@@ -10,7 +10,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 use Symfony\Component\Validator\ExecutionContext;
 use Adservice\UtilBundle\Entity\Country;
 use Adservice\UtilBundle\Entity\Language;
-use Adservice\UtilBundle\Entity\Region;
 
 /**
  * Adservice\UserBundle\Entity\User
