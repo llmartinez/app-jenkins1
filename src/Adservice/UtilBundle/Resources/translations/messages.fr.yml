@@ -1,4 +1,4 @@
-﻿header.welcome: "Auto Diagnostic Service"
+header.welcome: "Auto Diagnostic Service"
 
 adserviceticketing.com: "adserviceticketing.com"
 www.adserviceticketing.com: "adserviceticketing.com"
@@ -198,6 +198,7 @@ open: 					 "Ouvert"
 closed: 				 "Fermé"
 active: 				 "Actif"
 inactive: 				 "Inactif"
+expirated:                               "Expiré"
 create:					 "Créé"
 edited: 				 "Édité"
 rejected:				 "Rejeté"
@@ -253,6 +254,7 @@ edit.order.shop:		 "Éditer la demande du Boutique"
 edit.order.workshop:	 "Éditer la demande de l'atelier"
 edit.sentence:			 "Éditer la requête"
 edit.category_service:		 "Éditer la Catégorie du service"
+edit.description:                "Modifier la description"
 
 #ANY
 not_found:				 "Aucun résultat trouvé"
@@ -304,6 +306,7 @@ nicaragua:       "Nicaragua"
 costa rica:      "Costa Rica"
 ecuador:         "Ecuador"
 republica dominicana: "République Dominicaine"
+netherland:     "Hollande"
 
 #LANGUAGE
 english:				 "Anglais"
@@ -317,7 +320,8 @@ pt:						 "Portugais"
 polish:                         "Polonais"
 danish:                         "Danois"
 romanian:                       "Roumain"
-
+dutch:                          "Néerlandais"
+nl:                             "Néerlandais"
 #IMPORTANCE
 information:			 "Information"
 specific_information:	 "Information spécifique"
@@ -392,7 +396,6 @@ VARIOS:							"Plusieurs"
 "VARIOS ":						"Plusieurs"
 VARIOS CARROCERIA: 				"Plusieurs carrosseries"
 
-
 #PARTNER
 partner.delete:			 "Effacer Distributeur"
 partner.delete.confirm:	 "Êtes-vous sûr de vouloir effacer ce Distributeur? "
@@ -409,7 +412,6 @@ shop.delete.confirm:	 "Êtes-vous sûr de vouloir effacer ce Boutique?"
 
 #WORKSHOP
 workshops:				 "Ateliers"
-code_workshop:			 "Code Atelier"
 typology:				 "Type d'atelier"
 cif:					 "Code réseau"
 internal_code:			 "Code interne"
@@ -514,6 +516,7 @@ ticket_info:				  "Information du ticket"
 ticket.history.title:         "Historique des tickets"
 ticket.history.check:         "Vérifier l'historique des tickets"
 ticket.inactive:			  "Tickets inactifs"
+ticket.expirated:             "Tickets expirés"
 ticket.opt.all:               "Tous les tickets"
 ticket.opt.open:              "Tickets ouverts"
 ticket.opt.closed:            "Tickets fermés"
@@ -620,6 +623,8 @@ statistic.num_tickets.closed: "Nombre de tickets fermés"
 statistic.num_posts:              "Nombre de messages"
 statistic.last_tickets:		  "Derniers tickets des ateliers"
 statistic.no_ticket:		  "Ateliers sans ticket"
+billing:                          "Facturation"
+historical:                       "Historique"
 
 update: "Journées Inscrit"
 lowdate: "Journées Désinscrit"
@@ -657,6 +662,7 @@ list.workshop.rejected:			"Demande d'ateliers rejetées"
 reject.reason:					"Motif du rejet"
 
 #PAGINATION
+page:                                                   "Page"
 page.first:						"Première page"
 page.prev:						"Page antérieure"
 page.goto:						"Aller à la page"
@@ -753,6 +759,7 @@ mail.acceptOrder.shop.subject:			"Auto Diagnostic Service | Demande acceptée po
 mail.acceptOrder.title:					"La demande suivante a été acceptée"
 mail.acceptOrder.createdby:				"Cette demande a été acceptée par un conseiller."
 mail.acceptOrder.createdby.user:		"Cette demande a été acceptée via la plate-forme Auto Diagnostic Service."
+
 mail.acceptOrder.info:					"Pour accéder à cet atelier allez sur <a href='https://adserviceticketing.com'>adserviceticketing.com</a> en la sección "
 mail.acceptOrder.shop.info:				"Pour accéder à ce Boutique allez sur <a href='https://adserviceticketing.com'>adserviceticketing.com</a> en la sección "
 mail.acceptOrder.info.id:				"Le numéro de référence de l'atelier est : "
@@ -762,6 +769,7 @@ mail.removeOrder.subject:				"Auto Diagnostic Service | Demande annulée avec l'
 mail.removeOrder.title:					"La demande suivante a été annulée"
 mail.removeOrder.createdby:				"Cette demande a été annulée par un conseiller."
 mail.removeOrder.createdby.user:		"Cette demande a été annulée via la plate-forme Auto Diagnostic Service."
+
 mail.removeOrder.info:					"Pour consulter vos demande, allez sur <a href='https://adserviceticketing.com'>adserviceticketing.com</a> en la sección "
 mail.removeOrder.info.id:				"Le numéro de référence de l'atelier est : "
 mail.removeOrder.shop.info.id:			"Le numéro de référence du Boutique est : "
@@ -776,6 +784,7 @@ mail.resendOrder.info.id:				"Le numéro de référence de la demande est :"
 mail.newUser.subject:					"Auto Diagnostic Service | Nouvel utilisateur pour l'atelier"
 mail.newUser.title:						"Un nouvel utilisateur a été créé pour la plate-forme Auto Diagnostic Service"
 mail.newUser.createdby:					"Cet utilisateur a été créé via la plate-forme Auto Diagnostic Service."
+
 #mail.newUser.info:						"Pour plus d'information, entrez sur la plate-forme <a href='https://adserviceticketing.com/fr/help'>adserviceticketing.com/fr/help</a> "
 #mail.newUser.info.tel:					"ou appelez-le"
 mail.newUser.info:						"Pour plus d'information "
@@ -789,6 +798,7 @@ mail.changePassword.subject:			"Auto Diagnostic Service | Nouveau mot de passe p
 mail.changePassword.title:				"Le mot de passe de l'utilisateur a été changé depuis la plate-forme Auto Diagnostic Service"
 mail.changePassword.createdby:			"Cette modification a été réalisée par un conseiller. "
 mail.changePassword.createdby.user:		"Cette modification a été réalisée via la plate-forme Auto Diagnostic Service."
+
 #mail.changePassword.info:				"Pour plus d'information, entrez sur la plate-forme <a href='https://adserviceticketing.com/fr/help'>adserviceticketing.com/fr/help</a> "
 #mail.changePassword.info.tel:			"ou appelez-le"
 mail.changePassword.info:				"Pour plus d'information "
@@ -831,11 +841,11 @@ error: "Une erreur s’est produite"
 back_app:  "Revenir à l’application"
 
 termsConditions:	" "
-_termsConditions: 	"En utilisant l’application, vous acceptez les <a href="">termes et conditions</a> suivants."
+_termsConditions: 	"En utilisant l’application, vous acceptez les <a href=\"\">termes et conditions</a> suivants."
 footerText: 	 	"2014 © Grup Eina Digital · Centre d’Innovation et de Ressources"
-
 
 msg_einatech: "Procédure pour la réparation des unités électroniques, Einatech.\n\t1. Création d'un ticket pour la demande de réparation en cliquant sur « Réparation de module électronique ».\n\t2. Remplissez tous les champs requis et cliquez sur Créer.\n\t3. Une fois créé le ticket, le service Einatech communiquera avec l'atelier pour confirmer la récupération.\n\t4. ll est important de joindre une image de la carte grise au ticket ou dans l'emballage.\n\t5. Récupération a l'atelier par l'agence de transport service express 24h.\n\tTous les articles recueillis voyagent avec l'assurance obligatoire du transport selon la L.O.O.T. qui couvre dommages par une valeur 5,95 € / kg. Nous recommandons d'emballer les articles à envoyer avec du matériel de protection pour éviter tout dommage. Toute perte ou dommage dépassant cette valeur sera en charge du client.\n\t6. À la réception de l'unité défectueuse, les agents Einatech l’entreront dans le système informatique et enverront un e-mail / ticket pour informer de la réception de l’unité.\n\t7. Le budget sera envoyé en 24-48 heures de la réception du matériel par e-mail /ticket.\n\t8. Dès la réception de la conformité par-mail/ticket, l’acceptation sera traitée, un e-mail/ticket sera \n\tenvoyé confirmant sa réception et on procédera à la réalisation des travaux.\n\t9. Une fois réparé et vérifié, l'article sera retourné par l'agence de transport avec 24h contre remboursement."
 einatech: "Réparation module électronique"
 einatech_textarea_default : "-Elément de type: \n-Référence: \n-Description du défaut: \n-Machine de diagnostic utilisé: \n-Codes et description de défaut: \n-Kilomètres de véhicules: "
 valoration: "Estimation entretien"
+welcome:    "Bienvenue"

@@ -254,6 +254,7 @@ edit.order.shop:		 "Editar Solicitud de la Tienda"
 edit.order.workshop:	 "Editar Solicitud del Taller"
 edit.sentence:			 "Editar Sentencia"
 edit.category_service:		 "Editar Categoría de Servicio"
+edit.description:                "Editar Descripción"
 
 #ANY
 not_found:				 "No se han encontrado resultados"
@@ -305,7 +306,7 @@ nicaragua:       "Nicaragua"
 costa rica:      "Costa Rica"
 ecuador:         "Ecuador"
 republica dominicana: "República Dominicana"
-
+netherland:     "Holanda"
 
 #LANGUAGE
 english:			"Inglés"
@@ -319,7 +320,8 @@ pt:						"Portugués"
 polish:                         "Polaco"
 danish:                         "Danés"
 romanian:                       "Rumano"
-
+dutch:                          "Holandés"
+nl:                             "Holandés"
 #IMPORTANCE
 information:			 "Información"
 specific_information:	 "Información específica"
@@ -410,7 +412,6 @@ shop.delete.confirm:	 "¿Estás seguro de que quieres eliminar esta tienda?"
 
 #WORKSHOP
 workshops:				 "Talleres"
-code_workshop:			 "Código de Taller"
 typology:				 "Tipología"
 cif:					 "CIF"
 internal_code:			 "Código Interno"
@@ -562,10 +563,8 @@ ticket_at:            "a fecha "
 ticket_reassign:			  "Desbloquea y reasigna"
 ticket_vin_error_length:      "El bastidor debe tener 17 caracteres"
 ticket_vin_error_o:           "El bastidor no puede contener la letra 'O' ni 'o' "
-
 ticket.call:                    "Llamada telefónica"
 ticket.weekend_closed:          "Sentimos no poder transferir su solicitud. Su horario para la generación y tramitación de tickets es de lunes a viernes ininterrumpidamente."
-
 filter:                 "Filtrar"
 filter_by_plate_number: "Filtrar por matrícula"
 filter_by_vin:          "Filtrar por bastidor"
@@ -624,6 +623,8 @@ statistic.num_tickets.closed: "Número de Tickets cerrados"
 statistic.num_posts:              "Número de Posts"
 statistic.last_tickets:		  "Últimos tickets de los talleres"
 statistic.no_ticket:		  "Talleres sin tickets"
+billing:                          "Facturación"
+historical:                       "Histórico"
 
 update: "Días de Alta"
 lowdate: "Días de Baja"
@@ -661,6 +662,7 @@ list.workshop.rejected:			"Solicitudes de Talleres rechazadas"
 reject.reason:					"Motivo del rechazo"
 
 #PAGINATION
+page:                                                   "Página"
 page.first:						"Primera página"
 page.prev:						"Página anterior"
 page.goto:						"Ir a la página"
@@ -846,3 +848,4 @@ msg_einatech: "Procedimiento para la reparación de unidades electrónicas, Eina
 einatech: "Reparación de módulo electrónico"
 einatech_textarea_default : "-Tipo elemento: \n-Referencia: \n-Descripción de la avería: \n-Máquina de diagnosis utilizada: \n-Códigos de avería y descripción: \n-Kilómetros del vehículo: "
 valoration: "Valoración de mantenimiento"
+welcome:    "Bienvenida"

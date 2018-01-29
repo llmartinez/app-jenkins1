@@ -198,6 +198,7 @@ open: 					 "Aberto"
 closed: 				 "Fechado"
 active: 				 "Ativo"
 inactive: 				 "Inativo"
+expirated:                               "Expirou"
 create:					 "Criado"
 edited: 				 "Editado"
 rejected:				 "Rejeitado"
@@ -253,6 +254,7 @@ edit.order.shop:		 "Editar Pedido da Loja"
 edit.order.workshop:	 "Editar Pedido da Oficina"
 edit.sentence:			 "Editar Frase"
 edit.category_service:		 "Editar Categoria de serviço"
+edit.description:                "Editar Descrição"
 
 #ANY
 not_found:				 "Nenhum resultado encontrado"
@@ -304,6 +306,7 @@ nicaragua:       "Nicaragua"
 costa rica:      "Costa Rica"
 ecuador:         "Ecuador"
 republica dominicana: "República Dominicana"
+netherland:     "Holanda"
 
 #LANGUAGE
 english:				 "Inglês"
@@ -317,7 +320,8 @@ pt:						 "Português"
 polish:                         "Polonês"
 danish:                         "Dinamarquês"
 romanian:                       "Romena"
-
+dutch:                          "holandês"
+nl:                             "holandês"
 #IMPORTANCE
 information:			 "Informação"
 specific_information:	 "Informação específica"
@@ -408,7 +412,6 @@ shop.delete.confirm:	 "Tem a certeza de que pretende eliminar esta loja?"
 
 #WORKSHOP
 workshops:				 "Oficinas"
-code_workshop:			 "Código de Oficina"
 typology:				 "Tipologia"
 cif:					 "NIF"
 internal_code:			 "Código Interno"
@@ -513,6 +516,7 @@ ticket_info:				  "Informação do talão"
 ticket.history.title:         "Historial de Talões"
 ticket.history.check:         "Verificar o historial de talões"
 ticket.inactive:			  "Talões inativos"
+ticket.expirated:             "Talões expirados"
 ticket.opt.all:               "Todos os Talões"
 ticket.opt.open:              "Talões abertos"
 ticket.opt.closed:            "Talões fechados"
@@ -619,6 +623,8 @@ statistic.num_tickets.closed:     "Número de Talões fechados"
 statistic.num_posts:              "Número de Posts"
 statistic.last_tickets:		  "Últimos talões das oficinas"
 statistic.no_ticket:		  "Oficinas sem talões"
+billing:                          "Cobrança"
+historical:                       "Histórico"
 
 update: "Dias Inscrito"
 lowdate: "Dias Inativos"
@@ -656,6 +662,7 @@ list.workshop.rejected:			"Pedidos de Oficinas rejeitados"
 reject.reason:					"Motivo da rejeição"
 
 #PAGINATION
+page:                                                   "Página"
 page.first:						"Primeira página"
 page.prev:						"Página anterior"
 page.goto:						"Ir para a página"
@@ -752,6 +759,7 @@ mail.acceptOrder.shop.subject:			"Auto Diagnostic Service | Pedido aceite para a
 mail.acceptOrder.title:					"Foi aceite o pedido de "
 mail.acceptOrder.createdby:				"Este pedido foi aceite por um assistente."
 mail.acceptOrder.createdby.user:		"Este pedido foi aceite através da plataforma Auto Diagnostic Service."
+
 mail.acceptOrder.info:					"Para aceder a esta oficina entre em <a href='https://adserviceticketing.com'>adserviceticketing.com</a> na secção "
 mail.acceptOrder.shop.info:				"Para aceder a esta loja entre em <a href='https://adserviceticketing.com'>adserviceticketing.com</a> na secção "
 mail.acceptOrder.info.id:				"O número de referência da oficina é:"
@@ -761,6 +769,7 @@ mail.removeOrder.subject:				"Auto Diagnostic Service | Pedido cancelado com o I
 mail.removeOrder.title:					"Foi cancelado o pedido de "
 mail.removeOrder.createdby:				"Este pedido foi cancelado por um assistente."
 mail.removeOrder.createdby.user:		"Este pedido foi cancelado através da plataforma Auto Diagnostic Service."
+
 mail.removeOrder.info:					"Para consultar os seus pedidos entre em <a href='https://adserviceticketing.com'>adserviceticketing.com</a> na secção "
 mail.removeOrder.info.id:				"O número de referência da oficina é:"
 mail.removeOrder.shop.info.id:			"O número de referência da loja é:"
@@ -775,6 +784,7 @@ mail.resendOrder.info.id:				"O número de referência do pedido é:"
 mail.newUser.subject:					"Auto Diagnostic Service | Novo utilizador para a oficina "
 mail.newUser.title:						"Foi criado um utilizador para a plataforma Auto Diagnostic Service"
 mail.newUser.createdby:					"Este utilizador foi criado através da plataforma Auto Diagnostic Service."
+
 #mail.newUser.info:						"Para mais informações entre na plataforma <a href='https://adserviceticketing.com/pt/help'>adserviceticketing.com/pt/help</a> "
 #mail.newUser.info.tel:					"ou contacte-nos pelo telefone "
 mail.newUser.info:						"Para mais informações "
@@ -788,6 +798,7 @@ mail.changePassword.subject:			"Auto Diagnostic Service | Nova palavra-passe par
 mail.changePassword.title:				"A palavra-passe do utilizador foi alterada a partir da plataforma Auto Diagnostic Service"
 mail.changePassword.createdby:			"Esta alteração foi feita por um assistente."
 mail.changePassword.createdby.user:		"Esta alteração foi feita através da plataforma Auto Diagnostic Service."
+
 #mail.changePassword.info:				"Para mais informações entre na plataforma <a href='https://adserviceticketing.com/pt/help'>adserviceticketing.com/pt/help</a> "
 #mail.changePassword.info.tel:			"ou contacte-nos pelo telefone "
 mail.changePassword.info:				"Para mais informações </a> "
@@ -833,8 +844,8 @@ termsConditions:	" "
 _termsConditions: 	'Ao fazer uso da aplicação, está a aceitar os <a href="">termos e condições</a> que se seguem.'
 footerText: 	 	"2014 © Grup Eina Digital · Centro de Inovação e Recursos"
 
-
 msg_einatech: "Procedimento para a reparaçao de centralitas , Einatech.\n\t1. Criar um talao para um pedido de reparaçao, selecionando 'Reparaçao de módulo electrónico'.\n\t2. Preencher todos os campos solicitados e seleccionar criar.\n\t3. Uma vez criado o talão, o serviço da Einatech entrará em contacto com a oficina para confirmar a recolha.\n\t4. É importante anexar uma imagem da ficha técnica do  talão ao pacote.\n\t5. A recolha na oficina será efectuada por uma agência de transporte com serviço urgente 24h.\n\tTodos os envios e recolhas viajam com um seguro obrigatório de transporte segundo a L.O.O.T. que cobre danos até um valor de 5,95€/kg. Recomendamos que envolvam as centralitas a enviar com material protector para evitar qualquer dano. Qualquer perda ou dano que exceda  este valor irá a cargo do cliente.\n\t6. Ao receber a centralita avariada, os agentes da Einatech irao inserir no sistema informático e enviarao um e-mail/talão á oficina informando da recepção da mesma.\n\t7. Se enviará o orçamento em 24-48 horas depois da recepção da centralita. O orçamento se enviará por e-mail/talão.\n\t8. Uma vez recibida a  confirmação para avançar a reparação via e-mail/talão se enviará um e-mail/talão confirmando a recepção da mesma e se procederá á reparação.\n\t9. Uma vez reparado e comprovada a centralita, esta é devolvida pela agência de transporte á sua oficina com o serviço 24h contra reembolso."
 einatech: "Reparar módulo electrónico"
 einatech_textarea_default : "-Tipo de elemento: \n-Referência: \n-Descrição da falha: \n-Máquina de diagnóstico utilizados: \n-Os códigos de falhas e descrição: \n-Quilómetros percorridos pelos veículos: "
 valoration: "Plano de manutenção"
+welcome:    "Bem vindo"
