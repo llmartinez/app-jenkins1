@@ -284,7 +284,7 @@ class Pagination
         }else{
             $consulta = $em->createQuery($query.$from.$where.$group_by.$order);
         }
-        
+//        dump($consulta);die;
         /* PARA DEBUG */
             // echo $query.$from.$where.$group_by.$order.'<br>';
             //

@@ -7,7 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 use Adservice\UserBundle\Entity\User;
-use Adservice\UtilBundle\Entity\Region;
 use Adservice\PartnerBundle\Entity\Partner;
 
 /**

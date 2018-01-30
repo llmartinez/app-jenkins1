@@ -2,91 +2,6 @@
     $.ajaxSetup({ cache: false });
 
 /**
- * Funcion que rellena (populate) el combo de las regiones segun el país seleccionado por el usuario
- * @param {url de tipo {{ path('mi_path') }}} route
- */
-function populate_region(route, region, city){
-    var id_country = $('form').find('select[name*=country]').val();
-    var route = 'regions_from_country';
-    var locale = $(document).find("#data_locale").val();
-
-    $.ajax({
-        type        : "POST",
-        url         : Routing.generate(route, {_locale: locale}),
-        data        : {id_country : id_country},
-        dataType    : "json",
-        beforeSend: function(){ $("body").css("cursor", "progress"); },
-        complete: function(){ $("body").css("cursor", "default"); },
-        success : function(data) {
-            // Limpiamos y llenamos el combo con las opciones del json
-            $('#data_regions').empty();
-            $("#slct_region").empty();
-
-            var region_edit = '';
-            $.each(data, function(idx, elm) {
-
-                if (idx != "error") {
-                    if((region != undefined) && (string_to_slug(elm.region) == string_to_slug(region)))
-                    {
-                        region_edit = elm.region;
-                        city_edit   = city;
-                        $('#data_regions').append("<option value="+elm.id+" selected>"+elm.region+"</option>");
-                    }
-                    else{
-                        if( region != 'no-region' ) {
-                            region_edit = region;
-                            city_edit   = city;
-                            $('#data_regions').append("<option value="+elm.id+">"+elm.region+"</option>");
-                        }
-                        else $('#data_regions').append("<option value="+elm.id+">"+elm.region+"</option>");
-                    }
-                }
-                else{
-                    $( "#data_regions" ).empty();
-                    $( "#data_regions" ).append("<tr><td>" + elm + "</td></tr>");
-                }
-            });
-            $("#slct_region").html($('#data_regions').html());
-        },
-        error : function(){
-            console.log("Error al cargar las regiones...");
-        }
-    });
-}
-
-/**
- * Funcion que rellena (populate) el combo de las ciudades segun la region seleccionada por el usuario
- */
-function populate_city(){
-    var route     = 'cities_from_region';
-    var locale    = $(document).find("#data_locale").val();
-
-    $.ajax({
-        type        : "POST",
-        url         : Routing.generate(route, {_locale: locale}),
-        data        : {id_region : id_region},
-        dataType    : "json",
-        beforeSend: function(){ $("body").css("cursor", "progress"); },
-        complete: function(){ $("body").css("cursor", "default"); },
-        success : function(data) {
-            // Limpiamos y llenamos el combo con las opciones del json
-            $('#data_cities').empty();
-            $("#slct_city"  ).empty();
-            $.each(data, function(idx, elm)
-            {
-                if(elm.city == city) $('#data_cities').append("<option value="+elm.id+" selected>"+elm.city+"</option>");
-                else                 $('#data_cities').append("<option value="+elm.id+">"+elm.city+"</option>");
-            });
-            $("#slct_city").html($('#data_cities').html());
-            $('div#div_regions span.select2-chosen').text(id_region);
-        },
-        error : function(){
-            console.log("Error al cargar las ciudades...");
-        }
-    });
-}
-
-/**
  * Funcion que rellena (populate) el combo de las socios segun la CatServ seleccionada por el usuario
  */
 function populate_partner(){
@@ -1120,12 +1035,7 @@ function fill_car_from_plate_number() {
            if (data['error'] !== "No hay coincidencias") {
                var versionId = data.versionId;
                fill_model_by_PlateNumber(data);
-
            }
-           else {
-               alert($("#msg_plate_number_not_found").val());
-           }
-
         },
         error: function () {
             console.log("Error loading models...");

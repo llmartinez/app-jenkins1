@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
-use Adservice\UtilBundle\Entity\Region;
 use Adservice\PartnerBundle\Entity\Shop;
 use Adservice\CarBundle\Entity\Brand;
 use Adservice\CarBundle\Entity\Model;
