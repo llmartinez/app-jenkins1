@@ -18,10 +18,9 @@ class UserAssessorType extends AbstractType {
     {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
-        if (isset($_SESSION['id_catserv'])) { $id_catserv = $_SESSION['id_catserv'];unset($_SESSION['id_catserv']);$cserv_empty=null;} else { $id_catserv = ' != 0';$cserv_empty='';}
-
-        if (isset($_SESSION['all'])) { $all = $_SESSION['all'];unset($_SESSION['all']);} else { $all = 'All';}
-
+        if (isset($_SESSION['id_catserv'])) { $id_catserv = $_SESSION['id_catserv'];unset($_SESSION['id_catserv']);$cserv_empty=null;}
+        else {$id_catserv = ' != 0';$cserv_empty='all';}
+      
         $builder
             ->add('username')
             ->add('password', RepeatedType::class, array('type' => PasswordType::class,
@@ -43,7 +42,6 @@ class UserAssessorType extends AbstractType {
                   'class' => 'Adservice\UtilBundle\Entity\CountryService',
                   'choice_label' => 'country',                
                   'choice_translation_domain' => null,
-                  'placeholder' => $all,
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC')
@@ -52,7 +50,7 @@ class UserAssessorType extends AbstractType {
                   'required' => false,
                   'class' => 'Adservice\UserBundle\Entity\CategoryService',
                   'choice_label' => 'category_service',
-                  'placeholder' => $all,
+                  'placeholder' => $cserv_empty,
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv) {
                                                 return $er->createQueryBuilder('cs')
                                                           ->orderBy('cs.category_service', 'ASC')

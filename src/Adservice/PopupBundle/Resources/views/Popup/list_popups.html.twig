@@ -19,7 +19,7 @@
         <select id="flt_category_service" class='form-control' data-url="{{ path( route, { 'page': 'plc_page', 'category_service': 'plc_category_service'}) }}">
                 <option value="none">{{ 'all'|trans }}</option>
             {% for _category_service in catservices %}
-                <option value="{{ _category_service.id }}" {% if _category_service.id == category_service %} selected {% endif %}>{{ _category_service | trans }}</option>
+                <option value="{{ _category_service.id }}" {% if _category_service.id == category_service %} selected {% endif %}>{{ _category_service }}</option>
             {% endfor %}
     </select></div>
     <div class="col-xs-3 col-md-3 form-group"> <label> {{ 'country'|trans }} </label>

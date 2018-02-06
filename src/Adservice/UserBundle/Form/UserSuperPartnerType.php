@@ -22,8 +22,8 @@ class UserSuperPartnerType extends AbstractType {
         // Recojemos variables de sesion para fitlrar los resultados del formulario
         if (isset($_SESSION['id_partner'])) { $id_partner = $_SESSION['id_partner'];unset($_SESSION['id_partner']);} else { $id_partner = ' != 0';}
         if (isset($_SESSION['id_country'])) { $id_country = $_SESSION['id_country'];unset($_SESSION['id_country']);} else { $id_country = ' != 0';}
-        if (isset($_SESSION['id_catserv'])) { $id_catserv = $_SESSION['id_catserv'];unset($_SESSION['id_catserv']);$cserv_empty=null;} else { $id_catserv = ' != 0';$cserv_empty='';}
-
+        if (isset($_SESSION['id_catserv'])) { $id_catserv = $_SESSION['id_catserv'];unset($_SESSION['id_catserv']);$cserv_empty=null;}
+        else {$id_catserv = ' != 0';$cserv_empty='';}
         $builder
             ->add('username')
             ->add('password', RepeatedType::class, array('type' => PasswordType::class,
@@ -37,16 +37,6 @@ class UserSuperPartnerType extends AbstractType {
             ->add('name')
             ->add('surname')
             ->add('active' , CheckboxType::class, array('required' => false))
-            // ->add('partner', 'entity', array(
-            //       'required' => false,
-            //       'class' => 'Adservice\PartnerBundle\Entity\Partner',
-            //       'choice_label' => 'name',
-            //       'empty_value' => '',
-            //       'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_country, $id_partner) {
-            //                                     return $er->createQueryBuilder('s')
-            //                                               ->orderBy('s.name', 'ASC')
-            //                                               ->where('s.active = 1')
-            //                                               ->andWhere('s.country'.$id_country); }))
             ->add('category_service', EntityType::class, array(
                   'required' => false,
                   'class' => 'Adservice\UserBundle\Entity\CategoryService',

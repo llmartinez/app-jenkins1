@@ -478,7 +478,7 @@ class UserController extends Controller {
             $_SESSION['role'] = $this->getUser()->getRoles()[0]->getName();
         }
 
-
+        
         //dependiendo del tipo de usuario llamamos a un formType o a otro y le seteamos el rol que toque
         if ($type == 'admin') {
             $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_ADMIN');
@@ -497,7 +497,6 @@ class UserController extends Controller {
             $user->setUserRoles($rol);
             $form = $this->createForm(UserCommercialType::class, $user);
         } elseif ($type == 'assessor') {
-            $_SESSION['all'] = $this->get('translator')->trans('all');
             $rol = $em->getRepository('UserBundle:Role')->findByName('ROLE_ASSESSOR');
             $user->setUserRoles($rol);
             $form = $this->createForm(UserAssessorType::class, $user);
@@ -592,15 +591,7 @@ class UserController extends Controller {
         }
         $em = $this->getDoctrine()->getManager();
         $trans = $this->get('translator');
-
-        if($request->request->has('assign_all')){
-            $sql = 'UPDATE UserBundle:User u SET u.category_service = null WHERE u.id = '.$user->getId().' ';
-            $result= $em->createQuery($sql)->getResult();
-            $flash =  $trans->trans('btn.edit').' '.$trans->trans('user').': '.$user->getUsername();
-            $this->get('session')->getFlashBag()->add('alert', $flash);
-
-            return $this->redirect($this->generateUrl('user_list'));
-        }
+       
         //guardamos el password por si no lo queremos modificar...
         $original_password = $user->getPassword();
         
@@ -645,7 +636,7 @@ class UserController extends Controller {
             $user_role_id = 1;
             if($user->getRoles()[0]->getId() != 1) {
                 if($user->getCategoryService() != null) {
-                    $_SESSION['id_catserv'] = ' = '.$user->getCategoryService()->getId();
+                    //$_SESSION['id_catserv'] = ' = '.$user->getCategoryService()->getId();
                     $user_role_id = 0;
                 }
             }
@@ -663,8 +654,14 @@ class UserController extends Controller {
         }else {
             $_SESSION['id_partner'] = ' = '.$partners->getId();
         }
-
+     
         $_SESSION['role'] = $this->getUser()->getRoles()[0]->getName();
+        $catserv =  $this->get('security.token_storage')->getToken()->getUser()->getCategoryService();
+        if(isset($catserv)){
+            $_SESSION['id_catserv'] = ' = '.$catserv->getId();
+            
+        }
+
 
         if     ($role == "ROLE_SUPER_ADMIN" or $role == "ROLE_ADMIN") $form = $this->createForm(EditUserAdminAssessorType::class, $user);
         elseif ($role == "ROLE_ASSESSOR"){
@@ -682,14 +679,11 @@ class UserController extends Controller {
         $actual_username = $user->getUsername();
         $actual_city   = $user->getRegion();
         $actual_region = $user->getCity();
-
+        
+     
         if ($request->getMethod() == 'POST') {
 
-            if($user->getCategoryService() != null and $request->request->get('assessor_type')['category_service'] == null and $role == "ROLE_ASSESSOR") {
-                $flash =  $trans->trans('error.bad_introduction').' ('.$trans->trans('category_service').')';
-                $this->get('session')->getFlashBag()->add('error', $flash);
-            }
-            else {
+            
 
                 if($user->getShop() != null) $old_shop = $user->getShop()->getId();
 
@@ -768,7 +762,7 @@ class UserController extends Controller {
                 }else{
                     return $this->redirect($this->generateUrl('user_partner_list'));
                 }
-            }
+            
 
         }
 

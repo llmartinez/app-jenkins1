@@ -45,8 +45,6 @@
                     {% if user_role_id == 2 %}
                         <label>{{ 'category_service'|trans }} *</label>
                         {{ form_widget(form.category_service, { 'attr': {'class': 'form-control' } }) }}
-                        <button id="assign_all" name="assign_all" type="submit" class="btn btn-primary form-control mt5" role="button">{{ 'assign_to'|trans }} {{ 'all'|trans }}</button>
-
                     {% elseif user_role_id == 1 %}
                         <input id="id_catserv" type="hidden" value="">
                         <label>{{ 'category_service'|trans }} *</label>

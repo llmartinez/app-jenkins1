@@ -18,65 +18,6 @@ use Adservice\TicketBundle\Entity\Subsystem;
 class AjaxController extends Controller
 {
 
-    //  ____  _____ ____ ___ ___  _   _
-    // |  _ \| ____/ ___|_ _/ _ \| \ | |
-    // | |_) |  _|| |  _ | | | | |  \| |
-    // |  _ <| |__| |_| || | |_| | |\  |
-    // |_| \_\_____\____|___\___/|_| \_|
-
-    /**
-     * Funcion Ajax para obtener las regiones de un país
-     * @return json
-     */
-    public function regionsFromCountryAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        $id_country = $request->request->get('id_country');
-
-        $regions = $em->getRepository("UtilBundle:Region")->findBy(array('country' => $id_country));
-        $size = sizeOf($regions);
-        if($size > 0) {
-            foreach ($regions as $region) {
-                $json[] = $region->to_json();
-            }
-        }else{
-                $json = array( 'error' => 'No hay coincidencias');
-        }
-       return new Response(json_encode($json), $status = 200);
-    }
-
-    //  ____ ___ _______   __
-    //  / ___|_ _|_   _\ \ / /
-    // | |    | |  | |  \ V /
-    // | |___ | |  | |   | |
-    //  \____|___| |_|   |_|
-
-    /**
-     * Funcion Ajax para obtener las ciudades de una region
-     * @return json
-     */
-    public function citiesFromRegionAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        $id_region = $request->request->get('id_region');
-
-        $cities = $em->getRepository("UtilBundle:City")->findBy(array('region' => $id_region));
-        $size = sizeOf($cities);
-        if($size > 0) {
-            foreach ($cities as $city) {
-                $json[] = $city->to_json();
-            }
-        }else{
-                $json = array( 'error' => 'No hay coincidencias');
-        }
-        return new Response(json_encode($json), $status = 200);
-    }
-
-    //   ____    _  _____ ____  _____ ______     __
-    //  / ___|  / \|_   _/ ___|| ____|  _ \ \   / /
-    // | |     / _ \ | | \___ \|  _| | |_) \ \ / /
-    // | |___ / ___ \| |  ___) | |___|  _ < \ V /
-    //  \____/_/   \_\_| |____/|_____|_| \_\ \_/
-
-
     /**
      * Funcion Ajax para obtener los socios de una Cateogria de Servicio
      * @return json

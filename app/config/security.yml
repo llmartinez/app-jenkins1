@@ -41,7 +41,7 @@ security:
       - { path: ^/(es|en|fr|pt)/shop,                       roles: [ROLE_ADMIN, ROLE_AD], requires_channel: https }
       - { path: ^/(es|en|fr|pt)/order,                      roles: [ROLE_ADMIN, ROLE_COMMERCIAL], requires_channel: https }
       - { path: ^/(es|en|fr|pt)/user/list,                  roles: [ROLE_ADMIN], requires_channel: https }
-      - { path: ^/(es|en|fr|pt)/user,                       roles: [ROLE_USER, ROLE_AD], requires_channel: https }
+      - { path: ^/(es|en|fr|pt)/user,                       roles: [ROLE_USER, ROLE_AD, ROLE_COMMERCIAL], requires_channel: https }
       - { path: ^/(es|en|fr|pt)/popup,                      roles: [ROLE_USER, ROLE_AD], requires_channel: https }
       - { path: ^/(es|en|fr|pt)/workshop/observation,       roles: [ROLE_ASSESSOR], requires_channel: https }
       - { path: ^/(es|en|fr|pt)/workshop,                   roles: [ROLE_ADMIN, ROLE_AD], requires_channel: https }
@@ -50,8 +50,8 @@ security:
       - { path: ^/(es|en|fr|pt)/ticket/close,               roles: [ROLE_USER], requires_channel: https }
       - { path: ^/(es|en|fr|pt)/ticket,                     roles: [ROLE_USER], requires_channel: https }
       - { path: ^/(es|en|fr|pt)/car,                        roles: [ROLE_USER], requires_channel: https }
-      - { path: ^/(es|en|fr|pt)/statistic/list-top,         roles: [ROLE_TOP_AD], requires_channel: https }
-      - { path: ^/(es|en|fr|pt)/statistic,                  roles: [ROLE_TOP_AD], requires_channel: https }
+      - { path: ^/(es|en|fr|pt)/statistic/list-top,         roles: [ROLE_AD], requires_channel: https }
+      - { path: ^/(es|en|fr|pt)/statistic,                  roles: [ROLE_TOP_AD, ROLE_SUPER_AD], requires_channel: https }
       # - { path: ^/(es|en|fr|pt)/lock,                     roles: [ROLE_USER]                  }
       - { path: ^/(es|en|fr|pt)/import,                     roles: [ROLE_SUPER_ADMIN], requires_channel: https }
       # - { path: ^/(es|en|fr|pt)/,                         roles: [ROLE_USER]                  }

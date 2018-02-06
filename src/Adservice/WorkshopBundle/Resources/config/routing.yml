@@ -68,9 +68,6 @@ typology_edit:
 ##############################
 #       RUTAS AJAX           #
 ##############################
-#user_provinces:
-#    path: /provincesFromRegion
-#    defaults: { _controller: UtilBundle:Workshop:provincesFromRegion }
 
 search_cif:
     path: /new/{cif}
