@@ -40,20 +40,6 @@ class UtilController extends Controller
     }
 
     /**
-     * Devuelve un array con paises, regiones y ciudades para utilizar para autocompletar los formularios
-     * @return array
-     */
-    public static function getLocations($em)
-    {
-       $countries = $em->getRepository('UtilBundle:Country')->findAll();
-       $regions   = $em->getRepository('UtilBundle:Region' )->findAll();
-       $cities    = $em->getRepository('UtilBundle:City'   )->findAll();
-
-       $array = array('countries' => $countries, 'regions' => $regions, 'cities' => $cities);
-       return $array;
-    }
-
-    /**
      * Obtiene el Slug de una cadena
      * @param  string $cadena
      * @param  string $separador

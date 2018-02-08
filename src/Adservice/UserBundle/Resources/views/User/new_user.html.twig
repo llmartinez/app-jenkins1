@@ -53,31 +53,25 @@
                  {{ form_widget(form.password.password2) }}
             </div>
             {% if is_granted('ROLE_ADMIN') %}
-                {% if not is_granted('ROLE_SUPER_ADMIN') %}
+                
                     <div class="col-xs-2 col-md-2 form-group">
                         {% if user_type == "assessor" %}
                             <label> {{ 'category_service'|trans }} </label>
                         {% else %}
                             <label>{{ 'category_service'|trans }} *</label>
                         {% endif %}
-                        <select  id="admin_assessor_type_category_service" name="admin_assessor_type_shoptype[category_service]" class="form-control">
-                            <option value="0"></option>
-                            <option value="{{ catserv.id }}">{{ catserv.CategoryService }}</option>
-                        </select>
+                        {{ form_widget(form.category_service, { 'attr': {'class': 'form-control'} }) }}
                     </div>
-                    <div class="col-xs-2 col-md-2 form-group" hidden>
-                        <label>{{ 'category_service'|trans }} *</label> {{ form_widget(form.category_service, { 'attr': {'class': 'form-control'} }) }}
-                    </div>
-                {% else %}
+                
+            {% elseif is_granted('ROLE_AD') %}
+                <div class="hidden"><input type="hidden" id="category_service_id" name="category_service_id" value="{{ catserv.CategoryService }}"></div>
+            {% else %}
                     {% if form.category_service is defined %}
                         <div class="col-xs-2 col-md-2 form-group fl">
                             <label>{{ 'category_service'|trans }} *</label> {{ form_widget(form.category_service, { 'attr': {'class': 'form-control'} }) }}
                         </div>
                     {% endif %}
                 {% endif %}
-            {% elseif is_granted('ROLE_AD') %}
-                <div class="hidden"><input type="hidden" id="category_service_id" name="category_service_id" value="{{ catserv.CategoryService }}"></div>
-            {% endif %}
             {% if form.partner is defined %}
              <div class="col-xs-2 col-md-2 form-group">
                 {% if user_type == "super_ad" %}
@@ -146,18 +140,23 @@
 
             var confirm = false;
             var catserv = $("select[id*='category_service']").val();
-
-            if(catserv != '') {
-                if(catserv != undefined){
+            if($("select[id*='category_service'] option:selected").text() != ""){
+                if(catserv != '') {
+                    if(catserv != undefined){
+                        confirm = window.confirm("{{ 'btn.confirm_catservice'|trans }}: "
+                                                + $("select[id*='category_service'] option[value="+catserv+"]").text());
+                    }else{
+                        var catserv = $("#category_service_id").val();
+                        confirm = window.confirm("{{ 'btn.confirm_catservice'|trans }}: "+ catserv);
+                    }
+                    if(confirm) $('#btn_create').trigger('click');
+                }
+                else {
                     confirm = window.confirm("{{ 'btn.confirm_catservice'|trans }}: "
-                                            + $("select[id*='category_service'] option[value="+catserv+"]").text());
-                }else{
-                    var catserv = $("#category_service_id").val();
-                    confirm = window.confirm("{{ 'btn.confirm_catservice'|trans }}: "+ catserv);
+                                                + $("select[id*='category_service'] option[value="+catserv+"]").text());
+                    if(confirm) $('#btn_create').trigger('click');
                 }
             }
-
-            if(confirm) $('#btn_create').trigger('click');
         });
     </script>
 {% endblock %}

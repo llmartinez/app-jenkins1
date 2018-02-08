@@ -439,7 +439,6 @@ class WorkshopController extends Controller {
                     'form_name' => $form->getName(),
                     'form' => $form->createView(),
                     'catserv' => $catserv,
-                    // 'locations'          => UtilController::getLocations($em),
         ));
     }
 

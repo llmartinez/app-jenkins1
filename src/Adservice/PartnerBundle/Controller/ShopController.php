@@ -27,9 +27,12 @@ class ShopController extends Controller {
         if ($this->get('security.authorization_checker')->isGranted('ROLE_AD') === false) {
             throw new AccessDeniedException();
         }
-        if($user = $this->getUser()->getCategoryService() != null)
-             $catser = $user = $this->getUser()->getCategoryService()->getId();
-        else $catser = '0';
+        if($this->getUser()->getCategoryService() != null){
+             $catser = $this->getUser()->getCategoryService()->getId();
+        }
+        else{ 
+            $catser = '0';
+        }
         $em = $this->getDoctrine()->getManager();
         $params[] = array("name", " != '...' "); //Evita listar las tiendas por defecto de los socios (Tiendas con nombre '...')
 

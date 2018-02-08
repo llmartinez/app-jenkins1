@@ -195,14 +195,10 @@ class PartnerController extends Controller {
             $this->get('session')->getFlashBag()->add('info', $flash);
         }
 
-        $regions      = $em->getRepository("UtilBundle:Region")->findBy(array('country' => '1'));
-        $cities       = $em->getRepository("UtilBundle:City"  )->findAll();
 //        $cat_services = $em->getRepository("UserBundle:CategoryService")->findAll();
         return $this->render('PartnerBundle:Partner:new_partner.html.twig', array('partner'      => $partner,
                                                                                   'form_name'    => $form->getName(),
                                                                                   'form'         => $form->createView(),
-                                                                                  'regions'      => $regions,
-                                                                                  'cities'       => $cities,
                                                                                   'cat_services' => $cat_services,
                                                                                  ));
     }
@@ -299,112 +295,6 @@ class PartnerController extends Controller {
 
         return $this->redirect($this->generateUrl('partner_list'));
     }
-
-    /**
-     * Listado de todos los usuarios socios de la bbdd
-     * @throws AccessDeniedException
-     */
-    // public function userPartnerlistAction(Request $request, $page=1, $country='0', $term='0', $field='0') {
-
-    //     if ($this->get('security.authorization_checker')->isGranted('ROLE_TOP_AD') === false) {
-    //         throw new AccessDeniedException();
-    //     }
-    //     $em = $this->getDoctrine()->getManager();
-    //     $params = array();
-    //     if ($term != '0' and $field != '0'){
-
-    //         if ($term == 'tel') {
-    //             $params[] = array('phone_number_1', " != '0' AND (e.phone_number_1 LIKE '%".$field."%' OR e.phone_number_2 LIKE '%".$field."%' OR e.mobile_number_1 LIKE '%".$field."%' OR e.mobile_number_2 LIKE '%".$field."%') ");
-    //         }
-    //         elseif($term == 'mail'){
-    //             $params[] = array('email_1', " != '0' AND (e.email_1 LIKE '%".$field."%' OR e.email_2 LIKE '%".$field."%') ");
-    //         }
-    //         elseif($term == 'name'){
-    //             $params[] = array($term, " LIKE '%".$field."%'");
-    //         }
-    //     }
-
-    //     if($country != '0'){
-    //         $params[] = array('country', ' = '.$country);
-    //     }
-    //     $params[] = array('partner', ' > 0 ');
-    //     $params[] = array('category_service', ' = '.$this->getUser()->getCategoryService()->getId());
-    //     $pagination = new Pagination($page);
-
-
-
-    //     $partners = $pagination->getRows($em, 'UserBundle', 'User', $params, $pagination);
-    //     $length   = $pagination->getRowsLength($em, 'UserBundle', 'User', $params);
-
-    //     $pagination->setTotalPagByLength($length);
-
-    //     $countries = $em->getRepository('UtilBundle:Country')->findAll();
-
-    //     return $this->render('PartnerBundle:Partner:list_user_partners.html.twig', array('all_partners' => $partners,
-    //                                                                                 'pagination'   => $pagination,
-    //                                                                                 'countries'    => $countries,
-    //                                                                                 'country'      => $country,
-    //                                                                                 'term'         => $term,
-    //                                                                                 'field'        => $field,
-    //                                                                                 'role'         => 'partner'
-    //                                                                                 ));
-    // }
-
-     /**
-     * Listado de todos los usuarios socios de la bbdd
-     * @throws AccessDeniedException
-     */
-    // public function userSuperPartnerlistAction(Request $request, $page=1, $country='0', $term='0', $field='0') {
-
-    //     if ($this->get('security.authorization_checker')->isGranted('ROLE_TOP_AD') === false) {
-    //         throw new AccessDeniedException();
-    //     }
-    //     $em = $this->getDoctrine()->getManager();
-    //     $params = array();
-    //     if ($term != '0' and $field != '0'){
-
-    //         if ($term == 'tel') {
-    //             $params[] = array('phone_number_1', " != '0' AND (e.phone_number_1 LIKE '%".$field."%' OR e.phone_number_2 LIKE '%".$field."%' OR e.mobile_number_1 LIKE '%".$field."%' OR e.mobile_number_2 LIKE '%".$field."%') ");
-    //         }
-    //         elseif($term == 'mail'){
-    //             $params[] = array('email_1', " != '0' AND (e.email_1 LIKE '%".$field."%' OR e.email_2 LIKE '%".$field."%') ");
-    //         }
-    //         elseif($term == 'name'){
-    //             $params[] = array($term, " LIKE '%".$field."%'");
-    //         }
-    //     }
-
-    //     if($country != '0'){
-    //         $params[] = array('country', ' = '.$country);
-    //     }
-    //     $params[] = array('category_service', ' = '.$this->getUser()->getCategoryService()->getId());
-    //     $pagination = new Pagination($page);
-
-    //     $partners = $pagination->getRows($em, 'UserBundle', 'User', $params, $pagination);
-    //     $users_role_super_ad=array();
-    //     foreach ($partners as $user) {
-
-    //         $role     = $user->getRoles();
-    //         $role     = $role[0];
-    //         $role     = $role->getName();
-    //         if ($role == "ROLE_SUPER_AD")     $users_role_super_ad[]    = $user;
-
-    //     }
-    //     $length   = $pagination->getRowsLength($em, 'UserBundle', 'User', $params);
-
-    //     $pagination->setTotalPagByLength($length);
-
-    //     $countries = $em->getRepository('UtilBundle:Country')->findAll();
-
-    //     return $this->render('PartnerBundle:Partner:list_user_super_partners.html.twig', array('all_partners' => $users_role_super_ad,
-    //                                                                                 'pagination'   => $pagination,
-    //                                                                                 'countries'    => $countries,
-    //                                                                                 'country'      => $country,
-    //                                                                                 'term'         => $term,
-    //                                                                                 'field'        => $field,
-    //                                                                                 'role'         => 'super_partner'
-    //                                                                                 ));
-    // }
 
     public function activeDeactiveListAction(Request $request, $user_id, $permission, $page, $country, $option, $term, $field){
         $em = $this->getDoctrine()->getManager();

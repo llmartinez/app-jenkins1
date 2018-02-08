@@ -342,7 +342,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * @param string $category_service
      */
-    public function setCategoryService(\Adservice\UserBundle\Entity\CategoryService $category_service) {
+    public function setCategoryService($category_service) {
         $this->category_service = $category_service;
     }
 

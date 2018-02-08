@@ -42,18 +42,6 @@ upload:
 #   APDO. AJAX   #
 ###########################
 
-regions_from_country:
-    path: /regionsFromCountry
-    defaults: { _controller: UtilBundle:Ajax:regionsFromCountry }
-    options:
-        expose: true
-
-cities_from_region:
-    path: /citiesFromRegion
-    defaults: { _controller: UtilBundle:Ajax:citiesFromRegion }
-    options:
-        expose: true
-
 partners_from_catserv:
     path: /partnersFromCatServ
     defaults: { _controller: UtilBundle:Ajax:partnersFromCatServ }
