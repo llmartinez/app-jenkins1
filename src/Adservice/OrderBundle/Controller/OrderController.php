@@ -36,8 +36,8 @@ class OrderController extends Controller
         $rejected     = array('action' , " = 'rejected'");
         $not_rejected = array('action' , " != 'rejected'");
 
-        $preorder     = array('wanted_action' , " = 'preorder'");
-        $not_preorder = array('wanted_action' , " != 'preorder'");
+        $preorder     = array('wanted_action' , " LIKE 'preorder%'");
+        $not_preorder = array('wanted_action' , " NOT LIKE 'preorder%'");
 
         $workshop_pending [] = $not_preorder;
         $workshop_pending [] = $not_rejected;
