@@ -379,7 +379,7 @@ class WorkshopController extends Controller {
                     }
                     
                     /* Dejamos el locale tal y como estaba */
-                    $request->setLocale($locale);
+                    $this->get('translator')->setLocale($locale);
                 }
 
                 $flash = $this->get('translator')->trans('create') . ' ' . $this->get('translator')->trans('workshop') . ': ' . $username;
@@ -411,7 +411,7 @@ class WorkshopController extends Controller {
                 } else {
                     $flash = $this->get('translator')->trans('error.code_workshop.used') . $code;
                 }
-                $this->get('translator')->setLocale($locale);
+                
             }
             
         }
