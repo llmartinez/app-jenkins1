@@ -571,7 +571,9 @@ class TicketController extends Controller {
             $id_plateNumber = strtoupper($id_plateNumber);
             $car->setPlateNumber($id_plateNumber);
         }
-        
+        if(isset($_SESSION['error']) && $_SESSION['error']!= ''){
+            $this->get('session')->getFlashBag()->add('error', $_SESSION['error']);
+        }
         $systems = $em->getRepository('TicketBundle:System')->findAll();
         if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN') || $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')){
             $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
@@ -990,7 +992,7 @@ class TicketController extends Controller {
         }
         $marca_session = $modelo_session = $version_session = $description_session = $plateNumber_session = $vin_session = $system_session = $subsystem_session = $importance_session = null; 
         
-        if(isset($_SESSION['version'])) {
+        if(isset($_SESSION['marca'])) {
             $marca_session = $_SESSION['marca'];
             $modelo_session = $_SESSION['modelo'];
             $version_session = $_SESSION['version'];    
