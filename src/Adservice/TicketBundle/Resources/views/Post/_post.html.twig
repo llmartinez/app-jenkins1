@@ -7,7 +7,7 @@
                         <img class="img_icon" src="{{ asset('bundles/util/images/icon/phone.png') }}" title="{{ 'ticket.call' | trans }}" alt="{{ 'ticket.call' | trans }}">
                     {% else %}
                         <img class="img_icon" src="{{ asset('bundles/util/images/icon/ticket.png') }}" title="{{ 'ticket' | trans }}" alt="{{ 'ticket' | trans }}">
-                    {%endif %} 
+                    {% endif %} 
                     <a style="color:black; text-decoration:none; padding-left:20px;">{{ 'you'|trans }}</a>
         {% else %}
 	             class="legend">
@@ -23,7 +23,8 @@
                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/assessor_.png') }}">
                            
                             {{ 'assessor'|trans }}
-                            {% if ( is_granted('ROLE_ASSESSOR')) %}{{ post.createdBy.name }}{% endif %}
+                            {{ post.createdBy.name }} {{post.createdBy.surname | slice(0,1)}}
+                            
 	                {% else %}
                             {{ 'user'|trans }}
                     {% endif %}

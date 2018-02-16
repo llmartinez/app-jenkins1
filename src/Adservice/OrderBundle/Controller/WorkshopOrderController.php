@@ -599,7 +599,10 @@ class WorkshopOrderController extends Controller {
                     $this->get('session')->getFlashBag()->add('error', $flash);
                 }
 
-                return $this->redirect($this->generateUrl('list_orders'));
+                if ($this->get('security.authorization_checker')->isGranted('ROLE_AD'))
+                    return $this->redirect($this->generateUrl('list_orders'));
+                else
+                    return $this->redirect($this->generateUrl('list_orders', array('option' => 'preorder_pending')));
             }
             else {
                 // Si no hay cambios en la solicitud, volvemos al listado de talleres
@@ -709,7 +712,10 @@ class WorkshopOrderController extends Controller {
             $request->setLocale($locale);
         }
 
-        return $this->redirect($this->generateUrl('list_orders'));
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_AD'))
+            return $this->redirect($this->generateUrl('list_orders'));
+        else
+            return $this->redirect($this->generateUrl('list_orders', array('option' => 'preorder_pending')));
 
     }
 
@@ -778,7 +784,10 @@ class WorkshopOrderController extends Controller {
                     $request->setLocale($locale);
                 }
 
-                return $this->redirect($this->generateUrl('list_orders'));
+                if ($this->get('security.authorization_checker')->isGranted('ROLE_AD'))
+                    return $this->redirect($this->generateUrl('list_orders'));
+                else
+                    return $this->redirect($this->generateUrl('list_orders', array('option' => 'preorder_rejected')));
             }
 
         }
@@ -914,7 +923,10 @@ class WorkshopOrderController extends Controller {
         $em->remove($workshopOrder);
         $em->flush();
 
-        return $this->redirect($this->generateUrl('list_orders'));
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_AD'))
+            return $this->redirect($this->generateUrl('list_orders'));
+        else
+            return $this->redirect($this->generateUrl('list_orders', array('option' => 'preorder_pending')));
 
     }
 
@@ -992,45 +1004,20 @@ class WorkshopOrderController extends Controller {
             $flash .=" ". $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getMobileNumber2();
         }
 
-        //  else $this->get('session')->getFlashBag()->add('error', $flash);
         if (strpos($workshopOrder->getWantedAction(), 'preorder_') !== false && $status == 'accepted')
         {
-            if($find == null or $workshopOrder->getCodeWorkshop() != $find->getCodeWorkshop())
+            if ((strpos($workshopOrder->getWantedAction(), '_create') !== false && ($find == null or $workshopOrder->getCodeWorkshop() != $find->getCodeWorkshop())) || strpos($workshopOrder->getWantedAction(), '_create') !== true)
             {
                 $preorder = true;
-
                 $workshopOrder->setWantedAction(substr($workshopOrder->getWantedAction(),9));
-                dump($workshopOrder->getWantedAction());die;
                 $em->persist($workshopOrder);
                 $em->flush();
-
-
-                // Enviamos un mail con credenciales de usuario a modo de backup
-                // $mail = $this->container->getParameter('mail_report');
-                // $pos = strpos($mail, '@');
-                // if ($pos != 0) {
-
-                //     // Cambiamos el locale para enviar el mail en el idioma del taller
-                //     $locale = $request->getLocale();
-
-                //     /* MAILING */
-                //     $mailerUser = $this->get('cms.mailer');
-                //     $mailerUser->setTo($mail);
-                //     $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject').$user_workshop->getWorkshop());
-                //     $mailerUser->setFrom('noreply@adserviceticketing.com');
-                //     $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $user_workshop, 'password' => $pass, '__locale' => $locale)));
-                //     $mailerUser->sendMailToSpool();
-                //     // echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $user_workshop, 'password' => $pass));die;
-
-                //     // Dejamos el locale tal y como estaba
-                //     $request->setLocale($locale);
-                // }
-
-                $flash =  $this->get('translator')->trans('preorder').' '.$this->get('translator')->trans('action.accepted').': '.$this->get('translator')->trans('create').' '.$this->get('translator')->trans('new.order.workshop');
+                $flash =  $this->get('translator')->trans('preorder').' '.$this->get('translator')->trans('action.accepted');
                 $this->get('session')->getFlashBag()->add('alert', $flash);
             }
             else $this->get('session')->getFlashBag()->add('error', $flash);
         }
+        
         elseif (( $workshopOrder->getWantedAction() == 'activate') && $status == 'accepted')
         {
             $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('id' => $workshopOrder->getIdWorkshop()));
