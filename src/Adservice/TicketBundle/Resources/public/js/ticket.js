@@ -23,11 +23,18 @@ $(document).ready(function() {
         var ticket_description  = $('#ticket_description').val();
         var ticket_plateNumber = $('#ticket_plateNumber').val();
 
-        if(ticket_brand != '')
+        if(ticket_brand != ''){
             $('#new_car_form_brand').val(ticket_brand);
+            if(ticket_model == ''){            
+                fill_model(0);
+            }
+        }
 
         if(ticket_model != ''){            
             fill_model(ticket_model);
+            if(ticket_version == ''){            
+                fill_version(0);
+            }
         }
 
         if(ticket_importance != '')

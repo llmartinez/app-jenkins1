@@ -45,15 +45,15 @@
                     {% if is_granted('ROLE_ASSESSOR') or is_granted('ROLE_AD') %}
                         <td>
                             <a title="{{ 'edit.workshop'|trans }}" href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
-                                {% if is_granted('ROLE_SUPER_ADMIN')%}
-{#                                  <a title="{{ 'edit.delete'|trans }}" href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin.png') }}"></a>#}
-                                    <a href="{{ path('workshop_delete', { 'id': workshop.id }) }}"
+                            {% if is_granted('ROLE_SUPER_ADMIN')%}
+{#                              <a title="{{ 'edit.delete'|trans }}" href="{{ path("workshop_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin.png') }}"></a>#}
+                                <a href="{{ path('workshop_delete', { 'id': workshop.id }) }}"
                                        onClick="javascript: return confirm(
                                                    '{{ 'workshop.delete.confirm'|trans }}{{workshop.id}}\n\n\n{{ 'workshop.delete.confirm2'|trans }}({{workshop.tickets | length}})');" title="{{ 'workshop.delete'|trans }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/bin.png') }}"></a>
                                     {% if workshop.users[0] is defined %}{% set user_id = workshop.users[0].id %}
                                         <a title="{{ 'edit.user'|trans }}" href="{{ path("user_edit", { 'id': user_id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/user.png') }}"></a>
                                     {% endif %}
-                                {% endif %}
+                                 {% endif %}
                             {% if workshop.active == 0 %}
                                 <a title="{{ 'workshop.activate'|trans }}" href="{{ path("workshop_activate_deactivate", { 'workshop_id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/check_boxes.png') }}"></a>
                             {% else %}

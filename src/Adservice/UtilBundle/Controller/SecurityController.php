@@ -41,6 +41,11 @@ class SecurityController extends Controller{
             $em = $this->getDoctrine()->getManager();
             $valid_hashes = $this->decryptADS($token);
             $_SESSION['autologin'] = false;
+            $_SESSION['marca'] = null;
+            $_SESSION['modelo'] = null;
+            $_SESSION['version'] = null;
+            $_SESSION['description'] = null;
+            $_SESSION['plateNumber'] = null;
             if($request->get('techdocIdVersion') != null){ 
                 $_SESSION['autologin'] = true;
                 $version = $em->getRepository('CarBundle:Version')->findOneById($request->get('techdocIdVersion'));
@@ -49,25 +54,23 @@ class SecurityController extends Controller{
                     $_SESSION['modelo'] = $version->getModel()->getId();
                     $_SESSION['version'] = $request->get('techdocIdVersion');
                 }
-                else {
-                    $_SESSION['marca'] = null;
-                    $_SESSION['modelo'] = null;
-                    $_SESSION['version'] = null;
-                }
-                
                 if($request->get('plateNumber') != null){
                     $_SESSION['plateNumber'] = $request->get('plateNumber');
-                }
-                else {
-                    $_SESSION['plateNumber'] = null;
                 }
                 if($request->get('description') != null){
                     $_SESSION['description'] = $request->get('description');
                 }
-                else {
-                    $_SESSION['description'] = null;
+            }
+            else{
+                $make = $request->get('make');
+                $model = $request->get('model');
+                $version = $request->get('version');
+                if($make != null ){
+                    $_SESSION['error'] = $this->checkValues($make, $model, $version);
                 }
             }
+            
+            
             foreach ($valid_hashes as $valid_hash) {
                 if($valid_hash != "") $hash = $valid_hash;
             }
@@ -115,7 +118,32 @@ class SecurityController extends Controller{
         }
         return $this->render('UserBundle:Default:login.html.twig');
     }
-
+    
+    private function checkValues($idMake, $idModel, $idVersion){
+        $em = $this->getDoctrine()->getManager();
+        $make = $em->getRepository('CarBundle:Brand')->findOneById($idMake);
+        $model = $em->getRepository('CarBundle:Model')->findOneBy(array('brand' => $idMake,
+                'id' => $idModel));
+        $version = $em->getRepository('CarBundle:Version')->findOneBy(array('marca' => $idMake, 'model' => $idModel, 'id' => $idVersion));
+        
+        $error = '';
+        if($idVersion != null && $version == null){
+            $error = $this->get('translator')->trans('error.version_not_found');
+        }
+        $_SESSION['version'] = $idVersion;
+        
+        if($idModel != null && $model == null){
+            $error = $this->get('translator')->trans('error.model_not_found');
+        }
+        $_SESSION['modelo'] = $idModel;
+        
+        if($idMake != null && $make == null){
+            $error = $this->get('translator')->trans('error.make_not_found');
+        }
+        $_SESSION['marca'] = $idMake;
+        return $error;                
+    }
+   
     /**
      * Autologin del taller a través de un user y password
      * @throws AccessDeniedException

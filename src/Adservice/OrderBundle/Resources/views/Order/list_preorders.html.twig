@@ -194,7 +194,6 @@
                                         </div><!-- /.modal-content -->
                                     </div><!-- /.modal-dialog -->
                                 </div><!-- /.modal -->
-
                                 {% if workshopOrder.wantedaction == 'modify' or workshopOrder.action == 're_modify' %}
                                     <span class="label label-warning"> {{ 'action.modify'|trans }}</span>
                                 {% elseif workshopOrder.wantedaction == 'activate' %}
@@ -205,8 +204,18 @@
                                     <span class="label label-success"> {{ 'active'|trans }}</span>
                                     <span class="glyphicon glyphicon-arrow-right">                        </span>
                                     <span class="label label-danger">  {{ 'inactive'|trans }}</span>
-                                {% elseif workshopOrder.wantedaction == 'preorder' %}
-                                    <span class="label label-info">    {{ 'preorder'|trans }}</span>
+                                {% elseif workshopOrder.wantedaction == 'preorder_create' %}
+                                    <span class="label label-info">    {{ 'preorder_create'|trans }}</span>
+                                {% elseif workshopOrder.wantedaction == 'preorder_modify' %}
+                                    <span class="label label-warning">    {{ 'preorder_modify'|trans }}</span>
+                                {% elseif workshopOrder.wantedaction == 'preorder_activate' %}
+                                    <span class="label label-danger">  {{ 'inactive'|trans }}</span>
+                                    <span class="glyphicon glyphicon-arrow-right">                        </span>
+                                    <span class="label label-success"> {{ 'active'|trans }}</span>
+                                {% elseif workshopOrder.wantedaction == 'preorder_deactivate' %}
+                                    <span class="label label-success"> {{ 'active'|trans }}</span>
+                                    <span class="glyphicon glyphicon-arrow-right">                        </span>
+                                    <span class="label label-danger">  {{ 'inactive'|trans }}</span>
                                 {% elseif workshopOrder.action == 'create' %}
                                     <span class="label label-info">    {{ 'action.create'|trans }}</span>
                                 {% elseif workshopOrder.action == 'rejected' %}
