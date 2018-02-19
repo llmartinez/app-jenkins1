@@ -18,10 +18,6 @@
 
 	<input type="hidden" id="id_workshop" name="id_workshop" value="{{ workshop.id }}">
 
-	{% for flashMessage in app.session.flashbag.get('error') %}
-		<p class="error">{{ flashMessage }}</p>
-	{% endfor %}
-
 	{# WORKSHOP #}
 	<div class="form-group" {% if workshop.name != "" %}title="{{workshop.name}}" alt="{{workshop.name}}"{% endif %}>
 		<img title="{{workshop.name}}" alt="{{workshop.name}}" class='img_icon' src='{{ asset('bundles/util/images/icon/workshop_.png') }}'> #{{ workshop.codePartner}} - {{ workshop.codeWorkshop }}: <b style="color:#428bca;">{{ workshop.name|length > 15 ? workshop.name|slice(0, 15) ~ '...' : workshop.name  }}</b>

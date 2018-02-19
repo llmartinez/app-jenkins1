@@ -1042,13 +1042,10 @@ class WorkshopOrderController extends Controller {
 
             UtilController::createHistorical($em, $workshop, $stat);
 
-            // Cambiamos el locale para enviar el mail en el idioma del taller
-            $locale = $request->getLocale();
-            $lang_w = $workshop->getCountry()->getLang();
-            $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
-            $request->setLocale($lang->getShortName());
+            $locale = $this->get('translator')->getLocale();
+            $lang_w = $em->getRepository('UtilBundle:Language')->findOneByLanguage($workshop->getCountry()->getLang());
+            $this->get('translator')->setLocale($lang_w->getShortName());
 
-            // Enviamos un mail con la solicitud al taller
             $mail = $workshop->getEmail1();
             $pos = strpos($mail, '@');
             if ($pos != 0) {
@@ -1058,9 +1055,8 @@ class WorkshopOrderController extends Controller {
                 $mailerUser->setTo($mail);
                 $mailerUser->setSubject($this->get('translator')->trans('mail.acceptOrder.subject').$workshop);
                 $mailerUser->setFrom('noreply@adserviceticketing.com');
-                $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> 'activate', '__locale' => $locale)));
+                $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> 'activate', '__locale' => $lang_w->getShortName())));
                 $mailerUser->sendMailToSpool();
-                // echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $user_workshop, 'password' => $pass));die;
 
             }
             
@@ -1071,14 +1067,14 @@ class WorkshopOrderController extends Controller {
                 
                 $mailerUser->setTo($mail);  
                 $mailerUser->setCc(array($mailCC1,$mailCC2));   
-                $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> 'activate', '__locale' => $locale)));
+                $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> 'activate', '__locale' => $lang_w->getShortName())));
                 $mailerUser->sendMailToSpool();
                
                 $mailTopFr = $this->container->getParameter('mail_top_fr');
                 
                 $mailerUser->setTo($mailTopFr);                     
                 $mailerUser->setCc(null); 
-                $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> 'activate', '__locale' => $locale)));
+                $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> 'activate', '__locale' => $lang_w->getShortName())));
                 $mailerUser->sendMailToSpool();
                 
             }
@@ -1089,8 +1085,7 @@ class WorkshopOrderController extends Controller {
                 $mailerUser->sendMailToSpool();
                 
             }
-            // Dejamos el locale tal y como estaba
-            $request->setLocale($locale);
+            $this->get('translator')->setLocale($locale);
         }
         elseif (( $workshopOrder->getWantedAction() == 'deactivate') && $status == 'accepted')
         {
@@ -1128,28 +1123,23 @@ class WorkshopOrderController extends Controller {
                 //                               WHERE t.id IN (".$ids.")");
                 // $consulta->getResult();
 
-            // Cambiamos el locale para enviar el mail en el idioma del taller
-            $locale = $request->getLocale();
-            $lang_w = $workshop->getCountry()->getLang();
-            $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
-            $request->setLocale($lang->getShortName());
+            
+            $locale = $this->get('translator')->getLocale();
+            $lang_w = $em->getRepository('UtilBundle:Language')->findOneByLanguage($workshop->getCountry()->getLang());
+            $this->get('translator')->setLocale($lang_w->getShortName());
 
-            // Enviamos un mail con la solicitud al taller
             $mail = $workshop->getEmail1();
             $pos = strpos($mail, '@');
             if ($pos != 0) {
 
-                /* MAILING */
                 $mailerUser = $this->get('cms.mailer');
                 $mailerUser->setTo($mail);
                 $mailerUser->setSubject($this->get('translator')->trans('mail.acceptOrder.subject').$workshop);
                 $mailerUser->setFrom('noreply@adserviceticketing.com');
-                $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> 'deactivate', '__locale' => $locale)));
+                $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> 'deactivate', '__locale' => $lang_w->getShortName())));
                 $mailerUser->sendMailToSpool();
-                // echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $user_workshop, 'password' => $pass));die;
 
             }
-            // Enviamos un mail con la solicitud a modo de backup
           
             if($workshop->getCategoryService()->getId() == 3) {
                 $mail = $this->container->getParameter('mail_report_ad');                
@@ -1158,14 +1148,14 @@ class WorkshopOrderController extends Controller {
               
                 $mailerUser->setTo($mail);
                 $mailerUser->setCc(array($mailCC1,$mailCC2));                  
-                $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> 'deactivate', '__locale' => "fr_FR")));
+                $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> 'deactivate', '__locale' => $lang_w->getShortName())));
                 $mailerUser->sendMailToSpool();
                                
                 $mailTopFr = $this->container->getParameter('mail_top_fr');
                
                 $mailerUser->setTo($mailTopFr);                     
                 $mailerUser->setCc(null); 
-                $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> 'deactivate', '__locale' => "es_ES")));
+                $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> 'deactivate', '__locale' => $lang_w->getShortName())));
                 $mailerUser->sendMailToSpool();
                 
             }
@@ -1176,8 +1166,8 @@ class WorkshopOrderController extends Controller {
                 $mailerUser->sendMailToSpool();
                 
             }
-            // Dejamos el locale tal y como estaba
-            $request->setLocale($locale);
+            
+            $this->get('translator')->setLocale($locale);
         }
         elseif (($workshopOrder->getWantedAction() == 'modify')  && $status == 'accepted')
         {
@@ -1215,27 +1205,21 @@ class WorkshopOrderController extends Controller {
             $em->flush();
             UtilController::saveEntity($em, $workshop, $workshop->getCreatedBy());
 
-            // Cambiamos el locale para enviar el mail en el idioma del taller
-            $locale = $request->getLocale();
-            $lang_w = $workshop->getCountry()->getLang();
-            $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
-            $request->setLocale($lang->getShortName());
+            $locale = $this->get('translator')->getLocale();
+            $lang_w = $em->getRepository('UtilBundle:Language')->findOneByLanguage($workshop->getCountry()->getLang());
+            $this->get('translator')->setLocale($lang_w->getShortName());
 
-            // Enviamos un mail con la solicitud al taller
             $mail = $workshop->getEmail1();
             $pos = strpos($mail, '@');
             if ($pos != 0)
             {
-                /* MAILING */
                 $mailerUser = $this->get('cms.mailer');
                 $mailerUser->setTo($mail);
                 $mailerUser->setSubject($this->get('translator')->trans('mail.acceptOrder.subject').$workshop);
                 $mailerUser->setFrom('noreply@adserviceticketing.com');
-                $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> 'modify', '__locale' => $locale)));
+                $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> 'modify', '__locale' => $lang_w->getShortName())));
                 $mailerUser->sendMailToSpool();
-                // echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $user_workshop, 'password' => $pass));die;
             }
-            // Enviamos un mail con la solicitud a modo de backup
             $mail = $this->container->getParameter('mail_report');
             $pos = strpos($mail, '@');
             if ($pos != 0)
@@ -1244,8 +1228,7 @@ class WorkshopOrderController extends Controller {
                 $mailerUser->sendMailToSpool();
             }            
            
-            // Dejamos el locale tal y como estaba
-            $request->setLocale($locale);
+            $this->get('translator')->setLocale($locale);
         }
         elseif (($workshopOrder->getWantedAction() == 'create')  && $status == 'accepted')
         {
@@ -1359,28 +1342,15 @@ class WorkshopOrderController extends Controller {
                 if($workshop->getTest()) $stat = 2;
             
                 UtilController::createHistorical($em, $workshop, $stat);
+                $locale = $this->get('translator')->getLocale();
+                $lang_w = $em->getRepository('UtilBundle:Language')->findOneByLanguage($workshop->getCountry()->getLang());
+                $this->get('translator')->setLocale($lang_w->getShortName());
 
-                // Enviamos un mail con credenciales de usuario a modo de backup
-                $mail = $this->container->getParameter('mail_report');
-                $pos = strpos($mail, '@');
-                if ($pos != 0) {
+                $mailerUser = $this->get('cms.mailer');
+                $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject').$user_workshop->getWorkshop());
+                $mailerUser->setFrom('noreply@adserviceticketing.com');
+                $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $user_workshop, 'password' => $pass, '__locale' => $lang_w->getShortName())));
 
-                    // Cambiamos el locale para enviar el mail en el idioma del taller
-                    $locale = $request->getLocale();
-
-                    /* MAILING */
-                    $mailerUser = $this->get('cms.mailer');
-                    $mailerUser->setTo($mail);
-                    $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject').$user_workshop->getWorkshop());
-                    $mailerUser->setFrom('noreply@adserviceticketing.com');
-                    $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $user_workshop, 'password' => $pass, '__locale' => $locale)));
-                    $mailerUser->sendMailToSpool();
-                    // echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $user_workshop, 'password' => $pass));die;
-
-                    // Dejamos el locale tal y como estaba
-                    $request->setLocale($locale);
-                }
-                
                 if($workshop->getCategoryService()->getId() == 3) {
                     
                     $mail = $this->container->getParameter('mail_report_ad');              
@@ -1396,7 +1366,7 @@ class WorkshopOrderController extends Controller {
                     
                     $mailerUser->setTo($mailTopFr); 
                     $mailerUser->setCc(null); 
-                    $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail_top_fr.html.twig', array('user' => $user_workshop, '__locale' => $locale)));
+                    $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail_top_fr.html.twig', array('user' => $user_workshop, '__locale' => $lang_w->getShortName())));
                     $mailerUser->sendMailToSpool();
                     
                 }  
@@ -1408,6 +1378,8 @@ class WorkshopOrderController extends Controller {
                                    
                 }
                 
+                $this->get('translator')->setLocale($locale);
+                
                 if ($this->get('security.authorization_checker')->isGranted('ROLE_TOP_AD') and $catserv == 3){
                     $flash = $this->get('translator')->trans('create') . ' ' . $this->get('translator')->trans('workshop') . ': ' . $username;
                 }
@@ -1418,47 +1390,34 @@ class WorkshopOrderController extends Controller {
             }
             else $this->get('session')->getFlashBag()->add('error', $flash);
         }
-
         if(($preorder == false) and ($find == null or $workshopOrder->getCodeWorkshop() != $find->getCodeWorkshop()))
         {
             $mail = $workshop->getCreatedBy()->getEmail1();
             $pos = strpos($mail, '@');
             if ($pos != 0) {
 
-                // Cambiamos el locale para enviar el mail en el idioma del taller
-                $locale = $request->getLocale();
+                $locale = $this->get('translator')->getLocale();
+                $lang_w = $em->getRepository('UtilBundle:Language')->findOneByLanguage($workshop->getCountry()->getLang());
+                $this->get('translator')->setLocale($lang_w->getShortName());
 
-                $lang_w = $user_workshop->getCountry()->getLang();
-                $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_w);
-                $request->setLocale($lang->getShortName());
-
-                /* MAILING */
                 $mailer = $this->get('cms.mailer');
                 $mailer->setTo($mail);
                 $mailer->setSubject($this->get('translator')->trans('order').' '.$this->get('translator')->trans('action.accepted'));
                 $mailer->setFrom('noreply@adserviceticketing.com');
                 $mailer->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop,
                                                                                                            'action'   => $action,
-                                                                                                           '__locale' => $locale)));
+                                                                                                           '__locale' => $lang_w->getShortName())));
                 $mailer->sendMailToSpool();
-                // echo $this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop,
-                //                                                                                'action'   => $action));die;
-
-                // Copia del mail de confirmacion a modo de backup
-                //
+                
                 if($workshop->getCategoryService()->getId() == 3) {
-                    $request->setLocale('fr_FR');
                     $mail = $this->container->getParameter('mail_report_ad');
                 } else {
-                    $request->setLocale('es_ES');
                     $mail = $this->container->getParameter('mail_report');
                 }
-                $mail = $this->container->getParameter('mail_report');
                 $mailer->setTo($mail);
                 $mailer->sendMailToSpool();
 
-                // Dejamos el locale tal y como estaba
-                $request->setLocale($locale);
+                $this->get('translator')->setLocale($locale);
             }
         }
 

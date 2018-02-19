@@ -28,10 +28,6 @@
 
 	<input type="hidden" id="id_workshop" name="id_workshop" value="{{ workshop.id }}">
 
-	{% for flashMessage in app.session.flashbag.get('error') %}
-		<p class="grid-full w100 error">{{ flashMessage }}</p>
-	{% endfor %}
-
 	<div class="grid-full w100">
 		{# WORKSHOP #}
 		<div class="grid-full w50" {% if workshop.name != "" %}title="{{workshop.name}}" alt="{{workshop.name}}"{% endif %}>
