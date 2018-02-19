@@ -552,6 +552,8 @@ class UserController extends Controller {
 
             // $partner = $form->getData('partner');
             $user = UtilController::settersContact($user, $user);
+            $token = UtilController::getRandomToken();
+            $user->setToken($token);
             $this->saveUser($em, $user);
 
             $flash =  $this->get('translator')->trans('create').' '.$this->get('translator')->trans('user').': '.$username;

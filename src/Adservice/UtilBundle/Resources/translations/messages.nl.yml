@@ -415,7 +415,6 @@ shop.delete.confirm:	 "¿Ben je zeker dat je dit verkoopspunt wilt verwijderen?"
 
 #WORKSHOP
 workshops:				 "Garages"
-typology:				 "Type"
 cif:					 "Bedrijfs ID nummer"
 internal_code:			 "Code Interne"
 commercial_code:		 "Code Commercïele verantwoordelijke"

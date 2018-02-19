@@ -415,7 +415,6 @@ shop.delete.confirm:	 "Êtes-vous sûr de vouloir effacer ce Boutique?"
 
 #WORKSHOP
 workshops:				 "Ateliers"
-typology:				 "Type d'atelier"
 cif:					 "Code réseau"
 internal_code:			 "Code interne"
 commercial_code:		 "Code de commerce"
