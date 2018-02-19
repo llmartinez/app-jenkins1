@@ -2667,6 +2667,7 @@ class TicketController extends Controller {
         $_SESSION['subsystem'] = null;
         $_SESSION['system'] = null;
         $_SESSION['autologin'] = null;
+        $_SESSION['error'] = null;
         
     }
     

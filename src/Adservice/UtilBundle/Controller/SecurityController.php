@@ -128,21 +128,22 @@ class SecurityController extends Controller{
         
         $error = '';
         if($idVersion != null && $version == null){
-            $error = "No hay coincidencias con la version proporcionada";
+            $error = $this->get('translator')->trans('error.version_not_found');
         }
         $_SESSION['version'] = $idVersion;
         
         if($idModel != null && $model == null){
-            $error = "No hay coincidencias con el modelo proporcionado";
+            $error = $this->get('translator')->trans('error.model_not_found');
         }
         $_SESSION['modelo'] = $idModel;
         
         if($idMake != null && $make == null){
-            $error = 'No hay coincidencias con la marca proporcionada';
+            $error = $this->get('translator')->trans('error.make_not_found');
         }
         $_SESSION['marca'] = $idMake;
         return $error;                
     }
+   
     /**
      * Autologin del taller a través de un user y password
      * @throws AccessDeniedException
