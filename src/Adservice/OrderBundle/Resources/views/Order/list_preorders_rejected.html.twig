@@ -115,8 +115,7 @@
                             </td>
                             <td>
                             {% if not is_granted('ROLE_ADMIN') %}
-
-                                {% if workshopOrder.wantedAction != 'create' and workshopOrder.wantedAction != 'preorder' %}
+                                {% if workshopOrder.wantedAction != 'create' and 'preorder_' not in workshopOrder.wantedAction %}
                                     <a title="{{ 'edit.workshop'|trans }}" href="{{ path('workshopOrder_edit',   {'id': workshopOrder.idWorkshop }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"></a>
 
                                     <a title="{{ 'order.resend'|trans }}"  href="{{ path('workshopOrder_resendOrder', {'id': workshopOrder.id      }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/update.png') }}"></a>

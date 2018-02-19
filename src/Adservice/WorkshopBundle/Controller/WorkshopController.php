@@ -414,7 +414,7 @@ class WorkshopController extends Controller {
                 } else {
                     $flash = $this->get('translator')->trans('error.code_workshop.used') . $code;
                 }
-                $this->get('session')->getFlashBag()->add('error', $flash);
+                
             }
             
         }
@@ -716,7 +716,7 @@ class WorkshopController extends Controller {
                     $em->persist($workshop);
                     $em->flush();
 
-                    $this->deactivateActivateWorkshopAction($workshop->getId(), $request);
+                    $this->deactivateActivateWorkshopAction($request, $workshop->getId());
 
                     return $this->redirect($this->generateUrl('workshop_list'));
                 }

@@ -125,14 +125,7 @@
                                 </div><!-- /.modal-dialog -->
                             </div><!-- /.modal -->
                     {% elseif is_granted('ROLE_AD') %}
-                        <td>
-                            <a title="{{ 'edit.workshop'|trans }}" href="{{ path("workshopOrder_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
-                            {% if workshop.active == 1 %}
-                                <a title="{{ 'workshop.deactivate'|trans }}"   href="{{ path('workshopOrder_change_status', {'id':workshop.id, 'status':'inactive'  }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/check_boxes.png') }}"> </a>
-                            {% else %}
-                                <a title="{{ 'workshop.activate'|trans }}" href="{{ path('workshopOrder_change_status', {'id':workshop.id, 'status':'active'    }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/check_boxes1.png') }}"> </a>
-                            {% endif %}
-                        </td>
+                       
                         <!-- Modal -->
                             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
@@ -152,6 +145,9 @@
                                 </div><!-- /.modal-dialog -->
                             </div><!-- /.modal -->
                     {% endif %}
+                    <td>
+                        <a title="{{ 'edit.workshop'|trans }}" href="{{ path("workshopOrder_edit", { 'id':workshop.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
+                    </td>
                 {% endif %}
             </tr>
             {% endfor %}

@@ -274,7 +274,7 @@ class WorkshopOrderController extends Controller {
                     if($roles != 'ROLE_COMMERCIAL') {
                             $workshopOrder->setWantedAction('create');
                     }else{
-                            $workshopOrder->setWantedAction('preorder');
+                            $workshopOrder->setWantedAction('preorder_create');
                     }
 
                     if($workshopOrder->getAdServicePlus() == null) $workshopOrder->setAdServicePlus(0);
@@ -412,25 +412,20 @@ class WorkshopOrderController extends Controller {
                 throw new AccessDeniedException();
             }
         }
-
         if (!$this->get('security.authorization_checker')->isGranted('ROLE_SUPERADMIN'))
         {
             // SUPER_AD
-            if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD'))
+            if (!$this->get('security.authorization_checker')->isGranted('ROLE_COMMERCIAL'))
             {
-                //if($user->getCountry()->getId() != $workshopOrder->getCountry()->getId())
-                //throw new AccessDeniedException();
-            }
-            // AD
-            else{
                 if($user->getPartner()->getCodePartner() != $workshopOrder->getPartner()->getCodePartner())
                 throw new AccessDeniedException();
             }
         }
         
-        if ((($this->get('security.authorization_checker')->isGranted('ROLE_AD') and
+        if ((($this->get('security.authorization_checker')->isGranted('ROLE_COMMERCIAL') and
                     $user->getCategoryService()->getId() == $workshopOrder->getCategoryService()->getId()) === false)
         and (!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD'))) {
+            
             return $this->render('TwigBundle:Exception:exception_access.html.twig');
         }
 
@@ -533,8 +528,8 @@ class WorkshopOrderController extends Controller {
                     $user = $this->getUser();
 
                     //$workshopOrder = UtilController::newEntity($workshopOrder, $user);
-                    $workshopOrder->setCreatedBy($workshop->getCreatedBy());
-                    $workshopOrder->setCreatedAt($workshop->getCreatedAt());
+                    $workshopOrder->setCreatedBy($user);
+                    $workshopOrder->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
                     if ($workshopOrder->getAction() == 'rejected' && $workshopOrder->getWantedAction() == 'modify') {
                         $workshopOrder->setAction('re_modify');
                     }
@@ -542,7 +537,12 @@ class WorkshopOrderController extends Controller {
                         $workshopOrder->setAction('re_modify');
                     }else{
                         $workshopOrder->setAction('modify');
-                        $workshopOrder->setWantedAction('modify');
+                        $roles=$user->getRoles()[0];
+                        if($roles != 'ROLE_COMMERCIAL') {
+                            $workshopOrder->setWantedAction('modify');
+                        }else{
+                                $workshopOrder->setWantedAction('preorder_modify');
+                        }                    
                     }
                     if($workshopOrder->getAdServicePlus() == null) $workshopOrder->setAdServicePlus(0);
 
@@ -557,6 +557,8 @@ class WorkshopOrderController extends Controller {
                     if($workshopOrder->getNumChecks() > 5){
                         $workshopOrder->setNumChecks(5);
                     }
+                    
+                    
                     UtilController::saveEntity($em, $workshopOrder, $workshop->getCreatedBy());
 
                     $mail = $workshopOrder->getCreatedBy()->getEmail1();
@@ -597,7 +599,10 @@ class WorkshopOrderController extends Controller {
                     $this->get('session')->getFlashBag()->add('error', $flash);
                 }
 
-                return $this->redirect($this->generateUrl('list_orders'));
+                if ($this->get('security.authorization_checker')->isGranted('ROLE_AD'))
+                    return $this->redirect($this->generateUrl('list_orders'));
+                else
+                    return $this->redirect($this->generateUrl('list_orders', array('option' => 'preorder_pending')));
             }
             else {
                 // Si no hay cambios en la solicitud, volvemos al listado de talleres
@@ -639,7 +644,7 @@ class WorkshopOrderController extends Controller {
      */
     public function changeStatusAction(Request $request, $id, $status, $workshop){
 
-        if ($this->get('security.authorization_checker')->isGranted('ROLE_AD') === false)
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_COMMERCIAL') === false)
             throw new AccessDeniedException();
 
         $em = $this->getDoctrine()->getManager();
@@ -655,19 +660,26 @@ class WorkshopOrderController extends Controller {
 
         $user = $this->getUser();
         $workshopOrder = $this->workshop_to_workshopOrder($workshop);
-        $workshopOrder->setCreatedBy($workshop->getCreatedBy());
-        $workshopOrder->setCreatedAt($workshop->getCreatedAt());
-
+        $workshopOrder->setCreatedBy($user);
+        $workshopOrder->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
+        $roles=$user->getRoles()[0];
         //actualizamos el campo "action" de la orden segun queramos activar o desactivar
         if ($status == 'active'){
             $workshopOrder->setAction('activate');
-            $workshopOrder->setWantedAction('activate');
+            if($roles != 'ROLE_COMMERCIAL') {
+                $workshopOrder->setWantedAction('activate');
+            }else{
+                    $workshopOrder->setWantedAction('preorder_activate');
+            } 
 
         }elseif ($status == 'inactive'){
             $workshopOrder->setAction('deactivate');
-            $workshopOrder->setWantedAction('deactivate');
+            if($roles != 'ROLE_COMMERCIAL') {
+                $workshopOrder->setWantedAction('deactivate');
+            }else{
+                    $workshopOrder->setWantedAction('preorder_deactivate');
+            } 
         }
-        $workshopOrder->setAction('deactivate');
         UtilController::saveEntity($em, $workshopOrder, $workshop->getCreatedBy());
 
         $mail = $workshopOrder->getCreatedBy()->getEmail1();
@@ -700,7 +712,10 @@ class WorkshopOrderController extends Controller {
             $request->setLocale($locale);
         }
 
-        return $this->redirect($this->generateUrl('list_orders'));
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_AD'))
+            return $this->redirect($this->generateUrl('list_orders'));
+        else
+            return $this->redirect($this->generateUrl('list_orders', array('option' => 'preorder_pending')));
 
     }
 
@@ -769,7 +784,10 @@ class WorkshopOrderController extends Controller {
                     $request->setLocale($locale);
                 }
 
-                return $this->redirect($this->generateUrl('list_orders'));
+                if ($this->get('security.authorization_checker')->isGranted('ROLE_AD'))
+                    return $this->redirect($this->generateUrl('list_orders'));
+                else
+                    return $this->redirect($this->generateUrl('list_orders', array('option' => 'preorder_rejected')));
             }
 
         }
@@ -905,7 +923,10 @@ class WorkshopOrderController extends Controller {
         $em->remove($workshopOrder);
         $em->flush();
 
-        return $this->redirect($this->generateUrl('list_orders'));
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_AD'))
+            return $this->redirect($this->generateUrl('list_orders'));
+        else
+            return $this->redirect($this->generateUrl('list_orders', array('option' => 'preorder_pending')));
 
     }
 
@@ -983,45 +1004,20 @@ class WorkshopOrderController extends Controller {
             $flash .=" ". $this->get('translator')->trans('error.code_phone.used').$workshopOrder->getMobileNumber2();
         }
 
-        //  else $this->get('session')->getFlashBag()->add('error', $flash);
-
-        if (($workshopOrder->getWantedAction() == 'preorder')  && $status == 'accepted'){
-
-            if($find == null or $workshopOrder->getCodeWorkshop() != $find->getCodeWorkshop())
+        if (strpos($workshopOrder->getWantedAction(), 'preorder_') !== false && $status == 'accepted')
+        {
+            if ((strpos($workshopOrder->getWantedAction(), '_create') !== false && ($find == null or $workshopOrder->getCodeWorkshop() != $find->getCodeWorkshop())) || strpos($workshopOrder->getWantedAction(), '_create') !== true)
             {
                 $preorder = true;
-
-                $workshopOrder->setWantedAction('create');
+                $workshopOrder->setWantedAction(substr($workshopOrder->getWantedAction(),9));
                 $em->persist($workshopOrder);
                 $em->flush();
-
-
-                // Enviamos un mail con credenciales de usuario a modo de backup
-                // $mail = $this->container->getParameter('mail_report');
-                // $pos = strpos($mail, '@');
-                // if ($pos != 0) {
-
-                //     // Cambiamos el locale para enviar el mail en el idioma del taller
-                //     $locale = $request->getLocale();
-
-                //     /* MAILING */
-                //     $mailerUser = $this->get('cms.mailer');
-                //     $mailerUser->setTo($mail);
-                //     $mailerUser->setSubject($this->get('translator')->trans('mail.newUser.subject').$user_workshop->getWorkshop());
-                //     $mailerUser->setFrom('noreply@adserviceticketing.com');
-                //     $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $user_workshop, 'password' => $pass, '__locale' => $locale)));
-                //     $mailerUser->sendMailToSpool();
-                //     // echo $this->renderView('UtilBundle:Mailing:user_new_mail.html.twig', array('user' => $user_workshop, 'password' => $pass));die;
-
-                //     // Dejamos el locale tal y como estaba
-                //     $request->setLocale($locale);
-                // }
-
-                $flash =  $this->get('translator')->trans('preorder').' '.$this->get('translator')->trans('action.accepted').': '.$this->get('translator')->trans('create').' '.$this->get('translator')->trans('new.order.workshop');
+                $flash =  $this->get('translator')->trans('preorder').' '.$this->get('translator')->trans('action.accepted');
                 $this->get('session')->getFlashBag()->add('alert', $flash);
             }
             else $this->get('session')->getFlashBag()->add('error', $flash);
         }
+        
         elseif (( $workshopOrder->getWantedAction() == 'activate') && $status == 'accepted')
         {
             $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('id' => $workshopOrder->getIdWorkshop()));

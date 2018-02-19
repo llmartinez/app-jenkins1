@@ -74,6 +74,16 @@
                                                      'required':'required' } }) }}
             </div>
         </div>
+            
+        <div class="col-xs-2 col-md-2 form-group fr">
+            {% if workshop.active == 1 %}
+                    <label>{{ 'action.inactive'|trans }}</label>
+                    <a style="margin-left: 20px;" title="{{ 'workshop.deactivate'|trans }}"   href="{{ path('workshopOrder_change_status', {'id':workshop.id, 'status':'inactive'  }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/check_boxes.png') }}"> </a>
+            {% else %}
+                    <label>{{ 'action.active'|trans }}</label>
+                    <a style="margin-left: 20px;" title="{{ 'workshop.activate'|trans }}" href="{{ path('workshopOrder_change_status', {'id':workshop.id, 'status':'active'    }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/check_boxes1.png') }}"> </a>
+            {% endif %}    
+        </div>
         <div class="col-xs-2 col-md-2 form-group fr">
             {% if id_catserv != 3 %}
             <div class="w65 fl mb15 {{is_hidden}}">
@@ -109,6 +119,8 @@
                 {{ form_widget(form.infotech) }}
             </div>
             {% endif %}
+            
+           
         </div>
         <div class="col-xs-10 col-md-10 form-group fl">
             <div class="col-xs-3 col-md-3">
