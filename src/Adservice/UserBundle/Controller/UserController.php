@@ -970,8 +970,8 @@ class UserController extends Controller {
 
         $rejected     = array('action' , " = 'rejected'");
         $not_rejected = array('action' , " != 'rejected'");
-        $preorder     = array('wanted_action' , " = 'preorder'");
-        $not_preorder = array('wanted_action' , " != 'preorder'");
+        $preorder     = array('wanted_action' , " LIKE 'preorder_%'");
+        $not_preorder = array('wanted_action' , " NOT LIKE 'preorder_%'");
 
         $workshop_pending [] = $not_preorder;
         $workshop_pending [] = $not_rejected;
@@ -981,6 +981,7 @@ class UserController extends Controller {
         $shop_rejected    [] = $rejected;
         $preorder_pending [] = $preorder;
         $preorder_pending [] = $not_rejected;
+        $preorder_pending[]  = $preorder;
         $preorder_rejected[] = $preorder;
         $preorder_rejected[] = $rejected;
 
@@ -995,42 +996,81 @@ class UserController extends Controller {
             $shop_rejected[]     = array('category_service' , " = ".$id_catserv);
         }
 
-        if    ($role == "ROLE_SUPER_AD"
-            OR $role == "ROLE_TOP_AD"  ){   $length_workshop_rejected = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_rejected);
-                                            $length_shop_rejected     = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_rejected);
-                                            $length_preorder_pending  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $preorder_pending);
+        if    ($role == "ROLE_SUPER_AD") {
+            $length_workshop_pending  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_pending);
+            $length_workshop_rejected  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_rejected);
+            $length_preorder_pending  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $preorder_pending);
+            $length_preorder_rejected  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $preorder_rejected);
+            $length = $length_workshop_pending + $length_workshop_rejected + $length_preorder_pending + $length_preorder_rejected;
+            if ($user->getCategoryService()->getId() !=  3) {
+                $length_shop_pending      = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_pending);
+                $length_shop_rejected      = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_rejected);
+                $length += $length_shop_pending + $length_shop_rejected;
+            }
+                                           
+        }
+        if    ( $role == "ROLE_TOP_AD"  ) {   
+            $length_workshop_pending = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_pending);
+            $length_workshop_rejected = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_rejected);
+            $length = $length_workshop_pending + $length_workshop_rejected;
+            if ($user->getCategoryService()->getId() !=  3) {
+                $length_shop_pending     = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_pending);
+                $length_shop_rejected     = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_rejected);
+                $length_preorder_pending  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $preorder_pending);
+                $length_preorder_rejected  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $preorder_rejected);
+                $length += $length_shop_pending + $length_shop_rejected + $length_preorder_pending + $length_preorder_rejected;
+            }
+        }
+        elseif($role == "ROLE_AD")      {   
+            $by_partner          = array('partner', ' = '.$user->getPartner()->getId());
 
-                                            $length = $length_workshop_rejected + $length_shop_rejected + $length_preorder_pending;
-                                        }
-        elseif($role == "ROLE_AD")      {   $by_partner          = array('partner', ' = '.$user->getPartner()->getId());
-                                            $workshop_rejected[] = $by_partner;
-                                            $shop_rejected[]     = $by_partner;
-                                            $preorder_pending[]  = $by_partner;
+            $workshop_pending[] = $by_partner;
+            $workshop_rejected[] = $by_partner;
+            $shop_pending[]     = $by_partner;
+            $shop_rejected[]     = $by_partner;
+            $preorder_pending[]  = $by_partner;
+            $preorder_rejected[]  = $by_partner;
 
-                                            $length_workshop_rejected = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_rejected);
-                                            $length_shop_rejected     = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_rejected);
-                                            $length_preorder_pending  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $preorder_pending);
+            $length_workshop_pending = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_pending);
+            $length_workshop_rejected = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_rejected);
+            $length_preorder_pending  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $preorder_pending);
+            $length_preorder_rejected  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $preorder_rejected);
+            $length = $length_workshop_pending + $length_workshop_rejected + $length_preorder_pending + $length_preorder_rejected;
+            if ($user->getCategoryService()->getId() !=  3) {
+                $length_shop_pending     = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_pending);
+                $length_shop_rejected     = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_rejected);
+                $length += $length_shop_pending + $length_shop_rejected;
+            }
+                                            
+        }
+        elseif($role == "ROLE_COMMERCIAL"){ 
+            $by_commercial       = array('created_by', ' = '.$user->getId());
+            $preorder_pending[]  = $by_commercial;
+            $preorder_rejected[] = $by_commercial;
 
-                                            $length = $length_workshop_rejected + $length_shop_rejected + $length_preorder_pending;
-                                        }
-        elseif($role == "ROLE_COMMERCIAL"){ $by_commercial       = array('created_by', ' = '.$user->getId());
-                                            $preorder_pending[]  = $by_commercial;
-                                            $preorder_rejected[] = $by_commercial;
+            $length_preorder_pending = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $preorder_pending);
+            $length_preorder_rejected = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $preorder_rejected);
 
-                                            $length = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $preorder_rejected);
-                                        }
+            $length = $length_preorder_pending + $length_preorder_rejected;
+        }
         elseif($role == "ROLE_ADMIN")   {
-                                            $length_workshop_pending  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_pending);
-                                            $length_shop_pending      = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_pending);
+            $length_workshop_pending  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_pending);
+            $length_workshop_rejected  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_rejected);
+            $length = $length_workshop_pending + $length_workshop_rejected;
+            if ($user->getCategoryService()->getId() !=  3) {
+                $length_shop_pending      = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_pending);
+                $length_shop_rejected      = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_rejected);
+                $length += $length_shop_pending + $length_shop_rejected;
+            }
 
-                                            $length = $length_workshop_pending + $length_shop_pending;
-                                        }
+        }
         elseif($role == "ROLE_SUPER_ADMIN"){
-                                            $length_workshop_pending  = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_pending);
-                                            $length_shop_pending      = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_pending);
-
-                                            $length = $length_workshop_pending + $length_shop_pending;
-                                        }
+            $length_workshop_pending = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_pending);
+            $length_workshop_rejected = $pagination->getRowsLength($em, 'OrderBundle', 'WorkshopOrder' , $workshop_rejected);
+            $length_shop_pending     = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_pending);
+            $length_shop_rejected     = $pagination->getRowsLength($em, 'OrderBundle', 'ShopOrder'     , $shop_rejected);
+            $length = $length_workshop_pending + $length_workshop_rejected + $length_shop_pending + $length_shop_rejected;
+        }
         return $length;
     }
 
