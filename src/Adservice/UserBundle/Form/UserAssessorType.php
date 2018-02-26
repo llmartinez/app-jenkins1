@@ -68,9 +68,9 @@ class UserAssessorType extends AbstractType {
                                                           ->orderBy('c.country', 'ASC'); }))
 
             ->add('region', TextType::class, array('required' => false))
-            ->add('city', TextType::class, array('required' => false))
-            ->add('address', TextType::class, array('required' => false))
-            ->add('postal_code', TextType::class, array('required' => false))
+            ->add('city', TextType::class)
+            ->add('address', TextType::class)
+            ->add('postal_code', TextType::class)
             ->add('phone_number_1' ,TextType::class)
             ->add('phone_number_2' ,TextType::class, array('required' => false))
             ->add('mobile_number_1',TextType::class, array('required' => false))

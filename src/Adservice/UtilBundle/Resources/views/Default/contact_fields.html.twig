@@ -40,30 +40,16 @@
                     <label> {{ 'region'|trans }} *</label>
 
                     {% if id_catserv != 3 %}
-                        <div> {{ form_widget(form.region, { 'attr': {'class': 'form-control', 'required': 'required' } }) }} </div>
+                        <div> {{ form_widget(form.region, { 'attr': {'class': 'form-control', 'required': 'true' } }) }} </div>
                     {% else %}
                         <div> {{ form_widget(form.region, { 'attr': {'class': 'form-control' } }) }} </div>
                     {% endif %}
-                    {# <div hidden='hidden'> {{ form_widget(form.region, { 'attr': {'class': 'form-control'} }) }} </div>
-                    <input type='hidden' id='no-region' value='{{ 'no-region'|trans }}'>
-                    <div id="region_autocomplete">
-                        <select hidden='hidden' id="data_regions"></select>
-                        <div id="div_regions">
-                            <select id="slct_region"></select>
-                        </div>
-                    </div> #}
+               
                 </div>
                 <div class="col-xs-2 col-md-2 form-group">
                     <label> {{ 'city'|trans }} *</label>
                     <div> {{ form_widget(form.city  , { 'attr': {'class': 'form-control'} }) }} </div>
-                    {# <div hidden='hidden'> {{ form_widget(form.city  , { 'attr': {'class': 'form-control'} }) }} </div>
-                    <input type='hidden' id='no-city' value='{{ 'no-city'|trans }}'>
-                    <div id="city_autocomplete">
-                        <select hidden='hidden' id="data_cities"></select>
-                        <div id="div_cities">
-                            <select id="slct_city"></select>
-                        </div>
-                    </div> #}
+                  
                 </div>
                 <div class="col-xs-4 col-md-4 form-group">
                     <label> {{ 'address'|trans }} *</label> {{ form_widget(form.address,          { 'attr': {'class'      : 'form-control',

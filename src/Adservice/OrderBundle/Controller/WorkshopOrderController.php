@@ -546,10 +546,6 @@ class WorkshopOrderController extends Controller {
                     }
                     if($workshopOrder->getAdServicePlus() == null) $workshopOrder->setAdServicePlus(0);
 
-                    // Set default shop to NULL
-                    //$shop = $form['shop']->getClientData();                        
-                    if($shop == 0) { $workshopOrder->setShop(null); }
-
                     $workshopOrder->setCategoryService($user->getCategoryService());
 
                     if($workshopOrder->getHasChecks() == false and $workshopOrder->getNumChecks() != null) $workshopOrder->setNumChecks(null);
