@@ -567,7 +567,6 @@ function fill_version(version) {
                     if (data['error'] != "No hay coincidencias") {
 
                         var dis_url = $( "#dis-url" ).val();
-                        var vts_url = $( "#vts-url" ).val();
 
                         //Primer campo vacío
                         $('form[id=contact]').find('select[id=new_car_form_version]').append("<option></option>");
@@ -584,7 +583,6 @@ function fill_version(version) {
                                 $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + ">" + elm.name  + " [" + elm.kw + "]" +  "</option>");
 
                             $( "#dis" ).attr("href", dis_url+'/model-'+elm.model);
-                            $( "#vts" ).attr("href", vts_url+'/'+elm.brand+'/'+elm.model);
                         });
                     }
                     if(version != undefined && version != '' ) {
@@ -664,10 +662,8 @@ function fill_car_data() {
                         $('form[id=contact]').find('#new_car_form_kW'          ).val(elm.kw     );
                         $('form[id=contact]').find('#new_car_form_displacement').val(elm.cm3    );
                         var dis_url = $( "#dis-url" ).val();
-                        var vts_url = $( "#vts-url" ).val();
 
                         $( "#dis" ).attr("href", dis_url+'/'+elm.id);
-                        $( "#vts" ).attr("href", vts_url+'/'+elm.brand+'/'+elm.model+'/'+elm.id);
                     });
                 }
             },

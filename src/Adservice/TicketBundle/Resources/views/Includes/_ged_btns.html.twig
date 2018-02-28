@@ -17,7 +17,7 @@
                     <a class="btn btn-primary asr_btn" id="dis" href="{{ user_catserv.getDis() }}/{{id}}" target="_blank">{{'dis'|trans}}</a>
                 {% endif %}
                 {% if user_catserv is defined and user_catserv != '' and user_catserv != null and user_catserv.getVts() != null %}
-                            <a class="btn btn-primary asr_btn" id="vts" href="{{ user_catserv.getVts() }}/{{brand}}/{{model}}/{{id}}" target="_blank">{{'gotoVTS'|trans}}</a>
+                            <a class="btn btn-primary asr_btn" id="vts" href="{{ user_catserv.getVts() }}" target="_blank">{{'gotoVTS'|trans}}</a>
                 {% endif %}
         </div>
 
@@ -29,7 +29,7 @@
                     <a class="btn btn-primary asr_btn" id="dis" href="{{ user_catserv.getDis() }}/model-{{model}}" target="_blank">{{'dis'|trans}}</a>
                 {% endif %}
                 {% if user_catserv is defined and user_catserv != '' and user_catserv != null and user_catserv.getVts() != null %}
-                    <a class="btn btn-primary asr_btn" id="vts" href="{{ user_catserv.getVts() }}/{{brand}}/{{model}}" target="_blank">{{'gotoVTS'|trans}}</a>
+                    <a class="btn btn-primary asr_btn" id="vts" href="{{ user_catserv.getVts() }}" target="_blank">{{'gotoVTS'|trans}}</a>
                 {% endif %}
         </div>
 
