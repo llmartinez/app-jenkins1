@@ -44,23 +44,23 @@
 
         	{% if 	  post.document.mymetype == 'doc' or post.document.mymetype == 'odt' or post.document.mymetype == 'pdf' or post.document.mymetype == 'ppt' or post.document.mymetype == 'txt' %}
                     
-                    {% if post.created_at.date > server_date_change or server_date_change == null %}
+                    {% if post.created_at.date > previous_attachments_date or previous_attachments_date == null %}
         		<a target='_blank' href="{{ asset('uploads/tickets/' ~ post.getTicket.id ~ '/' ~ post.id ~ '/' ~ post.document.path ) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/download.png') }}"> {{ 'file.download'|trans }} ({{ post.document.mymetype }})</a>
                     {% else %}
-                        <a target='_blank' href="{{old_server_attachments ~ post.getTicket.id ~ '/' ~ post.id ~ '/' ~ post.document.path}}">
+                        <a target='_blank' href="{{previous_attachments_url ~ post.getTicket.id ~ '/' ~ post.id ~ '/' ~ post.document.path}}">
                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/download.png') }}"> {{ 'file.download'|trans }} ({{ post.document.mymetype }})
                         </a>
                     {% endif %}
                     
         	{% elseif post.document.mymetype == 'bmp' or post.document.mymetype == 'gif' or post.document.mymetype == 'jpg' or post.document.mymetype == 'png' %}
                     
-                    {% if post.created_at.date > server_date_change or server_date_change == null %}
+                    {% if post.created_at.date > previous_attachments_date or previous_attachments_date == null %}
                         <a target='_blank' href="{{ asset('uploads/tickets/' ~ post.getTicket.id ~ '/' ~ post.id ~ '/' ~ post.document.path ) }}" imageanchor="1">
                             <img class="imgPost hover" src="{{ asset('uploads/tickets/' ~ post.getTicket.id ~ '/' ~ post.id ~ '/' ~ post.document.path ) }}">
                         </a> 
                     {% else %}
-                        <a target='_blank' href="{{old_server_attachments ~ post.getTicket.id ~ '/' ~ post.id ~ '/' ~ post.document.path}}" imageanchor="1">
-                            <img class="imgPost hover" src="{{old_server_attachments ~ post.getTicket.id ~ '/' ~ post.id ~ '/' ~ post.document.path}}">
+                        <a target='_blank' href="{{previous_attachments_url ~ post.getTicket.id ~ '/' ~ post.id ~ '/' ~ post.document.path}}" imageanchor="1">
+                            <img class="imgPost hover" src="{{previous_attachments_url ~ post.getTicket.id ~ '/' ~ post.id ~ '/' ~ post.document.path}}">
                         </a> 
                     {% endif %}
                     

@@ -33,7 +33,7 @@ parameters:
     mail_db: ""
     mail_report: ""
     mail_test: ""
-    #mail_centralita_default: ""
+
     mail_centralita_default: ""
     mail_einatech: ""
     mail_report_ad: ""
@@ -49,3 +49,6 @@ parameters:
 
     route_logo: "bundles/util/images/icon/logo"
     route_logo_mail: "http://adserviceticketing.com/logo"
+    session.default_locale: ""
+    previous_attachments_date: ""
+    previous_attachments_url: ""
