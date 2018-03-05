@@ -30,8 +30,8 @@ twig:
         env:             '%env%'
         route_logo:      '%route_logo%'
         route_logo_mail: '%route_logo_mail%'
-        server_date_change: '%server_date_change%'
-        old_server_attachments: '%old_server_attachments%'
+        previous_attachments_date: '%previous_attachments_date%'
+        previous_attachments_url: '%previous_attachments_url%'
         
 # Assetic Configuration
 assetic:
