@@ -52,7 +52,7 @@
                         </a>
                     {% endif %}
                     
-        	{% elseif post.document.mymetype == 'bmp' or post.document.mymetype == 'gif' or post.document.mymetype == 'jpg' or post.document.mymetype == 'png' %}
+        	{% elseif post.document.mymetype == 'bmp' or post.document.mymetype == 'gif' or post.document.mymetype == 'jpeg' or post.document.mymetype == 'jpg' or post.document.mymetype == 'png' %}
                     
                     {% if post.created_at.date > previous_attachments_date or previous_attachments_date == null %}
                         <a target='_blank' href="{{ asset('uploads/tickets/' ~ post.getTicket.id ~ '/' ~ post.id ~ '/' ~ post.document.path ) }}" imageanchor="1">
