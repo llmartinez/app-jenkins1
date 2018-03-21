@@ -676,7 +676,7 @@ page.last:						"Last page"
 #MAIL
 mail.welcome:							"Welcome to the Auto Diagnostic Service platform!!"
 mail.image:								"https://adserviceticketing.com/logo_adservice.png"
-mail.info.tel:							"610 40 09 16"
+mail.info.tel:							" +44 (0)121 314 6948"
 mail.info.more:							"More info:"
 mail.testing:		                	"In trial phase until"
 mail.goto_ticket:						"Go to ticket"
