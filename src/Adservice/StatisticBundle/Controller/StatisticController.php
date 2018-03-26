@@ -1559,7 +1559,7 @@ class StatisticController extends Controller {
                   if(isset($from_date) and $from_date == 'undefined-undefined-undefined 00:00:00') unset($from_date);
                   if(isset($to_date  ) and $to_date   == 'undefined-undefined-undefined 23:59:59') unset($to_date);
                   //Realizamos una query deshydratada con los datos ya montados
-                  $select = 'e.id as ID, p.code_partner as '.$code.$nSocio.', e.code_workshop as '.$code.$nTaller.', e.name as '.$nTaller.', p.name as '.$nSocio;
+                  $select = 'e.id as Id, p.code_partner as '.$code.$nSocio.', e.code_workshop as '.$code.$nTaller.', e.name as '.$nTaller.', p.name as '.$nSocio;
 
                   if($catserv != 3) $select .= ', s.name as '.$nShop;
 
@@ -2279,7 +2279,7 @@ class StatisticController extends Controller {
 
                     foreach ($workshopdiagnosismachine as $wkdm)
                     {
-                        if($wkdm->getWorkshopId() == $res['ID'])
+                        if($wkdm->getWorkshopId() == $res['Id'])
                         {
                             foreach ($diagmachines as $dm)
                             {
