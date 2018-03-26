@@ -61,14 +61,14 @@ class SecurityController extends Controller{
                     $_SESSION['description'] = $request->get('description');
                 }
             }
-            else{
-                $make = $request->get('make');
-                $model = $request->get('model');
-                $version = $request->get('version');
-                if($make != null ){
-                    $_SESSION['error'] = $this->checkValues($make, $model, $version);
-                }
-            }
+//            else{
+//                $make = $request->get('make');
+//                $model = $request->get('model');
+//                $version = $request->get('version');
+//                if($make != null ){
+//                    $_SESSION['error'] = $this->checkValues($make, $model, $version);
+//                }
+//            }
             
             
             foreach ($valid_hashes as $valid_hash) {
@@ -119,30 +119,30 @@ class SecurityController extends Controller{
         return $this->render('UserBundle:Default:login.html.twig');
     }
     
-    private function checkValues($idMake, $idModel, $idVersion){
-        $em = $this->getDoctrine()->getManager();
-        $make = $em->getRepository('CarBundle:Brand')->findOneById($idMake);
-        $model = $em->getRepository('CarBundle:Model')->findOneBy(array('brand' => $idMake,
-                'id' => $idModel));
-        $version = $em->getRepository('CarBundle:Version')->findOneBy(array('marca' => $idMake, 'model' => $idModel, 'id' => $idVersion));
-        
-        $error = '';
-        if($idVersion != null && $version == null){
-            $error = $this->get('translator')->trans('error.version_not_found');
-        }
-        $_SESSION['version'] = $idVersion;
-        
-        if($idModel != null && $model == null){
-            $error = $this->get('translator')->trans('error.model_not_found');
-        }
-        $_SESSION['modelo'] = $idModel;
-        
-        if($idMake != null && $make == null){
-            $error = $this->get('translator')->trans('error.make_not_found');
-        }
-        $_SESSION['marca'] = $idMake;
-        return $error;                
-    }
+//    private function checkValues($idMake, $idModel, $idVersion){
+//        $em = $this->getDoctrine()->getManager();
+//        $make = $em->getRepository('CarBundle:Brand')->findOneById($idMake);
+//        $model = $em->getRepository('CarBundle:Model')->findOneBy(array('brand' => $idMake,
+//                'id' => $idModel));
+//        $version = $em->getRepository('CarBundle:Version')->findOneBy(array('marca' => $idMake, 'model' => $idModel, 'id' => $idVersion));
+//        
+//        $error = '';
+//        if($idVersion != null && $version == null){
+//            $error = $this->get('translator')->trans('error.version_not_found');
+//        }
+//        $_SESSION['version'] = $idVersion;
+//        
+//        if($idModel != null && $model == null){
+//            $error = $this->get('translator')->trans('error.model_not_found');
+//        }
+//        $_SESSION['modelo'] = $idModel;
+//        
+//        if($idMake != null && $make == null){
+//            $error = $this->get('translator')->trans('error.make_not_found');
+//        }
+//        $_SESSION['marca'] = $idMake;
+//        return $error;                
+//    }
    
     /**
      * Autologin del taller a través de un user y password
