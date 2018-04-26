@@ -49,12 +49,12 @@ class WorkshopEditOrderType extends AbstractType
                   'class' => 'Adservice\WorkshopBundle\Entity\DiagnosisMachine',
                   'choice_label' => 'name',
                   'placeholder' => '',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use (/*$id_country,*/ $id_catserv) {
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
                                                           ->andWhere('s.category_service'.$id_catserv)
-                                                          // ->andWhere('s.country'.$id_country)
+                                                          ->orWhere('s.id = 1')                                                          
                                                           ; }))
             ->add('contact', TextType::class, array('required' => true))
             ->add('test', CheckboxType::class, array('required' => false))
@@ -72,7 +72,6 @@ class WorkshopEditOrderType extends AbstractType
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC')
                                                           ->where('c.id'.$id_country); }))
-            ->add('region')
             ->add('city')
             ->add('address')
             ->add('postal_code')
@@ -87,22 +86,27 @@ class WorkshopEditOrderType extends AbstractType
         
         if($id_catserv != ' = 3'){
             $builder
-            ->add('shop', EntityType::class, array(
-                  'required' => false,
-                  'class' => 'Adservice\PartnerBundle\Entity\Shop',
-                  'choice_label' => 'name',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_partner) {
-                                                return $er->createQueryBuilder('s')
-                                                          ->orderBy('s.name', 'ASC')
-                                                          ->where('s.active = 1')
-                                                          ->andWhere('s.category_service'.$id_catserv.' OR s.id = 1')
-                                                          ->andWhere('s.partner'.$id_partner.' OR s.id = 1'); }))
-
-            ->add('infotech', CheckboxType::class, array('required' => false))
-
-            ->add('ad_service_plus', CheckboxType::class, array('required' => false))
+                ->add('ad_service_plus', CheckboxType::class, array('required' => false))
+                ->add('shop', EntityType::class, array(
+                      'required' => false,
+                      'class' => 'Adservice\PartnerBundle\Entity\Shop',
+                      'choice_label' => 'name',
+                      'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv, $id_partner) {
+                                                    return $er->createQueryBuilder('s')
+                                                              ->orderBy('s.name', 'ASC')
+                                                              ->where('s.active = 1')
+                                                              ->andWhere('s.category_service'.$id_catserv.' OR s.id = 1')
+                                                              ->andWhere('s.partner'.$id_partner.' OR s.id = 1'); }))
+                ->add('region', TextType::class, array('required' => false))
+                ->add('infotech', CheckboxType::class, array('required' => false))
             ;
-        }   
+        }     
+        else{
+            $builder
+                ->add('commercial_phone', TextType::class, array('required' => false))
+                ->add('commercial_name', TextType::class, array('required' => false))
+            ;
+        }  
     }
 
     public function getBlockPrefix()

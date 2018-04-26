@@ -255,23 +255,23 @@ class Pagination
                                             $from  = $from.$join[2].' '.'JOIN '.$join[0].' ON '.$join[1].' ';
                                         }
                                         else{
-                                            $from  = $from.'JOIN '.$join[0].' ';
-                                            $where = $where.'AND '.$join[1].' ';
+                                            $from  = $from.' JOIN '.$join[0].' ';
+                                            $where = $where.' AND '.$join[1].' ';
                                         }
                                     }
         }
         if($params != null and $params[0] != null) {
             foreach ($params as $param) {
                 if($param != null)
-                    $where = $where.'AND e.'.$param[0].' '.$param[1].' ';
+                    $where = $where.' AND e.'.$param[0].' '.$param[1].' ';
             }
         }
 
-        ($group_by != null) ? $group_by = 'GROUP BY '.$group_by.' ' : $group_by = '';
+        ($group_by != null) ? $group_by = ' GROUP BY '.$group_by.' ' : $group_by = '';
 
         if ($ordered != null) {
-            if (is_array($ordered)) $order = 'ORDER BY '.$ordered[0].' '.$ordered[1].' ';
-            else                    $order = 'ORDER BY e.modified_at '.$ordered.' ';
+            if (is_array($ordered)) $order = ' ORDER BY '.$ordered[0].' '.$ordered[1].' ';
+            else                    $order = ' ORDER BY e.modified_at '.$ordered.' ';
         }
         else{
              $order = '';
@@ -284,7 +284,7 @@ class Pagination
         }else{
             $consulta = $em->createQuery($query.$from.$where.$group_by.$order);
         }
-//        dump($consulta);die;
+        //dump($consulta);
         /* PARA DEBUG */
             // echo $query.$from.$where.$group_by.$order.'<br>';
             //

@@ -48,7 +48,7 @@ class WorkshopOrderController extends Controller {
             $params[] = array('category_service', ' = '.$user->getCategoryService()->getId());
         }
 
-        if (in_array($term, array("tel","name","city","mail","internal_code","postal_code","cif","typology")) and $field != '0') {
+        if (in_array($term, array("tel","name","city","mail","internal_code","postal_code","cif","typology","code_workshop")) and $field != '0') {
             switch($term){
                 case 'tel':
                     $params[] = array('phone_number_1', " != '0' AND (e.phone_number_1 LIKE '%" . $field . "%' OR e.phone_number_2 LIKE '%" . $field . "%' OR e.mobile_number_1 LIKE '%" . $field . "%' OR e.mobile_number_2 LIKE '%" . $field . "%') ");
@@ -61,6 +61,8 @@ class WorkshopOrderController extends Controller {
                     break;
                 case 'name':
                     $field = str_replace("'","''",$field);
+                case 'code_workshop':
+                    $params[] = array($term, " = '" . $field . "'");
                 default:
                     $params[] = array($term, " LIKE '%" . $field . "%'");
                     break;
@@ -303,11 +305,11 @@ class WorkshopOrderController extends Controller {
 
                         /* MAILING */
                         $mailer = $this->get('cms.mailer');
-                        $mailer->setTo($mail);
+                        //$mailer->setTo($mail);
                         $mailer->setSubject($this->get('translator')->trans('mail.newOrder.subject').$workshopOrder->getId());
                         $mailer->setFrom('noreply@adserviceticketing.com');
                         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_new_mail.html.twig', array('workshopOrder' => $workshopOrder, '__locale' => $locale)));
-                        $mailer->sendMailToSpool();
+                        //$mailer->sendMailToSpool();
                         //echo $this->renderView('UtilBundle:Mailing:order_new_mail.html.twig', array('workshopOrder' => $workshopOrder));die;
 
                         // Copia del mail de confirmacion a modo de backup
@@ -319,18 +321,16 @@ class WorkshopOrderController extends Controller {
 
                         // Dejamos el locale tal y como estaba
                         $request->setLocale($locale);
-                        
-                        if ($user->getCategoryService()->getId() == 3) {
-                            $mailTopFr = $this->container->getParameter('mail_top_fr');
-                            $mailer->setTo($mailTopFr);                            
-                            $mailer->sendMailToSpool();
-                        }
+//                        
+//                        if ($user->getCategoryService()->getId() == 3) {
+//                            $mailTopFr = $this->container->getParameter('mail_top_fr');
+//                            $mailer->setTo($mailTopFr);                            
+//                            $mailer->sendMailToSpool();
+//                        }
                     }
-
-                    if ($this->get('security.authorization_checker')->isGranted('ROLE_AD'))
-                        return $this->redirect($this->generateUrl('list_orders'));
-                    else
-                        return $this->redirect($this->generateUrl('list_orders', array('option' => 'preorder_pending')));
+                    $flash = $this->get('translator')->trans('mail.newOrder.title').': ' . $workshopOrder->getName();
+                    $this->get('session')->getFlashBag()->add('alert', $flash);
+                    return $this->redirect($this->generateUrl('workshopOrder_new'));
 
                 }else{
                     if($findPhone[0]['1']>0){
@@ -357,14 +357,6 @@ class WorkshopOrderController extends Controller {
             }
 
         }
-
-        // $id_partner = $user->getPartner()->getId();
-
-        // $shops[] = $em->getRepository("PartnerBundle:Shop")->find(1);
-
-        // $array_shops = $em->getRepository("PartnerBundle:Shop")->findBy(array('partner' => $id_partner));
-
-        // foreach ($array_shops as $shop) { $shops[] = $shop; }
 
         return $this->render('OrderBundle:WorkshopOrders:new_order.html.twig', array('workshopOrder'    => $workshopOrder,
                                                                                      'form_name'        => $form->getName(),
@@ -569,13 +561,13 @@ class WorkshopOrderController extends Controller {
 
                         /* MAILING */
                         $mailer = $this->get('cms.mailer');
-                        $mailer->setTo($mail);
+                        //$mailer->setTo($mail);
                         $mailer->setSubject($this->get('translator')->trans('mail.editOrder.subject').$workshopOrder->getId());
                         $mailer->setFrom('noreply@adserviceticketing.com');
                         $mailer->setBody($this->renderView('UtilBundle:Mailing:order_edit_mail.html.twig', array('workshopOrder' => $workshopOrder,
                                                                                                                  'workshop'      => $workshop,
                                                                                                                  '__locale' => $locale )));
-                        $mailer->sendMailToSpool();
+                        //$mailer->sendMailToSpool();
                         // echo $this->renderView('UtilBundle:Mailing:order_edit_mail.html.twig', array('workshopOrder' => $workshopOrder,
                         //                                                                              'workshop'      => $workshop));die;
 
@@ -1129,7 +1121,7 @@ class WorkshopOrderController extends Controller {
                 $mailerUser->setSubject($this->get('translator')->trans('mail.acceptOrder.subject').$workshop);
                 $mailerUser->setFrom('noreply@adserviceticketing.com');
                 $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> 'deactivate', '__locale' => $lang_w->getShortName())));
-                $mailerUser->sendMailToSpool();
+//                $mailerUser->sendMailToSpool();
 
             }
           
@@ -1141,21 +1133,21 @@ class WorkshopOrderController extends Controller {
                 $mailerUser->setTo($mail);
                 $mailerUser->setCc(array($mailCC1,$mailCC2));                  
                 $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> 'deactivate', '__locale' => $lang_w->getShortName())));
-                $mailerUser->sendMailToSpool();
+//                $mailerUser->sendMailToSpool();
                                
                 $mailTopFr = $this->container->getParameter('mail_top_fr');
                
                 $mailerUser->setTo($mailTopFr);                     
                 $mailerUser->setCc(null); 
                 $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> 'deactivate', '__locale' => $lang_w->getShortName())));
-                $mailerUser->sendMailToSpool();
+//                $mailerUser->sendMailToSpool();
                 
             }
             else {
                 $mail = $this->container->getParameter('mail_report');
                 
                 $mailerUser->setTo($mail);
-                $mailerUser->sendMailToSpool();
+//                $mailerUser->sendMailToSpool();
                 
             }
             
@@ -1186,7 +1178,7 @@ class WorkshopOrderController extends Controller {
                 $em->persist($w_diag);
             }
 
-            $user_workshop = $em->getRepository('UserBundle:User')->findOneBy(array('workshop' => $workshop->getId()));
+            $user_workshop_ = $em->getRepository('UserBundle:User')->findOneBy(array('workshop' => $workshop->getId()));
             $user_workshop = UtilController::saveUserFromWorkshop($workshop,$user_workshop);
 
             $user_workshop->setName($workshop->getContact());
@@ -1210,14 +1202,14 @@ class WorkshopOrderController extends Controller {
                 $mailerUser->setSubject($this->get('translator')->trans('mail.acceptOrder.subject').$workshop);
                 $mailerUser->setFrom('noreply@adserviceticketing.com');
                 $mailerUser->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop, 'action'=> 'modify', '__locale' => $lang_w->getShortName())));
-                $mailerUser->sendMailToSpool();
+//                $mailerUser->sendMailToSpool();
             }
             $mail = $this->container->getParameter('mail_report');
             $pos = strpos($mail, '@');
             if ($pos != 0)
             {
                 $mailerUser->setTo($mail);
-                $mailerUser->sendMailToSpool();
+//                $mailerUser->sendMailToSpool();
             }            
            
             $this->get('translator')->setLocale($locale);
@@ -1351,7 +1343,7 @@ class WorkshopOrderController extends Controller {
                     
                     $mailerUser->setTo($mail);
                     $mailerUser->setCc(array($mailCC1,$mailCC2));   
-                    $mailerUser->sendMailToSpool();
+//                    $mailerUser->sendMailToSpool();
                     
                     
                     $mailTopFr = $this->container->getParameter('mail_top_fr');  
@@ -1359,14 +1351,14 @@ class WorkshopOrderController extends Controller {
                     $mailerUser->setTo($mailTopFr); 
                     $mailerUser->setCc(null); 
                     $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_new_mail_top_fr.html.twig', array('user' => $user_workshop, '__locale' => $lang_w->getShortName())));
-                    $mailerUser->sendMailToSpool();
+//                    $mailerUser->sendMailToSpool();
                     
                 }  
                 else {
                     $mail = $this->container->getParameter('mail_report');
                     
                     $mailerUser->setTo($mail);
-                    $mailerUser->sendMailToSpool();
+//                    $mailerUser->sendMailToSpool();
                                    
                 }
                 
@@ -1384,7 +1376,7 @@ class WorkshopOrderController extends Controller {
         }
         if(($preorder == false) and ($find == null or $workshopOrder->getCodeWorkshop() != $find->getCodeWorkshop()))
         {
-            $mail = $workshop->getCreatedBy()->getEmail1();
+            //$mail = $workshop->getCreatedBy()->getEmail1();
             $pos = strpos($mail, '@');
             if ($pos != 0) {
 
@@ -1393,13 +1385,13 @@ class WorkshopOrderController extends Controller {
                 $this->get('translator')->setLocale($lang_w->getShortName());
 
                 $mailer = $this->get('cms.mailer');
-                $mailer->setTo($mail);
+                //$mailer->setTo($mail);
                 $mailer->setSubject($this->get('translator')->trans('order').' '.$this->get('translator')->trans('action.accepted'));
                 $mailer->setFrom('noreply@adserviceticketing.com');
                 $mailer->setBody($this->renderView('UtilBundle:Mailing:order_accept_mail.html.twig', array('workshop' => $workshop,
                                                                                                            'action'   => $action,
                                                                                                            '__locale' => $lang_w->getShortName())));
-                $mailer->sendMailToSpool();
+                //$mailer->sendMailToSpool();
                 
                 if($workshop->getCategoryService()->getId() == 3) {
                     $mail = $this->container->getParameter('mail_report_ad');
@@ -1407,7 +1399,7 @@ class WorkshopOrderController extends Controller {
                     $mail = $this->container->getParameter('mail_report');
                 }
                 $mailer->setTo($mail);
-                $mailer->sendMailToSpool();
+//                $mailer->sendMailToSpool();
 
                 $this->get('translator')->setLocale($locale);
             }
@@ -1520,13 +1512,13 @@ class WorkshopOrderController extends Controller {
         $workshop->setHasChecks     ($workshopOrder->getHasChecks());
         $workshop->setNumChecks     ($workshopOrder->getNumChecks());
         $workshop->setInfotech      ($workshopOrder->getInfotech());
-
-        if ($workshopOrder->getCreatedBy() != null ) {
+        
+        if ($workshopOrder->getWantedAction() == "create" ) {
+            
             $workshop->setCreatedBy($workshopOrder->getCreatedBy());
-        }
-        if ($workshopOrder->getCreatedAt() != null ) {
             $workshop->setCreatedAt($workshopOrder->getCreatedAt());
             $workshop->setUpdateAt ($workshopOrder->getCreatedAt());
+            
         }
         if ($workshopOrder->getModifiedBy() != null ) {
             $workshop->setModifiedBy($workshopOrder->getModifiedBy());
