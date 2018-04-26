@@ -1178,7 +1178,7 @@ class WorkshopOrderController extends Controller {
                 $em->persist($w_diag);
             }
 
-            $user_workshop_ = $em->getRepository('UserBundle:User')->findOneBy(array('workshop' => $workshop->getId()));
+            $user_workshop = $em->getRepository('UserBundle:User')->findOneBy(array('workshop' => $workshop->getId()));
             $user_workshop = UtilController::saveUserFromWorkshop($workshop,$user_workshop);
 
             $user_workshop->setName($workshop->getContact());
