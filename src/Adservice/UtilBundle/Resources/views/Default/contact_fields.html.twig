@@ -35,17 +35,15 @@
                 <div class="col-xs-2 col-md-2 form-group">
                     <label> {{ 'country'|trans }} *</label> {{ form_widget(form.country,          { 'attr': {'class': 'form-control'} }) }}
                 </div>
-
-                <div class="col-xs-2 col-md-2 form-group" {% if id_catserv == 3 %} hidden {% endif %}>
-                    <label> {{ 'region'|trans }} *</label>
-
-                    {% if id_catserv != 3 %}
+                
+                {% if id_catserv != 3 %}    
+                    <div class="col-xs-2 col-md-2 form-group" {% if id_catserv == 3 %} hidden {% endif %}>
+                        <label> {{ 'region'|trans }} *</label>
                         <div> {{ form_widget(form.region, { 'attr': {'class': 'form-control', 'required': 'true' } }) }} </div>
-                    {% else %}
-                        <div> {{ form_widget(form.region, { 'attr': {'class': 'form-control' } }) }} </div>
-                    {% endif %}
+                    </div>
+                {% endif %}
                
-                </div>
+               
                 <div class="col-xs-2 col-md-2 form-group">
                     <label> {{ 'city'|trans }} *</label>
                     <div> {{ form_widget(form.city  , { 'attr': {'class': 'form-control'} }) }} </div>

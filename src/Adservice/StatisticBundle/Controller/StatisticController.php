@@ -233,6 +233,7 @@ class StatisticController extends Controller {
         $response->setLastModified($date);
         if ($raport == 'billing' or $raport == 'historical')
         {
+            
           //Recojemos los IDs de talleres del raport de facturación
             $qb = $em->getRepository('WorkshopBundle:Workshop')
                 ->createQueryBuilder('w')
@@ -489,6 +490,7 @@ class StatisticController extends Controller {
             $excel = $this->createExcelBilling($data, $raport);
         }
         elseif($raport == 'partner'){
+            
             $qb = $em->getRepository('PartnerBundle:Partner')
                     ->createQueryBuilder('e')
                     ->select('e.id','e.name', 'e.cif', 'e.active', 'e.phone_number_1', 'e.phone_number_2', 'e.mobile_number_1', 'e.mobile_number_2', 'e.fax', 'e.email_1', 'e.email_2', 'c.country', 'e.region', 'e.city', 'e.address', 'e.postal_code', 'e.created_at', 'e.modified_at')
@@ -504,12 +506,14 @@ class StatisticController extends Controller {
             
         }
         else{
-           
+            
           if ($raport != '0'){
+              
               $type = $raport;
               if ($raport == 'last-tickets') { $type = '0'; }
           }
           if($type != '0'){
+              
               if ($from_y != '0' and $from_m != '0' and $from_d != '0') {
 
                   $from_date = $from_y.'-'.$from_m.'-'.$from_d.' 00:00:00';
@@ -718,7 +722,7 @@ class StatisticController extends Controller {
                               ->setParameter('partner', $partner);
                   }
 
-                  if ($shop != "0") {
+                  if ($shop != "0" && $shop != "undefined") {
 
                       $qb = $qb->andWhere('sh.id = :shop')
                               ->setParameter('shop', $shop);
@@ -833,24 +837,18 @@ class StatisticController extends Controller {
                                   $qb = $qb->andWhere('w.created_at >= :created_at_from')
                                            ->setParameter('created_at_from', $from_date);
                               }
-                              $qb = $qb->andWhere('w.lowdate_at > :from_date OR w.lowdate_at IS NULL')
-                                       ->setParameter('from_date', $from_date);
+                             
                           }
 
                           if (isset($to_date))
-                          {
-                              if (!isset($from_date))
-                              {
-                                  $qb = $qb->andWhere('w.lowdate_at > :from_date')
-                                       ->setParameter('from_date', $to_date);
-                              }
+                          {                           
                               $qb = $qb->andWhere('w.created_at <= :created_at_to')
                                        ->setParameter('created_at_to', $to_date);
                           }
                           break;
                   }
 
-                  if ($country != "0") {
+                  if ($country != "0" && $country != "undefined") {
 
                         $qb = $qb->andWhere('w.country = :country')
                             ->setParameter('country', $country);
@@ -1515,7 +1513,8 @@ class StatisticController extends Controller {
                   $excel = $this->createExcelByMonth($results, $resultsF);
               }
               elseif ($type == 'undefined' AND !$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
-              {                  
+              {           
+                  
                   $trans  = $this->get('translator');
                   $catserv = $this->getUser()->getCategoryService();
 
@@ -1764,6 +1763,7 @@ class StatisticController extends Controller {
               /*
                   SELECT w.id, t.id FROM ticket t JOIN  workshop w ON t.workshop_id = w.id GROUP BY w.id ORDER BY t.id DESC
               */
+              
               $where .= 'AND e.workshop = w.id ';
 
               if    ($typology != "0"    ) {  $join  = ' JOIN w.typology tp ';
@@ -1791,7 +1791,7 @@ class StatisticController extends Controller {
               $sql = "SELECT partial e.{ id, description, solution, created_at }, partial w.{ id, code_partner, code_workshop, name } FROM TicketBundle:Ticket e JOIN e.workshop w ".$join." WHERE e.id IN (".$ids.") ";
               if ($catserv != "0") $sql .= ' AND e.category_service = '.$catserv.' ';
               $qt = $em->createQuery($sql);
-
+              
               $results   = $qt->getResult();
 
               $trans     = $this->get('translator');
