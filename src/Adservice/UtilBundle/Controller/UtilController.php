@@ -2,6 +2,9 @@
 
 namespace Adservice\UtilBundle\Controller;
 
+use Adservice\CarBundle\Entity\Brand;
+use Adservice\CarBundle\Entity\Model;
+use Adservice\CarBundle\Entity\Version;
 use Adservice\WorkshopBundle\Entity\Historical;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
