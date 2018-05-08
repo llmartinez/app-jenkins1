@@ -2,6 +2,8 @@
 
 namespace Adservice\UtilBundle\Controller;
 
+use Adservice\CarBundle\Entity\Car;
+use Adservice\TicketBundle\Controller\DGTWebservice;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -522,18 +524,19 @@ class AjaxController extends Controller
         $em = $this->getDoctrine();
 
         $car = $em->getRepository('CarBundle:Car')->findOneBy(array('plateNumber' => $idPlateNumber));
-        if($car == null){
-            $json = array( 'error' => 'No hay coincidencias');
-        }
-        else{
-            $json = $car->to_json();
 
-            $version = null;
-            if($car->getVersion() != null){
-                $version = $car->getVersion()->getId();
-            }
+        if ($car instanceof Car AND $car->getStatus() == "validado"){
+
+            $json = $car->to_json();
+            return new JsonResponse($json);
         }
-        return new Response(json_encode($json), $status = 200);
+
+        $results = $this->get('dgt_webservice')->getData($idPlateNumber);
+        $json = $this->get('dgt_webservice')->transformData($results);
+        var_dump($json);
+        die;
+
+        return new JsonResponse($json);
     }
     
     public function getCarFromVinAction(Request $request, $vin){

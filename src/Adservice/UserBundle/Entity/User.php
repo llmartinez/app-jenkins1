@@ -5,6 +5,7 @@ namespace Adservice\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 use Symfony\Component\Validator\ExecutionContext;
@@ -169,6 +170,12 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      * @ORM\Column(name="allow_order", type="boolean", nullable=true, options={"default" : 1})
      */
     private $allow_order;
+
+    /**
+     * @ORM\OneToMany(targetEntity="\Adservice\UtilBundle\Entity\WebservicesHistorical", mappedBy="user")
+     */
+    protected $dgt_requests;
+
 //  ____  _____ _____ _____ _____ ____  ____    ______ _____ _____ _____ _____  ____  ____
 // / ___|| ____|_   _|_   _| ____|  _ \/ ___|  / / ___| ____|_   _|_   _| ____||  _ \/ ___|
 // \___ \|  _|   | |   | | |  _| | |_) \___ \ / / |  _|  _|   | |   | | |  _|  | |_) \___ \
@@ -181,7 +188,8 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     }
 
     public function __construct() {
-        $this->user_role = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->user_role = new ArrayCollection();
+        $this->dgt_requests = new ArrayCollection();
     }
 
     /**
@@ -538,6 +546,22 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      */
     public function getAllowOrder() {
         return $this->allow_order;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getDgtRequests()
+    {
+        return $this->dgt_requests;
+    }
+
+    /**
+     * @param ArrayCollection $dgt_requests
+     */
+    public function setDgtRequests(ArrayCollection $dgt_requests)
+    {
+        $this->dgt_requests = $dgt_requests;
     }
 
 //   ____ ___  _   _ _____  _    ____ _____
