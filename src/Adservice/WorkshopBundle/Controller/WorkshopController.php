@@ -39,7 +39,7 @@ class WorkshopController extends Controller {
             throw new AccessDeniedException();
         }
 
-        if (in_array($term, array("tel","name","city","mail","internal_code","postal_code","cif","typology")) and $field != '0') {
+        if (in_array($term, array("tel","name","city","mail","internal_code","postal_code","cif","typology","code_workshop")) and $field != '0') {
             switch($term){
                 case 'tel':
                     $params[] = array('phone_number_1', " != '0' AND (e.phone_number_1 LIKE '%" . $field . "%' OR e.phone_number_2 LIKE '%" . $field . "%' OR e.mobile_number_1 LIKE '%" . $field . "%' OR e.mobile_number_2 LIKE '%" . $field . "%') ");
@@ -52,6 +52,8 @@ class WorkshopController extends Controller {
                     break;
                 case 'name':
                     $field = str_replace("'","''",$field);
+                case 'code_workshop':
+                    $params[] = array($term, " = '" . $field . "'");
                 default:
                     $params[] = array($term, " LIKE '%" . $field . "%'");
                     break;
@@ -201,8 +203,11 @@ class WorkshopController extends Controller {
             //$_SESSION['id_country'] = ' != 0 ';
             $_SESSION['id_catserv'] = ' != 0 ';
         }
+        elseif ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')){
+            $_SESSION['id_catserv'] = ' = ' . $this->getUser()->getCategoryService()->getId();
+        }
         elseif ($this->get('security.authorization_checker')->isGranted('ROLE_TOP_AD')) {
-            $_SESSION['id_catserv'] = ' = 3 ';
+            $_SESSION['id_catserv'] = ' = 3';
         }
         elseif ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
 
@@ -392,7 +397,7 @@ class WorkshopController extends Controller {
                 }
                 $this->get('session')->getFlashBag()->add('alert', $flash);
 
-                return $this->redirect($this->generateUrl('workshop_list'));
+                return $this->redirect($this->generateUrl('workshop_new'));
             } else {
 
                 if ($findPhone[0]['1'] > 0) {
@@ -414,7 +419,7 @@ class WorkshopController extends Controller {
                 } else {
                     $flash = $this->get('translator')->trans('error.code_workshop.used') . $code;
                 }
-                
+                $this->get('session')->getFlashBag()->add('error', $flash);
             }
             
         }
@@ -468,7 +473,11 @@ class WorkshopController extends Controller {
 
             $_SESSION['id_partner'] = ' != 0 ';
             $_SESSION['id_country'] = ' = ' . $workshop->getCountry()->getId();
-        } elseif ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
+        } 
+        elseif ($this->get('security.authorization_checker')->isGranted('ROLE_TOP_AD')){
+            $_SESSION['id_catserv'] = ' = ' . $this->getUser()->getCategoryService()->getId();
+        }
+        elseif ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_AD')) {
 
             $partner_ids = '0';
             foreach ($partners as $p) {
@@ -522,6 +531,7 @@ class WorkshopController extends Controller {
                 if ($workshop->getMobileNumber2() != '0' and $workshop->getMobileNumber2() != null) {
                     $findPhone[3] = $em->getRepository("WorkshopBundle:Workshop")->findPhoneNoId($workshop->getMobileNumber2(), $workshop->getId());
                 }
+                
                 if (($find == null or $workshop->getCodeWorkshop() == $last_code ) and $findPhone[0]['1'] < 1 and $findPhone[1]['1'] < 1 and $findPhone[2]['1'] < 1 and $findPhone[3]['1'] < 1) {
                     $workshop = UtilController::settersContact($workshop, $workshop, $actual_region, $actual_city);
 
@@ -529,8 +539,8 @@ class WorkshopController extends Controller {
                     $workshop->setCodePartner($code_partner);
 
                     // Set default shop to NULL
-                    $shop = $workshop->getShop()->getId();
-                    if ($shop == 0) {
+                    $shop = $workshop->getShop();
+                    if (isset($shop) && $shop->getId() == 0) {
                         $workshop->setShop(null);
                     }
 

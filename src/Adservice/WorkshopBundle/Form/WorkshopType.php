@@ -26,7 +26,7 @@ class WorkshopType extends AbstractType
         $builder
             ->add('name')
             ->add('code_workshop', NumberType::class)
-            ->add('cif', TextType::class, array('required' => true))
+            ->add('cif', TextType::class, array('required' => false))
             ->add('category_service', EntityType::class, array(
                   'required' => false,
                   'class' => 'Adservice\UserBundle\Entity\CategoryService',
@@ -42,35 +42,21 @@ class WorkshopType extends AbstractType
                   'class' => 'Adservice\PartnerBundle\Entity\Partner',
                   'choice_label' => 'name',
                   'placeholder' => '',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use (/*$id_country,*/ $id_catserv) {
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
-                                                          //->andWhere('s.country'.$id_country); }))
                                                           ->andWhere('s.category_service'.$id_catserv); }))
-            ->add('shop', EntityType::class, array(
-                  'required' => true,
-                  'class' => 'Adservice\PartnerBundle\Entity\Shop',
-                  'choice_label' => 'name',
-                  'placeholder' => false,
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use (/*$id_country,*/ $id_catserv, $id_partner) {
-                                                return $er->createQueryBuilder('s')
-                                                          ->orderBy('s.name', 'ASC')
-                                                          ->where('s.active = 1')
-                                                          //->andWhere('s.country'.$id_country.' OR s.id = 1')
-                                                          ->andWhere('s.category_service'.$id_catserv.' OR s.id = 1')
-                                                          ->andWhere('s.partner'.$id_partner.' OR s.id = 1'); }))
             ->add('typology', EntityType::class, array(
                   'required' => true,
                   'class' => 'Adservice\WorkshopBundle\Entity\Typology',
                   'choice_label' => 'name',
                   'placeholder' => '',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use (/*$id_country,*/ $id_catserv) {
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
                                                           ->andWhere('s.category_service'.$id_catserv)
-                                                          // ->andWhere('s.country'.$id_country)
                                                           ; }))
             ->add('diagnosis_machines', EntityType::class, array(
                   'required' => false,
@@ -78,23 +64,18 @@ class WorkshopType extends AbstractType
                   'class' => 'Adservice\WorkshopBundle\Entity\DiagnosisMachine',
                   'choice_label' => 'name',
                   'placeholder' => '',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use (/*$id_country,*/ $id_catserv) {
+                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ($id_catserv) {
                                                 return $er->createQueryBuilder('s')
                                                           ->orderBy('s.name', 'ASC')
                                                           ->where('s.active = 1')
                                                           ->andWhere('s.category_service'.$id_catserv)
-                                                          // ->andWhere('s.country'.$id_country)
+                                                          ->orWhere('s.id = 1')
                                                           ; }))
             ->add('contact', TextType::class, array('required' => true))
-            ->add('internal_code', TextType::class, array('required' => false))
-            ->add('commercial_code', TextType::class, array('required' => false))
-            ->add('ad_service_plus', CheckboxType::class, array('required' => false))
-//            ->add('active', 'checkbox', array('required' => false))
             ->add('test', CheckboxType::class, array('required' => false))
             ->add('endtest_at', DateType::class, array('format' => 'dd-MM-yyyy'))
             ->add('haschecks', CheckboxType::class, array('required' => false))
             ->add('numchecks', IntegerType::class, array('required' => false))
-            ->add('infotech', CheckboxType::class, array('required' => false))
             ->add('observation_workshop', TextareaType::class, array('required' => false))
             ->add('observation_assessor', TextareaType::class, array('required' => false))
             ->add('observation_admin', TextareaType::class, array('required' => false))
@@ -109,7 +90,6 @@ class WorkshopType extends AbstractType
                   'query_builder' => function(\Doctrine\ORM\EntityRepository $er)  {
                                                 return $er->createQueryBuilder('c')
                                                           ->orderBy('c.country', 'ASC'); }))
-            ->add('region', TextType::class, array('required' => false))
             ->add('city')
             ->add('address')
             ->add('postal_code')
@@ -120,8 +100,35 @@ class WorkshopType extends AbstractType
             ->add('fax', TextType::class, array('required' => false))
             ->add('email_1',EmailType::class)
             ->add('email_2',EmailType::class, array('required' => false))
+            ->add('commercial_code', TextType::class, array('required' => false))
+            ->add('internal_code', TextType::class, array('required' => false))
         ;
-                                                          
+        if($id_catserv != ' = 3'){
+            $builder
+                ->add('infotech', CheckboxType::class, array('required' => false))
+                ->add('ad_service_plus', CheckboxType::class, array('required' => false))
+                ->add('shop', EntityType::class, array(
+                    'required' => true,
+                    'class' => 'Adservice\PartnerBundle\Entity\Shop',
+                    'choice_label' => 'name',
+                    'placeholder' => false,
+                    'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use ( $id_catserv, $id_partner) {
+                                                return $er->createQueryBuilder('s')
+                                                          ->orderBy('s.name', 'ASC')
+                                                          ->where('s.active = 1')
+                                                          ->andWhere('s.category_service'.$id_catserv.' OR s.id = 1')
+                                                          ->andWhere('s.partner'.$id_partner.' OR s.id = 1'); }))
+                ->add('region', TextType::class, array('required' => false))
+                ->add('ad_service_plus', CheckboxType::class, array('required' => false))
+                ->add('infotech', CheckboxType::class, array('required' => false))                                                                  
+                ;
+        }
+        else{
+            $builder
+                ->add('commercial_phone', TextType::class, array('required' => false))
+                ->add('commercial_name', TextType::class, array('required' => false))
+            ;
+        }
         if (isset($_SESSION['code_billing'])) $builder->add('code_billing', TextType::class, array('required' => false));
     }
 

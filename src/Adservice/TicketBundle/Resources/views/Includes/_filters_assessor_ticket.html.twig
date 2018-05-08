@@ -9,6 +9,9 @@
             <input type="hidden" id="msg_motor_not_found"  value="{{ 'msg_motor_not_found'|trans }}">
             <input type="hidden" id="msg_plate_number_not_found"  value="{{ 'error.plate_number_not_found'|trans }}">
             <input type="hidden" id="msg_vin_not_found"  value="{{ 'error.vin_not_found'|trans }}">
+            <input type="hidden" id='ticket_brand' name='ticket_brand' value="">
+            <input type="hidden" id='ticket_model' name='ticket_model' value="">
+            <input type="hidden" id='ticket_version' name='ticket_version' value="">
             {% if workshop is defined and workshop != null and workshop.id != "" %}
                 <input type='hidden' id='ftbmv_codepartner' name='ftbmv_codepartner' value="{{workshop.codepartner}}">
                 <input type='hidden' id='ftbmv_codeworkshop' name='ftbmv_codeworkshop' value="{{workshop.codeworkshop}}">
