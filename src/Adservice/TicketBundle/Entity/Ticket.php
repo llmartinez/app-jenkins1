@@ -97,6 +97,7 @@ class Ticket {
      * @var string $subsystem
      *
      * @ORM\ManyToOne(targetEntity="\Adservice\TicketBundle\Entity\Subsystem")
+     * @ORM\JoinColumn(name="subsystem_id", referencedColumnName="id")
      */
     private $subsystem;
 

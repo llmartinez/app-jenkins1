@@ -40,7 +40,11 @@ class Car
     /**
      * @var integer $version
      * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Version")
-     * @ORM\JoinColumn(name="version_id", referencedColumnName="Version")
+     * @ORM\JoinColumns({
+     *          @ORM\JoinColumn(name="version_id", referencedColumnName="Version"),
+     *          @ORM\JoinColumn(name="Motor", referencedColumnName="Motor")
+     *     })
+
      */
     private $version;
 
@@ -53,8 +57,8 @@ class Car
 
     /**
      * @var integer $motor
-     *
-     * @ORM\Column(name="motor", type="string", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Adservice\CarBundle\Entity\Motor")
+     * @ORM\JoinColumn(name="Motor", referencedColumnName="Motor")
      */
     private $motor;
 
@@ -416,6 +420,9 @@ class Car
     //     return $this->ticket;
     // }
 
+    /**
+     * @return string
+     */
     public function __toString() {
 
         $model   = $this->getModel()->getName();
@@ -434,7 +441,7 @@ class Car
                       'modelId'             => $this->getModel()->getId(),
                       'versionId'           => $version,
                       'year'                => $this->getYear(),
-                      'motor'               => $this->getMotor(),
+                      'motor'               => $this->getMotor()->getName(),
                       'kw'                  => $this->getKw(),
                       'cm3'                 => $this->getDisplacement(),
                       'vin'                 => $this->getVin(),

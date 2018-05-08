@@ -139,7 +139,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      * @var boolean $privacy
      *
-     * @ORM\Column(name="privacy", type="boolean")
+     * @ORM\Column(name="privacy", type="boolean", nullable=true)
      */
     private $privacy;
 
@@ -148,7 +148,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * Permiso del usuario (comercial) para listar talleres
      *
-     * @ORM\Column(name="allow_list", type="boolean", options={"default" : 1})
+     * @ORM\Column(name="allow_list", type="boolean", nullable=true, options={"default" : 1})
      */
     private $allow_list;
 
@@ -157,7 +157,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * Permiso del usuario (socio) para crear comerciales
      *
-     * @ORM\Column(name="allow_create", type="boolean", options={"default" : 1})
+     * @ORM\Column(name="allow_create", type="boolean", nullable=true, options={"default" : 1})
      */
     private $allow_create;
 
@@ -166,7 +166,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * Permiso del usuario (socio/comercial) para solicitar talleres
      *
-     * @ORM\Column(name="allow_order", type="boolean", options={"default" : 1})
+     * @ORM\Column(name="allow_order", type="boolean", nullable=true, options={"default" : 1})
      */
     private $allow_order;
 //  ____  _____ _____ _____ _____ ____  ____    ______ _____ _____ _____ _____  ____  ____
@@ -582,37 +582,37 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     private $postal_code;
 
     /**
-     * @var integer $phone_number_1
+     * @var string $phone_number_1
      *
-     * @ORM\Column(name="phone_number_1", type="integer")
+     * @ORM\Column(name="phone_number_1", type="string", length=15)
      */
     private $phone_number_1;
 
     /**
-     * @var integer $phone_number_2
+     * @var string $phone_number_2
      *
-     * @ORM\Column(name="phone_number_2", type="integer", nullable=true)
+     * @ORM\Column(name="phone_number_2", type="string", length=15, nullable=true)
      */
     private $phone_number_2;
 
     /**
-     * @var integer $mobile_number_1
+     * @var string $mobile_number_1
      *
-     * @ORM\Column(name="mobile_number_1", type="integer", nullable=true)
+     * @ORM\Column(name="mobile_number_1",type="string", length=15, nullable=true)
      */
     private $mobile_number_1;
 
     /**
-     * @var integer $mobile_number_2
+     * @var string $mobile_number_2
      *
-     * @ORM\Column(name="mobile_number_2", type="integer", nullable=true)
+     * @ORM\Column(name="mobile_number_2", type="string", length=15, nullable=true)
      */
     private $mobile_number_2;
 
     /**
-     * @var integer $fax
+     * @var string $fax
      *
-     * @ORM\Column(name="fax", type="integer", nullable=true)
+     * @ORM\Column(name="fax", type="string", length=15, nullable=true)
      */
     private $fax;
 
