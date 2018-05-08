@@ -600,9 +600,8 @@ class TicketController extends Controller {
             $form->handleRequest($request);
             $formC->handleRequest($request);
             $formD->handleRequest($request);
-           
         }
-        
+
         if ($ticket->getDescription() != null and $car->getBrand() != null and ($car->getBrand()->getId() == 0 || $car->getBrand()->getId() != null)
                 and $car->getModel() != null and ($car->getModel()->getId() == 0 || $car->getModel()->getId() != null) and $car->getVin() != null and $car->getPlateNumber() != null) {
             $array = array('ticket' => $ticket,
@@ -637,6 +636,7 @@ class TicketController extends Controller {
                     $array['system_session']= $ticket->getSubsystem()->getSystem()->getId();
                     $array['subsystem_session']= $ticket->getSubsystem()->getId();
                 }
+
                 if ($formC->isValid() && $formD->isValid()) {
                     $id_brand = $request->request->get('new_car_form_brand');
                     $id_model = $request->request->get('new_car_form_model');
@@ -666,7 +666,7 @@ class TicketController extends Controller {
                                         AND c.model = " . $id_model . " AND c.vin LIKE  '". $car->getVin() ."' AND c.plateNumber LIKE '". $car->getPlateNumber() . "' ";
 
                     if ($id_version != null) {
-                        $select .= "AND c.version = " . $id_version;
+                        $select .= "AND c.version = " . $id_version. " AND c.motor = " . $version->getMotor()->getId();
                     }
                     $select .= ')';
                     $query = $em->createQuery($select);
@@ -990,7 +990,7 @@ class TicketController extends Controller {
             $id_system = '';
             $id_subsystem = '';
         }
-        $marca_session = $modelo_session = $version_session = $description_session = $plateNumber_session = $vin_session = $system_session = $subsystem_session = $importance_session = null; 
+        $marca_session = $modelo_session = $version_session = $description_session = $plateNumber_session = $vin_session = $system_session = $subsystem_session = $importance_session = null;
         
         if(isset($_SESSION['marca'])) {
             $marca_session = $_SESSION['marca'];
@@ -1015,6 +1015,7 @@ class TicketController extends Controller {
         if(isset($_SESSION['importance'])) {
             $importance_session = $_SESSION['importance'];
         }
+
         $array = array('ticket' => $ticket,
             'action' => 'newTicket',
             'car' => $car,

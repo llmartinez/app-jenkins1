@@ -13,20 +13,20 @@ use Doctrine\ORM\Mapping as ORM;
 class WorkshopOrderDiagnosisMachine
 {
     /**
-     * @var integer $workshop_order_id
+     * @var integer $workshop_order
      *
-     * @ORM\Column(name="workshop_order_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="WorkshopOrder", inversedBy="diagnosis_machines")
      * @ORM\Id
      */
-    private $workshop_order_id;
+    private $workshop_order;
 
     /**
-     * @var integer $diagnosis_machine_id
+     * @var integer $diagnosis_machine
      *
      * @ORM\Column(name="diagnosis_machine_id", type="integer")
      * @ORM\Id
      */
-    private $diagnosis_machine_id;
+    private $diagnosis_machine;
 
 
     /**
@@ -34,8 +34,8 @@ class WorkshopOrderDiagnosisMachine
      *
      * @param string $workshop_order_id
      */
-    public function setWorkshopOrderId($workshop_order_id) {
-        $this->workshop_order_id = $workshop_order_id;
+    public function setWorkshopOrder($workshop_order) {
+        $this->workshop_order = $workshop_order;
     }
 
     /**
@@ -43,8 +43,8 @@ class WorkshopOrderDiagnosisMachine
      *
      * @return string
      */
-    public function getWorkshopOrderId() {
-        return $this->workshop_order_id;
+    public function getWorkshopOrder() {
+        return $this->workshop_order;
     }
 
     /**
@@ -52,8 +52,8 @@ class WorkshopOrderDiagnosisMachine
      *
      * @param string $diagnosis_machine_id
      */
-    public function setDiagnosisMachineId($diagnosis_machine_id) {
-        $this->diagnosis_machine_id = $diagnosis_machine_id;
+    public function setDiagnosisMachine($diagnosis_machine) {
+        $this->diagnosis_machine = $diagnosis_machine;
     }
 
     /**
@@ -61,7 +61,7 @@ class WorkshopOrderDiagnosisMachine
      *
      * @return string
      */
-    public function getDiagnosisMachineId() {
-        return $this->diagnosis_machine_id;
+    public function getDiagnosisMachine() {
+        return $this->diagnosis_machine;
     }
 }

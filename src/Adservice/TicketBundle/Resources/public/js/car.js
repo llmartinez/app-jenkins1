@@ -132,9 +132,4 @@
                 console.log("Error al cargar los motores...");
             }
         });
-    
-   
-
-    
-
     });

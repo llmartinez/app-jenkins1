@@ -208,11 +208,7 @@ class Workshop {
     private $infotech;
 
     /**
-     * @ORM\ManyToMany(targetEntity="DiagnosisMachine")
-     * @ORM\JoinTable(name="workshop_diagnosis_machine",
-     *     joinColumns={@ORM\JoinColumn(name="workshop_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="diagnosis_machine_id", referencedColumnName="id")}
-     * )
+     * @ORM\OneToMany(targetEntity="WorkshopDiagnosisMachine", mappedBy="workshop")
      */
     private $diagnosis_machines;
 
@@ -883,7 +879,7 @@ class Workshop {
     /**
      * @var integer $fax
      *
-     * @ORM\Column(name="fax", type="integer", nullable=true)
+     * @ORM\Column(name="fax", type="string", length=15, nullable=true)
      */
     private $fax;
 
