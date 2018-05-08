@@ -38,21 +38,21 @@ class CategoryService
     /**
      * @var string $dis
      *
-     * @ORM\Column(name="dis", type="string", length=255)
+     * @ORM\Column(name="dis", type="string", length=255, nullable=true)
      */
     private $dis;
 
     /**
      * @var string $vts
      *
-     * @ORM\Column(name="vts", type="string", length=255)
+     * @ORM\Column(name="vts", type="string", length=255, nullable=true)
      */
     private $vts;
 
     /**
      * @var string $email
      *
-     * @ORM\Column(name="email", type="string", length=255)
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
      */
     private $email;
     

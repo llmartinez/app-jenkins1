@@ -26,6 +26,14 @@ services:
         public: true
         arguments: ["@request", "@doctrine.orm.entity_manager", "@security.token_storage"]
 
+    security:
+        class: Adservice\UtilBundle\Services\Security
+        arguments: ["%secret_iv%"]
+
+    dgt_webservice:
+        class: Adservice\UtilBundle\Services\DGTWebservice
+        arguments: ["@security", "@doctrine.orm.entity_manager", "@security.token_storage"]
+
 #    my.listener:
 #        class: Adservice\UtilBundle\Listener\EntityUtilListener
 #        arguments: ['@service_container']

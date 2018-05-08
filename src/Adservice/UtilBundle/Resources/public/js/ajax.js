@@ -614,7 +614,7 @@ function fill_car_data() {
 
     $('#car').text($('select[id=new_car_form_brand] option:selected').text()+ ' '+$('select[id=new_car_form_model] option:selected').text()+ ' '+$('select[id=new_car_form_version] option:selected').text());
     var id_version = $('form[id=contact]').find('select[id=new_car_form_version]').val();
-    var version_motor = $('form[id=contact]').find('select[id=new_car_form_version] option:selected').text().split('[', 2)[1].slice(0,-2);
+    var version_motor = $('form[id=contact]').find('select[id=new_car_form_version] option:selected').text().split('[', 2)[1].slice(0,-1);
 
     var motor = $('form[id=contact]').find('input[id=flt_motor]').val();
     if (motor = undefined) motor = $('form[id=contact]').find('input[id=new_car_form_motor]').val();
@@ -1031,6 +1031,21 @@ function fill_car_from_plate_number() {
            if (data['error'] !== "No hay coincidencias") {
                var versionId = data.versionId;
                fill_model_by_PlateNumber(data);
+               /*if (data['error'] !== "No hay coincidencias") {
+                   console.log(data);
+                   if(data.length == 1) {
+                       fill_model_by_PlateNumber(data[0]);
+                   } else if(data.length > 1) {
+                       $('#modal_webservice_select_options').html('');
+                       for (var i = 0, len = data.length; i < len; i++) {
+                           $('#modal_webservice_select_options').append(
+                               '<input type="radio" name="dgt_option"  data-car=\''+JSON.stringify(data[i])+'\' id="'+i+'">'+
+                               '<label for="'+i+'">'+data[i].carDescription+'</label><hr>'
+                           );
+                       }
+                       $('#modal_webservice_select').modal();
+                   }
+               }*/
            }
         },
         error: function () {
@@ -1044,7 +1059,7 @@ function fill_car_from_plate_number() {
  */
 function fill_model_by_PlateNumber(dataPN) {
 
-    $('select#new_car_form_brand' ).val(dataPN.brandId);
+    $('select#new_car_form_brand').val(dataPN.brandId);
     $("#ticket_model").val(dataPN.modelId);
     $("#ticket_version").val(dataPN.versionId);
 
@@ -1137,10 +1152,11 @@ function fill_model_by_PlateNumber(dataPN) {
                                         $.each(data, function(idx, elm) {
                                                 if(version == elm.id ){
                                                     var mt = elm.name.substring(elm.name.indexOf("[")+1, elm.name.indexOf("]"));
-                                                    $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + " selected>" + elm.name + "</option>");
+                                                    $('form[id=contact]').find('select[id=new_car_form_version]').append(
+                                                        "<option data-motor='"+ elm.motor +"' value=" + elm.id + " selected>" + elm.name + " [" + elm.kw + "]" + "</option>");
                                                 }
                                                 else
-                                                    $('form[id=contact]').find('select[id=new_car_form_version]').append("<option value=" + elm.id + ">" + elm.name + "</option>");
+                                                    $('form[id=contact]').find('select[id=new_car_form_version]').append("<option data-motor='"+ elm.motor +"' value=" + elm.id + ">" + elm.name + " [" + elm.kw + "]" + "</option>");
                                                 
                                                 $('#car').text($('select[id=new_car_form_brand] option:selected').text()+ ' '+$('select[id=new_car_form_model] option:selected').text()+ ' '+$('select[id=new_car_form_version] option:selected').text());
                                                 $( "#dis" ).attr("href", dis_url+'/model-'+elm.model);
@@ -1168,11 +1184,14 @@ function fill_model_by_PlateNumber(dataPN) {
                             });
                         }
                     }
+                    $("#new_car_form_brand").prop('readonly', true);
+                    $("#new_car_form_model").prop('readonly', true);
+                    $("#new_car_form_version").prop('readonly', true);
                     $("#new_car_form_year").val(dataPN.year);
-                    $("#new_car_form_motor").val(dataPN.motor);
-                    $("#new_car_form_kW").val(dataPN.kw);
-                    $("#new_car_form_displacement").val(dataPN.cm3);
-                    $("#new_car_form_vin").val(dataPN.vin);
+                    $("#new_car_form_motor").val(dataPN.motor).prop('readonly', true);
+                    $("#new_car_form_kW").val(dataPN.kw).prop('readonly', true);
+                    $("#new_car_form_displacement").val(dataPN.cm3).prop('readonly', true);
+                    $("#new_car_form_vin").val(dataPN.vin).prop('readonly', true);
 
                 }
             },

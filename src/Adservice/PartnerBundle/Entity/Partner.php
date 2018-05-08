@@ -316,37 +316,37 @@ class Partner {//implements EventSubscriber{
     private $postal_code;
 
     /**
-     * @var integer $phone_number_1
+     * @var string $phone_number_1
      *
-     * @ORM\Column(name="phone_number_1", type="integer")
+     * @ORM\Column(name="phone_number_1", type="string", length=15)
      */
     private $phone_number_1;
 
     /**
-     * @var integer $phone_number_2
+     * @var string $phone_number_2
      *
-     * @ORM\Column(name="phone_number_2", type="integer", nullable=true)
+     * @ORM\Column(name="phone_number_2", type="string", length=15, nullable=true)
      */
     private $phone_number_2;
 
     /**
-     * @var integer $mobile_number_1
+     * @var string $mobile_number_1
      *
-     * @ORM\Column(name="mobile_number_1", type="integer", nullable=true)
+     * @ORM\Column(name="mobile_number_1", type="string", length=15, nullable=true)
      */
     private $mobile_number_1;
 
     /**
-     * @var integer $mobile_number_2
+     * @var string $mobile_number_2
      *
-     * @ORM\Column(name="mobile_number_2", type="integer", nullable=true)
+     * @ORM\Column(name="mobile_number_2", type="string", length=15, nullable=true)
      */
     private $mobile_number_2;
 
     /**
      * @var integer $fax
      *
-     * @ORM\Column(name="fax", type="integer", nullable=true)
+     * @ORM\Column(name="fax", type="string", length=15, nullable=true)
      */
     private $fax;
 

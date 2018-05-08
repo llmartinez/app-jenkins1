@@ -34,6 +34,24 @@ class Brand {
      */
     private $models;
 
+    /**
+     * @var string $createdAt
+     * @ORM\Column(name="created_at", type="string", length=255, nullable=true)
+     */
+    private $createdAt;
+
+    /**
+     * @var string $modifiedAt
+     * @ORM\Column(name="modified_at", type="string", length=255, nullable=true)
+     */
+    private $modifiedAt;
+
+    /**
+     * @var boolean $idRecycled
+     * @ORM\Column(name="id_recycled", type="boolean", nullable=true)
+     */
+    private $idRecycled;
+
 
     /**
      * Get id
@@ -88,6 +106,54 @@ class Brand {
     public function getModels()
     {
         return $this->models;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param string $createdAt
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return string
+     */
+    public function getModifiedAt()
+    {
+        return $this->modifiedAt;
+    }
+
+    /**
+     * @param string $modifiedAt
+     */
+    public function setModifiedAt($modifiedAt)
+    {
+        $this->modifiedAt = $modifiedAt;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isIdRecycled()
+    {
+        return $this->idRecycled;
+    }
+
+    /**
+     * @param boolean $idRecycled
+     */
+    public function setIdRecycled($idRecycled)
+    {
+        $this->idRecycled = $idRecycled;
     }
 
     public function to_json(){
