@@ -533,8 +533,6 @@ class AjaxController extends Controller
 
         $results = $this->get('dgt_webservice')->getData($idPlateNumber);
         $json = $this->get('dgt_webservice')->transformData($results);
-        var_dump($json);
-        die;
 
         return new JsonResponse($json);
     }
