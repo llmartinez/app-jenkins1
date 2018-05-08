@@ -151,11 +151,7 @@ class WorkshopOrder {
     private $category_service;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Adservice\WorkshopBundle\Entity\DiagnosisMachine")
-     * @ORM\JoinTable(name="workshop_order_diagnosis_machine",
-     *     joinColumns={@ORM\JoinColumn(name="workshop_order_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="diagnosis_machine_id", referencedColumnName="id")}
-     * )
+     * @ORM\OneToMany(targetEntity="Adservice\OrderBundle\Entity\WorkshopOrderDiagnosisMachine", mappedBy="workshop_order_id")
      */
     private $diagnosis_machines;
 

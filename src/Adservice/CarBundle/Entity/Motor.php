@@ -27,15 +27,6 @@ class Motor {
     private $name;
 
     /**
-     * @var string $versiones
-     *
-     * @ORM\OneToMany(targetEntity="Adservice\CarBundle\Entity\Version", mappedBy="motor")
-     * @ORM\JoinColumn(name="version", referencedColumnName="Version")
-     */
-    private $versiones;
-
-
-    /**
      * Get id
      *
      * @return integer
@@ -68,26 +59,6 @@ class Motor {
     public function __construct()
     {
         $this->versiones = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add versiones
-     *
-     * @param Adservice\CarBundle\Entity\Version $versiones
-     */
-    public function addVersion(\Adservice\CarBundle\Entity\Version $versiones)
-    {
-        $this->versiones[] = $versiones;
-    }
-
-    /**
-     * Get versiones
-     *
-     * @return Doctrine\Common\Collections\Collection
-     */
-    public function getVersiones()
-    {
-        return $this->versiones;
     }
 
     public function to_json(){

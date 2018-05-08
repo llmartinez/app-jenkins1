@@ -5,6 +5,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class NewTicketType extends AbstractType
 {
@@ -36,11 +37,17 @@ class NewTicketType extends AbstractType
                   'class' => 'Adservice\TicketBundle\Entity\Subsystem',
                   'choice_label' => 'name',
                   'placeholder' => '',
-                  'query_builder' => function(\Doctrine\ORM\EntityRepository $er) {
-                                                return $er->createQueryBuilder('s')
-                                                          ->where('s.id = 0'); }))
+                  ))
                 ;
     }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => 'Adservice\TicketBundle\Entity\Ticket'
+        ));
+    }
+
     public function getBlockPrefix()
     {
         return 'ticket_form';
