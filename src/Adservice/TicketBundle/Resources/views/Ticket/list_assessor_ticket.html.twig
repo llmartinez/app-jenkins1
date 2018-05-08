@@ -140,12 +140,8 @@
         {% else %}
             <p class="alert padded" align="center">{{ 'error404.ticket'|trans }}</p>
         {% endif %}
-        {% if more_results is defined %}
-            {% if more_results != 0 %}
-                <p class="tc">{{ 'showing_max_results'|trans }}</p>
-            {% endif %}
-        {% else %}
-            {% include 'UtilBundle:Pagination:tickets_assessor_pagination.html.twig' %}
-        {% endif %}
+        
+        {% include 'UtilBundle:Pagination:tickets_assessor_pagination.html.twig' %}
+       
 
         <script src="{{ asset('bundles/util/js/pagination_tickets_history.js') }}"></script>

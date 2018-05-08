@@ -684,6 +684,21 @@ class WorkshopOrder {
     public function getNumChecks() {
         return $this->numchecks;
     }
+    
+    /**
+     * @var string $commercial_name
+     *
+     * @ORM\Column(name="commercial_name", type="string", length=255)
+     */
+    private $commercial_name;
+
+    /**
+     * @var string $commercial_phone
+     *
+     * @ORM\Column(name="commercial_phone", type="string", length=15)
+     */
+    private $commercial_phone;
+
 
 
     /**
@@ -757,6 +772,41 @@ class WorkshopOrder {
 
     public function setWantedAction($wanted_action) {
         $this->wanted_action = $wanted_action;
+    }
+    /**
+     * Set commercial_name
+     *
+     * @param string $commercial_name
+     */
+    public function setCommercialName($commercial_name) {
+        $this->commercial_name = $commercial_name;
+    }
+
+    /**
+     * Get commercial_name
+     *
+     * @return string
+     */
+    public function getCommercialName() {
+        return $this->commercial_name;
+    }
+
+     /**
+     * Set commercial_phone
+     *
+     * @param string $commercial_phone
+     */
+    public function setCommercialPhone($commercial_phone) {
+        $this->commercial_phone = $commercial_phone;
+    }
+
+    /**
+     * Get commercial_phone
+     *
+     * @return string
+     */
+    public function getCommercialPhone() {
+        return $this->commercial_phone;
     }
 
 //   ____ ___  _   _ _____  _    ____ _____
