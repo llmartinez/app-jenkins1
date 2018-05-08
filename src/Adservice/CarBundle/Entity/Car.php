@@ -122,6 +122,28 @@ class Car
      */
     private $ticket;
 
+    /**
+     * @var string $origin
+     *
+     * @ORM\Column(name="origin", type="string", length=50, nullable=true)
+     */
+    private $origin;
+
+
+     /**
+      * @var integer $variants
+      *
+      * @ORM\Column(name="variants", type="integer", nullable=true)
+      */
+    private $variants;
+
+    /**
+     * @var string $status
+     *
+     * @ORM\Column(name="status", type="string", length=50, nullable=true)
+     */
+    private $status;
+
 
     /**
      * Set id
@@ -416,6 +438,54 @@ class Car
     //     return $this->ticket;
     // }
 
+    /**
+     * @return string
+     */
+    public function getOrigin()
+    {
+        return $this->origin;
+    }
+
+    /**
+     * @param string $origin
+     */
+    public function setOrigin($origin)
+    {
+        $this->origin = $origin;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVariants()
+    {
+        return $this->variants;
+    }
+
+    /**
+     * @param int $variants
+     */
+    public function setVariants($variants)
+    {
+        $this->variants = $variants;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param string $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
     public function __toString() {
 
         $model   = $this->getModel()->getName();
@@ -438,7 +508,16 @@ class Car
                       'kw'                  => $this->getKw(),
                       'cm3'                 => $this->getDisplacement(),
                       'vin'                 => $this->getVin(),
-                      'plateNumber'         => $this->getPlateNumber());
+                      'plateNumber'         => $this->getPlateNumber(),
+            'carDescription'        => $this->toStringExtended(),
+            'origin'                => $this->getOrigin(),
+            'variants'              => $this->getVariants());
+
         return $json;
+    }
+
+    public function toStringExtended(){
+
+        return $this->__toString().' '.$this->getYear().' '.$this->getMotor().' '.$this->getKw().'kw '.$this->getDisplacement().'cm3';
     }
 }
