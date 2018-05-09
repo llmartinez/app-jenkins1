@@ -1,6 +1,8 @@
 
     $.ajaxSetup({ cache: false });
 
+    var searchActivate = false;
+
 /**
  * Funcion que rellena (populate) el combo de las socios segun la CatServ seleccionada por el usuario
  */
@@ -1009,6 +1011,12 @@ function get_country_partner(id_partner){
 
 function fill_car_from_plate_number() {
 
+    if (searchActivate == true) {
+        return false;
+    } else {
+        searchActivate = true;
+    }
+
     var route     = 'get_car_from_plate_number';
 
     var idPlateNumber = $(document).find('#new_car_form_plateNumber').val();
@@ -1028,27 +1036,29 @@ function fill_car_from_plate_number() {
             $("body").css("cursor", "default");
         },
         success: function (data) {
-           if (data['error'] !== "No hay coincidencias") {
-               var versionId = data.versionId;
-               fill_model_by_PlateNumber(data);
-               /*if (data['error'] !== "No hay coincidencias") {
-                   console.log(data);
-                   if(data.length == 1) {
-                       fill_model_by_PlateNumber(data[0]);
-                   } else if(data.length > 1) {
-                       $('#modal_webservice_select_options').html('');
-                       for (var i = 0, len = data.length; i < len; i++) {
-                           $('#modal_webservice_select_options').append(
-                               '<input type="radio" name="dgt_option"  data-car=\''+JSON.stringify(data[i])+'\' id="'+i+'">'+
-                               '<label for="'+i+'">'+data[i].carDescription+'</label><hr>'
-                           );
-                       }
-                       $('#modal_webservice_select').modal();
-                   }
-               }*/
-           }
+            if (data['error'] !== "No hay coincidencias") {
+                var versionId = data.versionId;
+                //fill_model_by_PlateNumber(data);
+                if (data['error'] !== "No hay coincidencias") {
+                    console.log(data);
+                    if (data['cars'].length == 1) {
+                        fill_model_by_PlateNumber(data['cars'][0]);
+                    } else if (data['cars'].length > 1) {
+                        $('#modal_webservice_select_options').html('');
+                        for (var i = 0, len = data['cars'].length; i < len; i++) {
+                            $('#modal_webservice_select_options').append(
+                                '<input type="radio" name="dgt_option"  data-car=\'' + JSON.stringify(data['cars'][i]) + '\' id="' + i + '">' +
+                                '<label for="' + i + '">' + data['cars'][i].carDescription + '</label><hr>'
+                            );
+                        }
+                        $('#modal_webservice_select').modal();
+                    }
+                }
+            }
+            searchActivate = false;
         },
         error: function () {
+            searchActivate = false;
             console.log("Error loading models...");
         }
     });
