@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Adservice\OrderBundle\Controller\WorkshopOrderController;
 use Adservice\OrderBundle\Controller\ShopOrderController;
 use Adservice\UtilBundle\Entity\Pagination;
-
+use Adservice\OrderBundle\Entity\WorkshopOrder;
 
 class OrderController extends Controller
 {
@@ -158,4 +158,4 @@ class OrderController extends Controller
                                                                                 'length_shop_rejected'     => $length_shop_rejected,
                                                                             ));
     }
-}
+            }
