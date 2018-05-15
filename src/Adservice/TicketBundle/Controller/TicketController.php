@@ -420,31 +420,11 @@ class TicketController extends Controller {
         $car = new Car();
         $document = new Document();
         $_SESSION['einatech'] = $einatech;
-        if(isset($_SESSION['autologin'])){
-            $autologin_session = $_SESSION['autologin'];
-        }
-        else{
-            $autologin_session = false;
-        }
+        
+        $autologin_session = $this->get('session')->get('autologin');
         $user = $this->getUser();
         if(!$user)
         { 
-            if( $request->request->get('new_car_form_version') != null){
-                $_SESSION['marca'] = $request->request->get('new_car_form_brand');
-                $_SESSION['modelo'] = $request->request->get('new_car_form_model');
-                $_SESSION['version'] = $request->request->get('new_car_form_version');
-                $_SESSION['description'] = $request->request->get('ticket_form')['description'];
-                $_SESSION['plateNumber'] = $request->request->get('new_car_form')['plateNumber'];
-                $_SESSION['vin'] = $request->request->get('new_car_form')['vin'];
-                $_SESSION['displacement'] = $request->request->get('new_car_form')['displacement'];
-                $_SESSION['kW'] = $request->request->get('new_car_form')['kW'];
-                $_SESSION['importance'] = $request->request->get('ticket_form')['importance'];
-                if(array_key_exists('subsystem',$request->request->get('ticket_form'))){
-                    $_SESSION['subsystem'] = $request->request->get('ticket_form')['subsystem'];
-                    $subsystem = $em->getRepository('TicketBundle:Subsystem')->findOneById($_SESSION['subsystem']);
-                    $_SESSION['system'] = $subsystem->getSystem()->getId();
-                }
-            }
             return $this->redirect($this->generateUrl('user_login'));
         }
         
@@ -514,7 +494,8 @@ class TicketController extends Controller {
         $id_subsystem = $request->request->get('n_id_subsystem');
         $id_importance = $request->request->get('n_id_importance');
         $id_displacement = $request->request->get('n_id_displacement');
-        if(!isset($_SESSION['version']) or $_SESSION['version'] == null) {
+        
+        if($this->get('session')->get('version') == null) {
             $id_vin = $request->request->get('n_id_vin');
             $id_plateNumber = $request->request->get('n_id_plateNumber');
         }
@@ -571,9 +552,7 @@ class TicketController extends Controller {
             $id_plateNumber = strtoupper($id_plateNumber);
             $car->setPlateNumber($id_plateNumber);
         }
-        if(isset($_SESSION['error']) && $_SESSION['error']!= ''){
-            $this->get('session')->getFlashBag()->add('error', $_SESSION['error']);
-        }
+
         $systems = $em->getRepository('TicketBundle:System')->findAll();
         if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN') || $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')){
             $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
@@ -992,15 +971,15 @@ class TicketController extends Controller {
         }
         $marca_session = $modelo_session = $version_session = $description_session = $plateNumber_session = $vin_session = $system_session = $subsystem_session = $importance_session = null;
         
-        if(isset($_SESSION['marca'])) {
-            $marca_session = $_SESSION['marca'];
-            $modelo_session = $_SESSION['modelo'];
-            $version_session = $_SESSION['version'];    
+        if($this->get('session')->get('marca') != null) {
+            $marca_session = $this->get('session')->get('marca');
+            $modelo_session = $this->get('session')->get('modelo');
+            $version_session = $this->get('session')->get('version');    
             if($einatech != 1)
-                $description_session = $_SESSION['description'];           
-            $plateNumber_session = $_SESSION['plateNumber']; 
-            if(isset($_SESSION['vin'])) {
-                $vin_session = $_SESSION['vin'];
+                $description_session = $this->get('session')->get('description');           
+            $plateNumber_session = $this->get('session')->get('plateNumber'); 
+            if($this->get('session')->get('vin') != null) {
+                $vin_session = $this->get('session')->get('vin');
             }
             $id_vin = null;
             $car->setVin($id_vin);       
@@ -1008,12 +987,12 @@ class TicketController extends Controller {
             $car->setPlateNumber($id_plateNumber);    
             
         }
-        if(isset($_SESSION['subsystem'])) {
-            $system_session = $_SESSION['system'];
-            $subsystem_session = $_SESSION['subsystem'];
+        if($this->get('session')->get('subsystem') != null) {
+            $system_session = $this->get('session')->get('system');
+            $subsystem_session = $this->get('session')->get('subsystem');
         }
-        if(isset($_SESSION['importance'])) {
-            $importance_session = $_SESSION['importance'];
+        if($this->get('session')->get('importance') != null) {
+            $importance_session = $this->get('session')->get('importance');
         }
 
         $array = array('ticket' => $ticket,
@@ -2461,19 +2440,19 @@ class TicketController extends Controller {
     }
 
     private function deleteSessionCar(){
-        $_SESSION['marca'] = null;
-        $_SESSION['modelo'] = null;
-        $_SESSION['version'] = null;
-        $_SESSION['description'] = null;
-        $_SESSION['plateNumber'] = null;
-        $_SESSION['vin'] = null;
-        $_SESSION['displacement'] = null;
-        $_SESSION['kW'] = null;
-        $_SESSION['importance'] = null;
-        $_SESSION['subsystem'] = null;
-        $_SESSION['system'] = null;
-        $_SESSION['autologin'] = null;
-        $_SESSION['error'] = null;
+        $this->get('session')->set('marca', null);
+        $this->get('session')->set('modelo', null);
+        $this->get('session')->set('description', null);
+        $this->get('session')->set('plateNumber', null);
+        $this->get('session')->set('vin', null);
+        $this->get('session')->set('displacement', null);
+        $this->get('session')->set('kW', null);
+        $this->get('session')->set('importance', null);
+        $this->get('session')->set('subsystem', null);
+        $this->get('session')->set('system', null);
+        $this->get('session')->set('autologin', null);
+                
+        
         
     }
     
