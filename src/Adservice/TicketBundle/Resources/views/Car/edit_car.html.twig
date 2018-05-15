@@ -13,21 +13,24 @@
     
     <div class="grid-33">
         <label for="new_car_form_plateNumber">{{ 'plate_number'|trans }} *<a id="txt_plateNumber"></a></label>
-        <a class="pull-right" id="filter_plate_number" title="{{ 'filter_by_plate_number'|trans }}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>
-        {{ form_widget(formC.plateNumber, { 'attr': { 'onkeypress': 'return checkEnterInFilterFields(event, this.id);', 'class': 'form-control asr_form-control', 'required': 'required', 'placeholder': 'plate_number'} }) }}
+        <a {% if car.status == 'verified' %}style="display: none;"{% endif %} class="pull-right" id="filter_plate_number" title="{{ 'filter_by_plate_number'|trans }}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>
+        {{ form_widget(formC.plateNumber, { 'attr': { 'onkeypress': 'return checkEnterInFilterFields(event, this.id);'} }) }}
     </div>
 
     <div class="grid-33">
         <label for="new_car_form_vin">{{ 'vin'|trans }} *</label>
-            <a class="pull-right" id="filter_vin" title="{{ 'filter_by_vin'|trans }}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>
-        {{ form_widget(formC.vin, { 'attr': { 'onkeypress': 'return checkEnterInFilterFields(event, this.id);', 'class': 'form-control asr_form-control', 'placeholder': 'vin'} }) }}
+        <a {% if car.status == 'verified' or car.origin != 'custom' %}style="display: none;"{% endif %} class="pull-right" id="filter_vin" title="{{ 'filter_by_vin'|trans }}">
+            <label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label>
+        </a>
+        {{ form_widget(formC.vin, { 'attr': { 'onkeypress': 'return checkEnterInFilterFields(event, this.id);'} }) }}
     </div>
 
     <div class="grid-33">
         <label for="new_car_form_motor">{{ 'motor'|trans }}</label>
-        <a class="pull-right" id="filter_motor" title="{{ 'filter_by_motor'|trans }}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>
-        {# <a class="pull-right" id="list_motor" title="{{ 'motor'|trans }}" href="{{ path('listMotors') }}" target="_blank"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn_.png') }}"></a> #}
-        {{ form_widget(formC.motor, { 'attr': { 'onkeypress': 'return checkEnterInFilterFields(event, this.id);', 'class': 'form-control asr_form-control', 'placeholder': 'motor'} }) }}
+        <a {% if car.status == 'verified' or car.origin != 'custom' %}style="display: none;"{% endif %} class="pull-right" id="filter_motor" title="{{ 'filter_by_motor'|trans }}">
+            <label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label>
+        </a>
+        {{ form_widget(formC.motor, { 'attr': { 'onkeypress': 'return checkEnterInFilterFields(event, this.id);'} }) }}
         <input type="hidden" id="id_mts" value="">
     </div>
 </div>
@@ -40,7 +43,7 @@
     {% endif %}
    <div class="grid-33">
         <label for="new_car_form_brand">{{ 'brand'|trans }}</label>
-        <select id="new_car_form_brand" name="new_car_form_brand" class="form-control asr_form-control" {# multiple="multiple" #}, required data-url="{{ path("car_model", { 'id_brand' : "PLACEHOLDER" }) }}">
+        <select {% if car.status == 'verified' or car.origin != 'custom' %}style="display: none;"{% endif %} id="new_car_form_brand" name="new_car_form_brand" class="form-control asr_form-control" required data-url="{{ path("car_model", { 'id_brand' : "PLACEHOLDER" }) }}">
             <option></option>
             {% for brand in brands %}
                 <option value={{ brand.id }}
@@ -48,11 +51,12 @@
                 >{{ brand.name }}</option>
             {% endfor %}
         </select>
+       <input {% if car.status != 'verified' and car.origin == 'custom' %}style="display: none;"{% endif %} id="new_car_form_brand_read_only" name="new_car_form_brand_read_only" class="form-control asr_form-control" value="{{ car.brand.name }}" disabled="disabled">
     </div>
 
     <div class="grid-33">
         <label for="new_car_form_model">{{ 'model'|trans }}</label>
-        <select id="new_car_form_model" name="new_car_form_model" class="form-control asr_form-control" {# multiple="multiple" #}, required data-url="{{ path("car_version") }}">
+        <select {% if car.status == 'verified' or car.origin != 'custom' %}style="display: none;" {% endif %} id="new_car_form_model" name="new_car_form_model" class="form-control asr_form-control" {# multiple="multiple" #}, required data-url="{{ path("car_version") }}">
             <option></option>
             {% for model in models %}
                 <option value={{ model.id }}
@@ -60,36 +64,42 @@
                 >{{ model.name }}</option>
             {% endfor %}
         </select>
+        <input {% if car.status != 'verified' and car.origin == 'custom' %}style="display: none;"{% endif %} id="new_car_form_model_read_only" name="new_car_form_model_read_only" class="form-control asr_form-control" value="{{ car.model.name }}" disabled="disabled">
     </div>
 
     <div class="grid-33">
         <label for="new_car_form_version">{{ 'version'|trans }}</label>
-        <select id="new_car_form_version" name="new_car_form_version" class="form-control asr_form-control" {# multiple="multiple" #} >
+        <select {% if car.status == 'verified' or car.origin != 'custom' %}style="display: none;" {% endif %} id="new_car_form_version" name="new_car_form_version" class="form-control asr_form-control" >
             <option></option>
             {% for version in versions %}
                 <option value={{ version.id }}
-                {% if ticket.car is defined and ticket.car.version is defined and ticket.car.version.name is defined and ticket.car.version.name == version.name %} selected {% endif %}
-                >{{ version.name }}</option>
+                {% if car.version.name == version.name %} selected {% endif %}
+                        data-motor="{{ version.motor.name|default('') }}"
+                        data-inicio="{{ version.inicio|default('') }}"
+                        data-fin="{{ version.fin|default('') }}"
+                        data-kw="{{ version.kw|default('') }}"
+                        data-cm3="{{ version.cm3|default('') }}"
+                >{{ version.name ~ ' [' ~ version.motor.name ~ '] [' ~ version.kw ~ ']' }}</option>
             {% endfor %}
         </select>
+        <input {% if car.status != 'verified' and car.origin == 'custom' %}style="display: none;"{% endif %} id="new_car_form_version_read_only" name="new_car_form_version_read_only" class="form-control asr_form-control" value="{{ car.version.name|default('') }}" disabled="disabled">
     </div>
 </div>
 <div class="grid-full w100">
 
     <div class="grid-33">
         <label for="new_car_form_year">{{ 'year'|trans }}</label>
-        <a class="pull-right" id="filter_year" title="{{ 'filter_by_year'|trans }}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>
-        {{ form_widget(formC.year, { 'attr': { 'onkeypress': 'return checkEnterInFilterFields(event, this.id);', 'class': 'form-control asr_form-control', 'placeholder': 'year'} }) }}
+        {{ form_widget(formC.year, { 'attr': { 'onkeypress': 'return checkEnterInFilterFields(event, this.id);'} }) }}
     </div>
     
     <div class="grid-33">
         <label for="new_car_form_kW">{{ 'kw'|trans }}</label>
-        {{ form_widget(formC.kW, { 'attr': { 'class': 'form-control asr_form-control', 'placeholder': 'kw'} }) }}
+        {{ form_widget(formC.kW) }}
     </div>
     
     <div class="grid-33">
         <label for="new_car_form_displacement">{{ 'displacement'|trans }}</label>
-        {{ form_widget(formC.displacement, { 'attr': { 'class': 'form-control asr_form-control', 'placeholder': 'displacement'} }) }}
+        {{ form_widget(formC.displacement) }}
     </div>
 </div>
 

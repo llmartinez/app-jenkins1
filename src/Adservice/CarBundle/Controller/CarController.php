@@ -23,10 +23,8 @@ class CarController extends Controller {
         $em        = $this->getDoctrine()->getManager();
 
         $car = $ticket->getCar();
-        $formC = $this->createForm(CarType::class, $car);
-        // MAGIC: por algun motivo sin esto no carga nombre de Version en edit_car
-        // mas info: http://imgur.com/gallery/YsbKHg1
-        if($car->getVersion() != null) $version_name = $ticket->getCar()->getVersion()->getName();
+        $formC = $this->createForm(CarType::class, $car, array('status' => $car->getStatus(), 'origin' => $car->getOrigin()));
+
         if ($request->getMethod() == 'POST') {
 
             $formC->handleRequest($request);
@@ -107,7 +105,7 @@ class CarController extends Controller {
         $car = $em->getRepository('CarBundle:Car')->find($id);
         $car->setStatus($status);
         if ($status == 'invented'){
-            $car->setOrigin('CUSTOM');
+            $car->setOrigin('custom');
         }
         UtilController::saveEntity($em, $car, $this->getUser());
         return $this->redirect($this->generateUrl('editCar', array('id' => $ticket_id)));
