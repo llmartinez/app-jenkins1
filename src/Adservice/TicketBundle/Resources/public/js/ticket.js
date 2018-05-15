@@ -57,20 +57,6 @@ $(document).ready(function() {
 
     }
 
-    //UPPER VIN & PLATENUMBER
-    $('form').find('input[id*=vin]').focusout(function() {
-        var vin = $(this).val();
-        vin = normalizeForm(vin);
-        $(this).val(vin.toUpperCase());
-    });
-    $('form').find('input[id*=plateNumber]').focusout(function() {
-        var platenumber = $(this).val();
-        platenumber = normalizeForm(platenumber);
-        $(this).val(platenumber.toUpperCase());
-        if(platenumber != ''){
-            fill_car_from_plate_number();
-        }
-    });
 });
 function popUpEinatech() {
     var msg_einatech = $('#msg_einatech').val();

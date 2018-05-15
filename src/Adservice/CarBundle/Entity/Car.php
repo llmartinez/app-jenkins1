@@ -40,7 +40,11 @@ class Car
     /**
      * @var integer $version
      * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Version")
-     * @ORM\JoinColumn(name="version_id", referencedColumnName="Version")
+     * @ORM\JoinColumns({
+     *          @ORM\JoinColumn(name="version_id", referencedColumnName="Version"),
+     *          @ORM\JoinColumn(name="Motor", referencedColumnName="Motor")
+     *     })
+
      */
     private $version;
 
@@ -53,8 +57,8 @@ class Car
 
     /**
      * @var integer $motor
-     *
-     * @ORM\Column(name="motor", type="string", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Adservice\CarBundle\Entity\Motor")
+     * @ORM\JoinColumn(name="Motor", referencedColumnName="Motor")
      */
     private $motor;
 
@@ -121,6 +125,28 @@ class Car
      * @ORM\JoinColumn(name="car_id", referencedColumnName="Car")
      */
     private $ticket;
+
+    /**
+     * @var string $origin
+     *
+     * @ORM\Column(name="origin", type="string", length=50, nullable=true)
+     */
+    private $origin;
+
+
+     /**
+      * @var integer $variants
+      *
+      * @ORM\Column(name="variants", type="integer", nullable=true)
+      */
+    private $variants;
+
+    /**
+     * @var string $status
+     *
+     * @ORM\Column(name="status", type="string", length=50, nullable=true)
+     */
+    private $status;
 
 
     /**
@@ -416,6 +442,55 @@ class Car
     //     return $this->ticket;
     // }
 
+    /**
+     * @return string
+     */
+
+    public function getOrigin()
+    {
+        return $this->origin;
+    }
+
+    /**
+     * @param string $origin
+     */
+    public function setOrigin($origin)
+    {
+        $this->origin = $origin;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVariants()
+    {
+        return $this->variants;
+    }
+
+    /**
+     * @param int $variants
+     */
+    public function setVariants($variants)
+    {
+        $this->variants = $variants;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param string $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
     public function __toString() {
 
         $model   = $this->getModel()->getName();
@@ -434,11 +509,20 @@ class Car
                       'modelId'             => $this->getModel()->getId(),
                       'versionId'           => $version,
                       'year'                => $this->getYear(),
-                      'motor'               => $this->getMotor(),
+                      'motor'               => $this->getMotor()->getName(),
                       'kw'                  => $this->getKw(),
                       'cm3'                 => $this->getDisplacement(),
                       'vin'                 => $this->getVin(),
-                      'plateNumber'         => $this->getPlateNumber());
+                      'plateNumber'         => $this->getPlateNumber(),
+            'carDescription'        => $this->toStringExtended(),
+            'origin'                => $this->getOrigin(),
+            'variants'              => $this->getVariants());
+
         return $json;
+    }
+
+    public function toStringExtended(){
+
+        return $this->__toString().' '.$this->getYear().' '.$this->getMotor().' '.$this->getKw().'kw '.$this->getDisplacement().'cm3';
     }
 }

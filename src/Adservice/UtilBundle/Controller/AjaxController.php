@@ -2,7 +2,10 @@
 
 namespace Adservice\UtilBundle\Controller;
 
+use Adservice\CarBundle\Entity\Car;
+use Adservice\TicketBundle\Controller\DGTWebservice;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -373,7 +376,7 @@ class AjaxController extends Controller
         if($size > 0) {
             foreach ($versions as $version) {
 
-                $id_motor = $version->getMotor();
+                $id_motor = $version->getMotor()->getId();
 
                 if(isset($motors[$id_motor])) {
                     $m_name = $motors[$id_motor];
@@ -398,45 +401,20 @@ class AjaxController extends Controller
     public function carDataAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
 
-        $id_version    = $request->request->get('id_version');
-        $version_motor = $request->request->get('version_motor');
-        $motor = $request->request->get('motor');
-        $year = $request->request->get('year');
+        $version = $em->getRepository('CarBundle:Version')->findOneBy(
+            array(
+                'id' => $request->get('id_version'),
+                'motor' => $request->get('id_motor')
+            )
+        );
 
-        if(isset($motor)){
-            $motor = $request->request->get('motor');
-            $query = $em->createQuery("SELECT v FROM CarBundle:Version v, CarBundle:Motor mt
-                                        WHERE mt.id = v.motor AND v.id = ".$id_version." AND mt.name LIKE '%".$motor."%'");
-            $version = $query->getResult();
-            $version = $version[0];
-        }
-        elseif($year != null){
-            $year = $request->request->get('year');
-            $query = $em->createQuery("SELECT v FROM CarBundle:Version v
-                                        WHERE v.id = ".$id_version."
-                                        AND (v.inicio <= '".$year."99' AND v.inicio != '')
-                                        AND (v.fin >= '".$year."00' OR v.fin = '')");
-            $version = $query->getResult();
-            $version = $version[0];
-        }else{
-            $query = $em->createQuery("SELECT v FROM CarBundle:Version v, CarBundle:Motor mt
-                                        WHERE mt.id = v.motor AND v.id = ".$id_version." AND mt.name LIKE '%".$version_motor."%'");
-            $version = $query->getResult();
-            $version = $version[0];
+        if ($version instanceof Version) {
+            $json = $version->to_json();
+        } else {
+            $json = array( 'error' => 'No hay coincidencias');
         }
 
-        if (isset($version)) {
-            $id_motor = $version->getMotor();
-            $motor = $em->getRepository('CarBundle:Motor')->find($id_motor);
-            $version->setMotor($motor->getName());
-        }
-
-        if(isset($version)) {
-            $json[] = $version->to_json();
-        }
-        else $json   = array( 'error' => 'No hay coincidencias');
-
-        return new Response(json_encode($json), $status = 200);
+        return new JsonResponse($json);
     }
 
     /**
@@ -546,18 +524,17 @@ class AjaxController extends Controller
         $em = $this->getDoctrine();
 
         $car = $em->getRepository('CarBundle:Car')->findOneBy(array('plateNumber' => $idPlateNumber));
-        if($car == null){
-            $json = array( 'error' => 'No hay coincidencias');
-        }
-        else{
-            $json = $car->to_json();
 
-            $version = null;
-            if($car->getVersion() != null){
-                $version = $car->getVersion()->getId();
-            }
+        if ($car instanceof Car AND $car->getStatus() == "validado"){
+
+            $json = $car->to_json();
+            return new JsonResponse($json);
         }
-        return new Response(json_encode($json), $status = 200);
+
+        $results = $this->get('dgt_webservice')->getData($idPlateNumber);
+        $json = $this->get('dgt_webservice')->transformData($results);
+
+        return new JsonResponse($json);
     }
     
     public function getCarFromVinAction(Request $request, $vin){

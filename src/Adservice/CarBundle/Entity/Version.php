@@ -45,7 +45,9 @@ class Version {
     /**
      * @var string $motor
      *
-     * @ORM\Column(name="Motor", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="Adservice\CarBundle\Entity\Motor", inversedBy="id")
+     * @ORM\JoinColumn(name="Motor", referencedColumnName="Motor")
+     * @ORM\Id()
      */
     private $motor;
 
@@ -203,6 +205,24 @@ class Version {
      * @ORM\Column(name="AlineacionRuedas", type="boolean", nullable=true)
      */
     private $alineacionruedas;
+
+    /**
+     * @var string $createdAt
+     * @ORM\Column(name="created_at", type="string", length=255, nullable=true)
+     */
+    private $createdAt;
+
+    /**
+     * @var string $modifiedAt
+     * @ORM\Column(name="modified_at", type="string", length=255, nullable=true)
+     */
+    private $modifiedAt;
+
+    /**
+     * @var boolean $idRecycled
+     * @ORM\Column(name="id_recycled", type="boolean", nullable=true)
+     */
+    private $idRecycled;
 
 
     public function __toString() {
@@ -600,10 +620,58 @@ class Version {
         return $this->alineacionruedas;
     }
 
+    /**
+     * @return string
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param string $createdAt
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return string
+     */
+    public function getModifiedAt()
+    {
+        return $this->modifiedAt;
+    }
+
+    /**
+     * @param string $modifiedAt
+     */
+    public function setModifiedAt($modifiedAt)
+    {
+        $this->modifiedAt = $modifiedAt;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isIdRecycled()
+    {
+        return $this->idRecycled;
+    }
+
+    /**
+     * @param boolean $idRecycled
+     */
+    public function setIdRecycled($idRecycled)
+    {
+        $this->idRecycled = $idRecycled;
+    }
+
     public function to_json(){
         $json = array('id'                  => $this->getId(),
                       'name'                => $this->getName(),
-                      'motor'               => $this->getMotor(),
+                      'motor'               => $this->getMotor()->getId(),
                       'inicio'              => $this->getInicio(),
                       'fin'                 => $this->getFin(),
                       'kw'                  => $this->getKw(),

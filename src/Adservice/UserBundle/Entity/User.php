@@ -5,6 +5,7 @@ namespace Adservice\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 use Symfony\Component\Validator\ExecutionContext;
@@ -139,7 +140,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     /**
      * @var boolean $privacy
      *
-     * @ORM\Column(name="privacy", type="boolean")
+     * @ORM\Column(name="privacy", type="boolean", nullable=true)
      */
     private $privacy;
 
@@ -148,7 +149,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * Permiso del usuario (comercial) para listar talleres
      *
-     * @ORM\Column(name="allow_list", type="boolean", options={"default" : 1})
+     * @ORM\Column(name="allow_list", type="boolean", nullable=true, options={"default" : 1})
      */
     private $allow_list;
 
@@ -157,7 +158,7 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * Permiso del usuario (socio) para crear comerciales
      *
-     * @ORM\Column(name="allow_create", type="boolean", options={"default" : 1})
+     * @ORM\Column(name="allow_create", type="boolean", nullable=true, options={"default" : 1})
      */
     private $allow_create;
 
@@ -166,9 +167,15 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
      *
      * Permiso del usuario (socio/comercial) para solicitar talleres
      *
-     * @ORM\Column(name="allow_order", type="boolean", options={"default" : 1})
+     * @ORM\Column(name="allow_order", type="boolean", nullable=true, options={"default" : 1})
      */
     private $allow_order;
+
+    /**
+     * @ORM\OneToMany(targetEntity="\Adservice\UtilBundle\Entity\WebservicesHistorical", mappedBy="user")
+     */
+    protected $dgt_requests;
+
 //  ____  _____ _____ _____ _____ ____  ____    ______ _____ _____ _____ _____  ____  ____
 // / ___|| ____|_   _|_   _| ____|  _ \/ ___|  / / ___| ____|_   _|_   _| ____||  _ \/ ___|
 // \___ \|  _|   | |   | | |  _| | |_) \___ \ / / |  _|  _|   | |   | | |  _|  | |_) \___ \
@@ -181,7 +188,8 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     }
 
     public function __construct() {
-        $this->user_role = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->user_role = new ArrayCollection();
+        $this->dgt_requests = new ArrayCollection();
     }
 
     /**
@@ -540,6 +548,22 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
         return $this->allow_order;
     }
 
+    /**
+     * @return ArrayCollection
+     */
+    public function getDgtRequests()
+    {
+        return $this->dgt_requests;
+    }
+
+    /**
+     * @param ArrayCollection $dgt_requests
+     */
+    public function setDgtRequests(ArrayCollection $dgt_requests)
+    {
+        $this->dgt_requests = $dgt_requests;
+    }
+
 //   ____ ___  _   _ _____  _    ____ _____
 //  / ___/ _ \| \ | |_   _|/ \  / ___|_   _|
 // | |  | | | |  \| | | | / _ \| |     | |
@@ -582,37 +606,37 @@ class User implements UserInterface, AdvancedUserInterface, \Serializable {
     private $postal_code;
 
     /**
-     * @var integer $phone_number_1
+     * @var string $phone_number_1
      *
-     * @ORM\Column(name="phone_number_1", type="integer")
+     * @ORM\Column(name="phone_number_1", type="string", length=15)
      */
     private $phone_number_1;
 
     /**
-     * @var integer $phone_number_2
+     * @var string $phone_number_2
      *
-     * @ORM\Column(name="phone_number_2", type="integer", nullable=true)
+     * @ORM\Column(name="phone_number_2", type="string", length=15, nullable=true)
      */
     private $phone_number_2;
 
     /**
-     * @var integer $mobile_number_1
+     * @var string $mobile_number_1
      *
-     * @ORM\Column(name="mobile_number_1", type="integer", nullable=true)
+     * @ORM\Column(name="mobile_number_1",type="string", length=15, nullable=true)
      */
     private $mobile_number_1;
 
     /**
-     * @var integer $mobile_number_2
+     * @var string $mobile_number_2
      *
-     * @ORM\Column(name="mobile_number_2", type="integer", nullable=true)
+     * @ORM\Column(name="mobile_number_2", type="string", length=15, nullable=true)
      */
     private $mobile_number_2;
 
     /**
-     * @var integer $fax
+     * @var string $fax
      *
-     * @ORM\Column(name="fax", type="integer", nullable=true)
+     * @ORM\Column(name="fax", type="string", length=15, nullable=true)
      */
     private $fax;
 

@@ -32,9 +32,9 @@
 
     $("#filter_plate_number").on('click', function ()
     {
-        fill_car_from_plate_number();
+        check_plate_number();
     });
-    
+
     $("#filter_vin").on('click', function ()
     {
         fill_car_from_vin();
@@ -98,6 +98,24 @@
         //    checkYearLength();
     });
 
+    //UPPER VIN & PLATENUMBER
+    $('form').find('input[id*=vin]').focusout(function() {
+        var vin = $(this).val();
+        vin = normalizeForm(vin);
+        $(this).val(vin.toUpperCase());
+    });
+    $('form').find('input[id*=plateNumber]').focusout(function() {
+        check_plate_number();
+    });
+
+    function check_plate_number() {
+        var platenumber = normalizeForm($('#new_car_form_plateNumber').val());
+        $('#new_car_form_plateNumber').val(platenumber.toUpperCase());
+        if (platenumber != ''){
+            fill_car_from_plate_number();
+        }
+    }
+
     function checkYearLength(){
 
         var len = $('#new_car_form_year').val().length;
@@ -132,9 +150,9 @@
                 console.log("Error al cargar los motores...");
             }
         });
-    
-   
+    });
 
-    
-
+    $('#modal-btn-accept').click(function(){
+        fill_model_by_PlateNumber($('#modal_webservice_select_options > input:checked').data('car'));
+        $('#modal_webservice_select').modal('toggle');
     });
