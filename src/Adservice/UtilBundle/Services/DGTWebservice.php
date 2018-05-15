@@ -92,6 +92,7 @@ class DGTWebservice implements WebserviceInterface
     public function transformData($data)
     {
         $dataArray = json_decode($data, true);
+        $carCommonInfo = array();
         $arrayCars = array();
 
         if (array_key_exists('error', $dataArray)) {
@@ -100,48 +101,48 @@ class DGTWebservice implements WebserviceInterface
             return array('error' => true, 'cars' => $arrayCars);
         }
 
-        $car = $this->em->getRepository('CarBundle:Car')->findOneBy(array('plateNumber' => $dataArray['matricula']));
-
-        if(!$car){
-            $car = new Car();
-            $car->setPlateNumber($dataArray['matricula']);
-        }
-
-        //if (!isset($dataArray['procedencia'])) return array('error' => false, 'cars' => $arrayCars);
-
         $this->saveHistorical($dataArray['matricula'], $dataArray['procedencia'], null);
 
         if (isset($dataArray['vin'])) {
 
-            $car->setVin($dataArray['vin']);
-            $car->setOrigin('DGT');
-
-            //if (!isset($dataArray['coincidencias'])) return array('error' => false, 'cars' => $arrayCars);
-
-            $car->setVariants(count($dataArray['coincidencias']));
-
             foreach ($dataArray['coincidencias'] as $coincidencia) {
 
-                if ($this->checkData($coincidencia)) {
+                $motors = explode(',', str_replace(" ", "", $coincidencia['mt']));
 
-                    $idsArray = explode('/', $coincidencia['id']);
-                    $brand = $this->em->getRepository('CarBundle:Brand')->findOneBy(array('id' => $idsArray[0]));
-                    $model = $this->em->getRepository('CarBundle:Model')->findOneBy(array('id' => $idsArray[1]));
-                    $version = $this->em->getRepository('CarBundle:Version')->findOneBy(array('id' => $idsArray[2]));
-                    $car->setBrand($brand);
-                    $car->setModel($model);
-                    $car->setVersion($version);
-                    $car->setKW($version->getKw());
-                    $car->setDisplacement($version->getCm3());
-                    $car->setMotor($version->getMotor());
-                    if (isset($coincidencia['an'])) $car->setYear($coincidencia['an']);
+                foreach ($motors as $motor) {
 
-                    $arrayCars[] = $car->to_json();
+                    if ($this->checkData($coincidencia)) {
+
+                        $idsArray = explode('/', $coincidencia['id']);
+
+                        $kw = str_replace("kw", "", $coincidencia['kw']);
+                        $cm3 = str_replace("cc", "", $coincidencia['cc']);
+
+                        $json = array(
+                            'brandId' => $idsArray[0],
+                            'modelId' => $idsArray[1],
+                            'versionId' => $idsArray[2],
+                            'year' => $coincidencia['an'],
+                            'motor' => $motor,
+                            'kw' => $kw,
+                            'cm3' => $cm3,
+                            'carDescription' => $coincidencia['mrc'].' '.$coincidencia['mod'].' '.$coincidencia['vr'].' '.$coincidencia['an'].' '.$motor.' '.$kw.'kw '.$cm3.'cm3'
+                        );
+
+                        $arrayCars[] = $json;
+                    }
                 }
             }
+
+            $carCommonInfo = array(
+                'vin' => $dataArray['vin'],
+                'plateNumber' => $dataArray['matricula'],
+                'origin' => 'DGT',
+                'variants' => count($arrayCars)
+            );
         }
 
-        return array('error' => false, 'cars' => $arrayCars);
+        return array('error' => false, 'carInfo' => $carCommonInfo, 'cars' => $arrayCars);
     }
 
     /**
@@ -158,12 +159,6 @@ class DGTWebservice implements WebserviceInterface
         $idsArray = explode('/', $coincidencia['id']);
 
         if (count($idsArray) < 3 OR $idsArray[0] == "") return false;
-
-        $brand = $this->em->getRepository('CarBundle:Brand')->findOneBy(array('id' => $idsArray[0]));
-        $model = $this->em->getRepository('CarBundle:Model')->findOneBy(array('id' => $idsArray[1]));
-        $version = $this->em->getRepository('CarBundle:Version')->findOneBy(array('id' => $idsArray[2]));
-
-        if ($brand == null OR $model == null OR $version == null) return false;
 
         return true;
     }
