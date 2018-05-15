@@ -1,20 +1,13 @@
     <legend>
     	{{ 'car'|trans }}
-        {% if 
-            (app.user.getWorkshop() != null and app.user.getWorkshop().getActive() == 1)
-            or 
-            (app.user.getWorkshop() == null and (is_granted('ROLE_ADMIN') or ticket.blockedBy == app.user or
-                (ticket.workshop == app.user.getWorkshop() and ticket.assignedTo == NULL and ticket.pending == 1 ) and ticket.status != 'closed'))
-            or 
-            (is_granted('ROLE_ASSESSOR') and ticket.status == 'inactive') %}
         
-            {# editar Ticket #}
-            {% if is_granted('ROLE_ASSESSOR') %}                         
-                <a href="{{ path('editCar', { 'id': ticket.id }) }}">
-                    <img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}" title="{{ 'edit.car'|trans }}"></span>
-                </a>
-            {% endif %}    
-        {% endif %}
+        {# editar Ticket #}
+        {% if is_granted('ROLE_ASSESSOR') %}                         
+            <img class="img_icon" src="{{ asset('bundles/util/images/icon/' ~ car.status ~ '.png') }}" title="{{ car.status | trans }}">
+            <a href="{{ path('editCar', { 'id': ticket.id}) }}">
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}" title="{{ 'edit.car'|trans }}"></span>
+            </a>
+        {% endif %}    
     </legend>
 
 <input type="hidden" id="id_car" name="id_car" value="{{ car.id }}">

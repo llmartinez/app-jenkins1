@@ -29,8 +29,6 @@ class CarController extends Controller {
         if($car->getVersion() != null) $version_name = $ticket->getCar()->getVersion()->getName();
         if ($request->getMethod() == 'POST') {
 
-            $user = $em->getRepository('UserBundle:User')->find($this->getUser()->getId());
-
             $formC->handleRequest($request);
 
             //Define CAR
@@ -68,7 +66,7 @@ class CarController extends Controller {
                     }
                     $car->setVin(strtoupper($car->getVin()));
                     $car->setPlateNumber(strtoupper($car->getPlateNumber()));
-                    UtilController::saveEntity($em, $car, $user);
+                    UtilController::saveEntity($em, $car, $this->getUser());
 
                     return $this->redirect($this->generateUrl('showTicket', array('id' => $id)));
                 }
@@ -91,9 +89,27 @@ class CarController extends Controller {
         return $this->render('TicketBundle:Layout:edit_car_layout.html.twig', array(
                     'formC'       => $formC->createView(),
                     'ticket'      => $ticket,
+                    'car'         => $car,
                     'brands'      => $brands,
                     'models'      => $models,
                     'versions'    => $versions
                 ));
+    }
+    
+    /**
+     * Cambia el estado de un vehiculo por el valor pasado por parametro
+     * @Route("/car/edit/{id}")
+     * @ParamConverter("ticket", class="TicketBundle:Ticket")
+     * @return url
+     */
+    public function changeStatusCarAction($id, $status, $ticket_id){
+        $em = $this->getDoctrine()->getManager();
+        $car = $em->getRepository('CarBundle:Car')->find($id);
+        $car->setStatus($status);
+        if ($status == 'invented'){
+            $car->setOrigin('CUSTOM');
+        }
+        UtilController::saveEntity($em, $car, $this->getUser());
+        return $this->redirect($this->generateUrl('editCar', array('id' => $ticket_id)));
     }
 }

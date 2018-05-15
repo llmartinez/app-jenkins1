@@ -27,8 +27,18 @@
     <input type="hidden" id="msg_bad_cif_o" name="msg_bad_cif_o" value="{{ 'ticket_vin_error_o'|trans }}">
     <div class="form-group">
         <form action="{{ path('editCar', { 'id': ticket.id }) }}" id="contact" class="form" role="form" method="post">
-
+            <a href="{{ path('changeStatusCar', { 'id': car.id, 'status': 'invented', 'ticket_id': ticket.id }) }}" class="pull-right {% if car.status == 'invented' %} invented_car {%endif%}">
+                <img class="img_icon_car" src="{{ asset('bundles/util/images/icon/invented-md.png') }}" title="{{ 'invented'|trans }}">
+            </a>
+            <a href="{{ path('changeStatusCar', { 'id': car.id, 'status': 'undefined', 'ticket_id': ticket.id }) }}" class="pull-right {% if car.status == 'undefined' %} undefined_car {%endif%}">
+                <img class="img_icon_car" src="{{ asset('bundles/util/images/icon/undefined-md.png') }}" title="{{ 'undefined'|trans }}">
+            </a>
+            <a href="{{ path('changeStatusCar', { 'id': car.id, 'status': 'verified', 'ticket_id': ticket.id }) }}" class="pull-right {% if car.status == 'verified' %} verified_car {%endif%}">
+                <img class="img_icon_car" src="{{ asset('bundles/util/images/icon/verified-md.png') }}" title="{{ 'verified'|trans }}">
+            </a>
+            
             <legend> {{ 'edit.car'|trans }} </legend>
+           
             {% include 'TicketBundle:Car:edit_car.html.twig'  %}
             <button id="btn_create" class="btn btn-primary pull-right" type="submit"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick.png') }}"> {{ 'btn.send'|trans }}</button>
         </form>
