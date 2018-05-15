@@ -9,7 +9,7 @@ use Adservice\UserBundle\Entity\User;
  * Adservice\TicketBundle\Entity\Ticket
  *
  * @ORM\Table(name="ticket")
- * @ORM\Entity(repositoryClass="Adservice\TicketBundle\Entity\TicketRepository")
+ * @ORM\Entity(repositoryClass="Adservice\TicketBundle\Repository\TicketRepository")
  */
 class Ticket {
 

@@ -331,6 +331,10 @@ function search_by_bmv() {
         }
     });
 
+$("#id_system").on('change', function() {
+    fill_subsystem();
+});
+
 /**
  * De la href del modal que envia al delete, se le cambia el "foo" por el id que queremos borrar
  * @param int user_id

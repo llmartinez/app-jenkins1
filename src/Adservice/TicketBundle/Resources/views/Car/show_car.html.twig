@@ -3,7 +3,7 @@
         
         {# editar Ticket #}
         {% if is_granted('ROLE_ASSESSOR') %}                         
-            <img class="img_icon" src="{{ asset('bundles/util/images/icon/' ~ car.status ~ '.png') }}" title="{{ car.status | trans }}">
+            <img class="img_icon" src="{{ asset('bundles/util/images/icon/' ~ car.status|default('undefined') ~ '.png') }}" title="{{ car.status | trans }}">
             <a href="{{ path('editCar', { 'id': ticket.id}) }}">
                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}" title="{{ 'edit.car'|trans }}"></span>
             </a>

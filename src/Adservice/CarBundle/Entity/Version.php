@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Adservice\CarBundle\Entity\Version
  *
  * @ORM\Table(name="Version_Vehiculo")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Adservice\CarBundle\Repository\VersionRepository")
  */
 class Version {
     /**
@@ -671,7 +671,8 @@ class Version {
     public function to_json(){
         $json = array('id'                  => $this->getId(),
                       'name'                => $this->getName(),
-                      'motor'               => $this->getMotor()->getId(),
+                      'motorId'             => $this->getMotor()->getId(),
+                      'motorName'           => $this->getMotor()->getName(),
                       'inicio'              => $this->getInicio(),
                       'fin'                 => $this->getFin(),
                       'kw'                  => $this->getKw(),

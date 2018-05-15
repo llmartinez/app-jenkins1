@@ -1,5 +1,5 @@
 <?php
-namespace Adservice\TicketBundle\Entity;
+namespace Adservice\TicketBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
