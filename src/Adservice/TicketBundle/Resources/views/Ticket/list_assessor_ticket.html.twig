@@ -141,7 +141,11 @@
             <p class="alert padded" align="center">{{ 'error404.ticket'|trans }}</p>
         {% endif %}
         
-        {% include 'UtilBundle:Pagination:tickets_assessor_pagination.html.twig' %}
+        {% if app.request.get("_route") == "listTicket" %}
+            {% include 'UtilBundle:Pagination:tickets_assessor_pagination_byBMV.html.twig' %}
+        {% else %}
+            {% include 'UtilBundle:Pagination:tickets_assessor_pagination.html.twig' %}
+        {% endif %}
        
 
         <script src="{{ asset('bundles/util/js/pagination_tickets_history.js') }}"></script>
