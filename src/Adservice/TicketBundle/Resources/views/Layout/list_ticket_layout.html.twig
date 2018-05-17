@@ -71,7 +71,6 @@
     {{ parent() }}
     <script src="{{ asset('bundles/ticket/js/ticket_history.js') }}"></script>
     <script src="{{ asset('bundles/ticket/js/ticket_workshop.js') }}"></script>
-    <script src="{{ asset('bundles/util/js/pagination.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             {% if option != '' %} $('#slct_historyTickets').val("{{ option }}"); {% else %} $('#slct_historyTickets').val('all'); {% endif %}

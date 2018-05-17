@@ -40,36 +40,27 @@ class SecurityController extends Controller{
         {
             $em = $this->getDoctrine()->getManager();
             $valid_hashes = $this->decryptADS($token);
-            $_SESSION['autologin'] = false;
-            $_SESSION['marca'] = null;
-            $_SESSION['modelo'] = null;
-            $_SESSION['version'] = null;
-            $_SESSION['description'] = null;
-            $_SESSION['plateNumber'] = null;
+            $this->get('session')->set('autologin', false);
+            $this->get('session')->set('marca', null);
+            $this->get('session')->set('modelo', null);
+            $this->get('session')->set('version', null);
+            $this->get('session')->set('description', null);
+            $this->get('session')->set('plateNumber', null);
             if($request->get('techdocIdVersion') != null){ 
-                $_SESSION['autologin'] = true;
+                $this->get('session')->set('autologin', true);
                 $version = $em->getRepository('CarBundle:Version')->findOneById($request->get('techdocIdVersion'));
                 if($version != null){
-                    $_SESSION['marca'] = $version->getMarca()->getId();
-                    $_SESSION['modelo'] = $version->getModel()->getId();
-                    $_SESSION['version'] = $request->get('techdocIdVersion');
+                    $this->get('session')->set('marca', $version->getMarca()->getId());
+                    $this->get('session')->set('modelo', $version->getModel()->getId());
+                    $this->get('session')->set('version', $request->get('techdocIdVersion'));
                 }
                 if($request->get('plateNumber') != null){
-                    $_SESSION['plateNumber'] = $request->get('plateNumber');
+                    $this->get('session')->set('plateNumber', $request->get('plateNumber'));
                 }
                 if($request->get('description') != null){
-                    $_SESSION['description'] = $request->get('description');
+                    $this->get('session')->set('description', $request->get('description'));
                 }
             }
-//            else{
-//                $make = $request->get('make');
-//                $model = $request->get('model');
-//                $version = $request->get('version');
-//                if($make != null ){
-//                    $_SESSION['error'] = $this->checkValues($make, $model, $version);
-//                }
-//            }
-            
             
             foreach ($valid_hashes as $valid_hash) {
                 if($valid_hash != "") $hash = $valid_hash;
@@ -119,31 +110,6 @@ class SecurityController extends Controller{
         return $this->render('UserBundle:Default:login.html.twig');
     }
     
-//    private function checkValues($idMake, $idModel, $idVersion){
-//        $em = $this->getDoctrine()->getManager();
-//        $make = $em->getRepository('CarBundle:Brand')->findOneById($idMake);
-//        $model = $em->getRepository('CarBundle:Model')->findOneBy(array('brand' => $idMake,
-//                'id' => $idModel));
-//        $version = $em->getRepository('CarBundle:Version')->findOneBy(array('marca' => $idMake, 'model' => $idModel, 'id' => $idVersion));
-//        
-//        $error = '';
-//        if($idVersion != null && $version == null){
-//            $error = $this->get('translator')->trans('error.version_not_found');
-//        }
-//        $_SESSION['version'] = $idVersion;
-//        
-//        if($idModel != null && $model == null){
-//            $error = $this->get('translator')->trans('error.model_not_found');
-//        }
-//        $_SESSION['modelo'] = $idModel;
-//        
-//        if($idMake != null && $make == null){
-//            $error = $this->get('translator')->trans('error.make_not_found');
-//        }
-//        $_SESSION['marca'] = $idMake;
-//        return $error;                
-//    }
-   
     /**
      * Autologin del taller a través de un user y password
      * @throws AccessDeniedException
@@ -153,40 +119,16 @@ class SecurityController extends Controller{
 
         $login = $request->get("user");
         $password = $request->get("password");
-        $_SESSION['autologin'] = false;
+        $this->get('session')->set('autologin', false);
         if($login != null && $password != null)
         {
             $em = $this->getDoctrine()->getManager();
             $valid_hashes_login = $this->decryptADS($login);
             $valid_hashes_password = $this->decryptADS($password);
             
-            $_SESSION['autologin'] = true;
-            if($request->get('techdocIdVersion') != null){           
-                $version = $em->getRepository('CarBundle:Version')->findOneById($request->get('techdocIdVersion'));
-                if($version != null){
-                    $_SESSION['marca'] = $version->getMarca()->getId();
-                    $_SESSION['modelo'] = $version->getModel()->getId();
-                    $_SESSION['version'] = $request->get('techdocIdVersion');
-                }
-                else {
-                    $_SESSION['marca'] = null;
-                    $_SESSION['modelo'] = null;
-                    $_SESSION['version'] = null;
-                }
-                
-                if($request->get('plateNumber') != null){
-                    $_SESSION['plateNumber'] = $request->get('plateNumber');
-                }
-                else {
-                    $_SESSION['plateNumber'] = null;
-                }
-                if($request->get('description') != null){
-                    $_SESSION['description'] = $request->get('description');
-                }
-                else {
-                    $_SESSION['description'] = null;
-                }
-            }
+            $this->get('session')->set('autologin', true);
+
+           
             foreach ($valid_hashes_login as $valid_hash) {
                 if($valid_hash != "") $hash_login = $valid_hash;
             }
@@ -205,10 +147,33 @@ class SecurityController extends Controller{
                         $key = new UsernamePasswordToken($user, $user->getPassword(), "public", $user->getRoles());
                         $this->get("security.token_storage")->setToken($key);
 
-                        // Fire the login event
-                        $event = new InteractiveLoginEvent($request, $key);
-                        $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
+                        if($request->get('techdocIdVersion') != null){           
+                            $version = $em->getRepository('CarBundle:Version')->findOneById($request->get('techdocIdVersion'));
+                            if($version != null){
+                                $this->get('session')->set('marca', $version->getMarca()->getId());
+                                $this->get('session')->set('modelo', $version->getModel()->getId());
+                                $this->get('session')->set('version', $request->get('techdocIdVersion'));
+                            }
+                            else {
+                                $this->get('session')->set('marca', null);
+                                $this->get('session')->set('modelo', null);
+                                $this->get('session')->set('version', null);
+                            }
 
+                            if($request->get('plateNumber') != null){
+                                $this->get('session')->set('plateNumber', $request->get('plateNumber'));
+                            }
+                            else {
+                                $this->get('session')->set('plateNumber', null);
+                            }
+                            if($request->get('description') != null){
+                                $this->get('session')->set('description', $request->get('description'));
+                            }
+                            else {
+                                $this->get('session')->set('description', null);
+                            }
+                        }
+                        
                         return $this->redirect($this->generateUrl('_login'));
                     }
                     else return $this->redirect($this->generateUrl('_login'));

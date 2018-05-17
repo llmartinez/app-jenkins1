@@ -50,7 +50,8 @@
                 <option value="cif"  {% if term == 'cif'  %}selected{% endif %}>{{ 'cif'|trans }}</option>
                 <option value="postal_code" {% if term == 'postal_code' %}selected{% endif %}>{{ 'postal_code'|trans }}</option>
                 <option value="internal_code"  {% if term == 'internal_code'  %}selected{% endif %}>{{ 'internal_code'|trans }}</option>
-                <option value="typology"  {% if term == 'typology'  %}selected{% endif %}>{{ 'typology'|trans }}</option>
+                <option value="typology"  {% if term == 'typology'  %}selected{% endif %}>{{ 'typology'|trans }}</option>                
+                <option value="code_workshop"  {% if term == 'code_workshop'  %}selected{% endif %}>{{ 'code_workshop'|trans }}</option>
              </select>
         </div>
         <div class="col-xs-7 col-md-7 form-group" style="margin-top: 21px;margin-left: -25px;">
@@ -76,8 +77,6 @@
                 {% if id_catserv != 3 %}
                     <th>{{ 'shop'|trans }}</th>
                 {% endif %}
-                {# <th>{{ 'active'|trans }}</th> #}
-                {# <th>{{ 'numTickets'|trans }}</th> #}
                 {% if app.user.getAllowOrder() == true and is_granted('ROLE_AD') %}
                 <th>{{ 'actions'|trans }}</th>
                 {% endif %}
@@ -98,8 +97,6 @@
                 {% if id_catserv != 3 %}
                 <td>{{ workshop.shop }} </td>
                 {% endif %}
-                {# <td>{{ workshop.active }}       </td> #}
-                {# <td>{{ numTickets[workshop.id]}}</td> #}
                 {% if app.user.getAllowOrder() == true %}
                     {% if is_granted('ROLE_ADMIN') %}
                         <td>

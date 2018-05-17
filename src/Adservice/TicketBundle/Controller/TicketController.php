@@ -387,7 +387,7 @@ class TicketController extends Controller {
             'country' => $country, 'lang' => $lang, 'catserv' => $catserv, 'num_rows' => $num_rows, 'option' => $option, 'brands' => $brands,
             'systems' => $systems, 'countries' => $countries, 'catservices' => $catservices, 'languages' => $languages,
             'adsplus' => $adsplus, 'inactive' => $inactive, 't_inactive' => $t_inactive, 'importances' => $importances,
-            'advisers' => $advisers, 'adviser_id' => $adviser_id, 'workshop_id' => $workshop_id
+            'advisers' => $advisers, 'adviser_id' => $adviser_id, 'workshop_id' => $workshop_id, 'brand' => null
         );
         if($this->getUser()->getCategoryService() != null){
             $array['id_catserv'] = $this->getUser()->getCategoryService()->getId();
@@ -420,31 +420,11 @@ class TicketController extends Controller {
         $car = new Car();
         $document = new Document();
         $_SESSION['einatech'] = $einatech;
-        if(isset($_SESSION['autologin'])){
-            $autologin_session = $_SESSION['autologin'];
-        }
-        else{
-            $autologin_session = false;
-        }
+        
+        $autologin_session = $this->get('session')->get('autologin');
         $user = $this->getUser();
         if(!$user)
         { 
-            if( $request->request->get('new_car_form_version') != null){
-                $_SESSION['marca'] = $request->request->get('new_car_form_brand');
-                $_SESSION['modelo'] = $request->request->get('new_car_form_model');
-                $_SESSION['version'] = $request->request->get('new_car_form_version');
-                $_SESSION['description'] = $request->request->get('ticket_form')['description'];
-                $_SESSION['plateNumber'] = $request->request->get('new_car_form')['plateNumber'];
-                $_SESSION['vin'] = $request->request->get('new_car_form')['vin'];
-                $_SESSION['displacement'] = $request->request->get('new_car_form')['displacement'];
-                $_SESSION['kW'] = $request->request->get('new_car_form')['kW'];
-                $_SESSION['importance'] = $request->request->get('ticket_form')['importance'];
-                if(array_key_exists('subsystem',$request->request->get('ticket_form'))){
-                    $_SESSION['subsystem'] = $request->request->get('ticket_form')['subsystem'];
-                    $subsystem = $em->getRepository('TicketBundle:Subsystem')->findOneById($_SESSION['subsystem']);
-                    $_SESSION['system'] = $subsystem->getSystem()->getId();
-                }
-            }
             return $this->redirect($this->generateUrl('user_login'));
         }
         
@@ -514,7 +494,8 @@ class TicketController extends Controller {
         $id_subsystem = $request->request->get('n_id_subsystem');
         $id_importance = $request->request->get('n_id_importance');
         $id_displacement = $request->request->get('n_id_displacement');
-        if(!isset($_SESSION['version']) or $_SESSION['version'] == null) {
+        
+        if($this->get('session')->get('version') == null) {
             $id_vin = $request->request->get('n_id_vin');
             $id_plateNumber = $request->request->get('n_id_plateNumber');
         }
@@ -571,9 +552,7 @@ class TicketController extends Controller {
             $id_plateNumber = strtoupper($id_plateNumber);
             $car->setPlateNumber($id_plateNumber);
         }
-        if(isset($_SESSION['error']) && $_SESSION['error']!= ''){
-            $this->get('session')->getFlashBag()->add('error', $_SESSION['error']);
-        }
+
         $systems = $em->getRepository('TicketBundle:System')->findAll();
         if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN') || $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')){
             $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
@@ -992,15 +971,15 @@ class TicketController extends Controller {
         }
         $marca_session = $modelo_session = $version_session = $description_session = $plateNumber_session = $vin_session = $system_session = $subsystem_session = $importance_session = null; 
         
-        if(isset($_SESSION['marca'])) {
-            $marca_session = $_SESSION['marca'];
-            $modelo_session = $_SESSION['modelo'];
-            $version_session = $_SESSION['version'];    
+        if($this->get('session')->get('marca') != null) {
+            $marca_session = $this->get('session')->get('marca');
+            $modelo_session = $this->get('session')->get('modelo');
+            $version_session = $this->get('session')->get('version');    
             if($einatech != 1)
-                $description_session = $_SESSION['description'];           
-            $plateNumber_session = $_SESSION['plateNumber']; 
-            if(isset($_SESSION['vin'])) {
-                $vin_session = $_SESSION['vin'];
+                $description_session = $this->get('session')->get('description');           
+            $plateNumber_session = $this->get('session')->get('plateNumber'); 
+            if($this->get('session')->get('vin') != null) {
+                $vin_session = $this->get('session')->get('vin');
             }
             $id_vin = null;
             $car->setVin($id_vin);       
@@ -1008,12 +987,12 @@ class TicketController extends Controller {
             $car->setPlateNumber($id_plateNumber);    
             
         }
-        if(isset($_SESSION['subsystem'])) {
-            $system_session = $_SESSION['system'];
-            $subsystem_session = $_SESSION['subsystem'];
+        if($this->get('session')->get('subsystem') != null) {
+            $system_session = $this->get('session')->get('system');
+            $subsystem_session = $this->get('session')->get('subsystem');
         }
-        if(isset($_SESSION['importance'])) {
-            $importance_session = $_SESSION['importance'];
+        if($this->get('session')->get('importance') != null) {
+            $importance_session = $this->get('session')->get('importance');
         }
         $array = array('ticket' => $ticket,
             'action' => 'newTicket',
@@ -2155,10 +2134,9 @@ class TicketController extends Controller {
             $advisers = $em->getRepository("UserBundle:User")->findByRole($em, 0, 0, 'ROLE_ASSESSOR');
         }
         $pagination = new Pagination($page);
-
         // if($num_rows != 10) { $pagination->setMaxRows($num_rows); }
         // Seteamos el numero de resultados que se mostraran
-        $pagination->setMaxRows(50);
+        $pagination->setMaxRows(10);
 
         $cars = $pagination->getRows($em, 'CarBundle', 'Car', $params, $pagination);
 
@@ -2235,31 +2213,13 @@ class TicketController extends Controller {
      * @return url
      */
     public function findAssessorTicketByBMVAction(Request $request, $page = null) {
-        /*         * *********************************************************************************************************************
-         * TODO:
-         * En una nueva version (2.8) habría que separar esta funcion en otras 2,
-         *  en función de si se ha escogido un taller en la busqueda o no
-         * (La comprobacion "$workshop->getId();" muestra menos registros que los de $pagination, y hace fallar la paginación)
-         * -- QF:
-         *     - De momento se mostrará un listado fijo ($max_rows = 100;) y se ocultará la paginación,
-         *       a fin de evitar registros que no se mostraban al estar en una segunda página de $pagination.
-         *
-         * ********************************************************************************************************************* */
+        
         $em = $this->getDoctrine()->getManager();
-
-
-
         $user = $this->getUser();
-        if(!$user) return $this->redirect($this->generateUrl('user_login'));
-
-        $params = array();
-
-        // PAGE
-        if (!isset($page))
-            $page = $request->request->get('ftbmv_page');
-        if (!isset($page))
+        if(!$user){ return $this->redirect($this->generateUrl('user_login'));}
+        $page = $request->request->get('ftbmv_page');
+        if (!isset($page) or $page == 0)
             $page = 1;
-
         // WORKSHOP
         $codepartner = $request->get('ftbmv_codepartner');
         $codeworkshop = $request->get('ftbmv_codeworkshop');
@@ -2279,201 +2239,64 @@ class TicketController extends Controller {
         $displacement = $request->request->get('new_car_form_displacement');
         $vin = $request->request->get('new_car_form_vin');
         $plateNumber = $request->request->get('new_car_form_plateNumber');
-
-        if ($model != '0' and $version == '0')
+        
+        if ($model != '0' and $version == '0'){
             $version = '';
-
-        if ($plateNumber == null)
+        }
+        if ($plateNumber == null){
             $plateNumber = $request->request->get('new_car_form_plate_number');
-
+        }
         $workshop = new Workshop();
 
-        if(!$this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR'))
+        if(!$this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR')){
             $workshop = $user->getWorkshop();
-
-        elseif (isset($codepartner) and isset($codeworkshop) and $codepartner != '' and $codeworkshop != '')
+        }
+        elseif (isset($codepartner) and isset($codeworkshop) and $codepartner != '' and $codeworkshop != ''){
             $workshop = $em->getRepository('WorkshopBundle:Workshop')->findOneBy(array('code_workshop' => $codeworkshop, 'code_partner' => $codepartner));
-
-        if($workshop->getId() == null) {
-
-            $num_rows = $request->request->get('slct_numRows');
-            if (!isset($num_rows))
-                $num_rows = 10;
-            if (isset($brand) and $brand != null and $brand != '')
-                $params[] = array('brand', ' = ' . $brand);
-            if (isset($model) and $model != null and $model != '')
-                $params[] = array('model', ' = ' . $model);
-            if (isset($version) and $version != null and $version != '')
-                $params[] = array('version', ' = ' . $version);
-
-            if (isset($plateNumber) and $plateNumber != '0' and $plateNumber != '')
-                $params[] = array('plateNumber' . ' LIKE ', '\'' . $plateNumber . '\'');
-            $pagination = new Pagination($page);
-
-            // Seteamos el numero de resultados que se mostraran
-            $max_rows = 100;
-            $pagination->setMaxRows($max_rows);
-            $ordered = array('e.modified_at', 'DESC');
-
-            $cars = $pagination->getRows($em, 'CarBundle', 'Car', $params, $pagination, $ordered);
-            $length = $pagination->getRowsLength($em, 'CarBundle', 'Car', $params, $ordered);
-
-            $pagination->setTotalPagByLength($length);
-
-            $tickets = array();
-            $key = array_keys($cars);
-            $size = sizeOf($key);
-
-            if ($length > $max_rows)
-                $more_results = $length - $max_rows;
-            else
-                $more_results = 0;
-
-            if(!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') AND $user->getCategoryService() != NULL) {
-                $catserv = $user->getCategoryService()->getId();
-            }
-            else{
-                $catserv = null;
-            }
-
-            if ($size > 0) {
-
-                for ($i = 0; $i < $size; $i++) {
-
-                    $id = $cars[$key[$i]]->getId();
-                    if ($subsystem == 0 or $subsystem == ''){
-                        if(isset($catserv) && $catserv != null) $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id, 'category_service' => $catserv));
-                        else                $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id));
-                    }
-                    else{
-                        if(isset($catserv) && $catserv != null) $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id, 'subsystem' => $subsystem, 'category_service' => $catserv));
-                        else                $ticket = $em->getRepository('TicketBundle:Ticket')->findBy(array('car' => $id, 'subsystem' => $subsystem));
-                    }
-
-                    if (sizeof($ticket) >= 1) {
-                        foreach ($ticket as $tck) {
-                            if ($tck and ( $tck->getWorkshop()->getCountry()->getId() == $user->getCountry()->getId() or $this->get('security.authorization_checker')->isGranted('ROLE_ASSESSOR'))) {
-                                if($workshop != null){
-                                    $w_id = $workshop->getId();
-                                }
-                                // Si esta definido el taller añadimos al array solo las que coinciden con el taller
-                                if (isset($w_id)) {
-
-                                    if ($workshop->getId() == $tck->getWorkshop()->getId()) {
-
-                                        $tickets[] = $tck;
-                                    }
-                                }
-                                // Sino añadimos todos los tickets independientemente del taller que sean
-                                else {
-                                    $tickets[] = $tck;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }else{
-
-            if(!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') AND $user->getCategoryService() != NULL) {
-                $catserv = $user->getCategoryService()->getId();
-            }
-            else $catserv = null;
-
-            if($workshop->getId() != null) $ticket = $em->getRepository('TicketBundle:Ticket')->findByWorkshop($workshop);
-            else                           $ticket = $em->getRepository('TicketBundle:Ticket')->findByCategoryService($catserv);
-            $pagination = new Pagination();
-            $num_rows = $request->request->get('slct_numRows');
-            if (!isset($num_rows))
-                $num_rows = 10;
-            $more_results = 0;
-
-            $arr_open = array();
-            $arr_closed = array();
-            $arr_inactive = array();
-            $arr_expirated = array();
-
-            foreach ($ticket as $tck)
-            {
-                $car = $tck->getCar();
-                $add_ticket = null;
-
-                // Si se esta buscando algun campo y no lo encuentra, deja de buscar coincidencias entre ese ticket y el coche buscado
-                $search = true;
-
-                if($subsystem != null and $subsystem != '' and $subsystem != '0'){
-                    if($tck->getSubsystem() == null or $subsystem != $tck->getSubsystem()->getId()) $search = false;
-                }
-                if($plateNumber != null and $plateNumber != '' and $plateNumber != '0'){
-                    if($car->getPlateNumber() == null or $plateNumber != $car->getPlateNumber())    $search = false;
-                }
-
-                if($search){
-                    if($version != null and $version != '' and $version != '0'){
-                        if($car->getVersion() != null and $version == $car->getVersion()->getId()) {
-                            $add_ticket = $tck;
-                        }
-                    }
-                    elseif($model != null and $model != '' and $model != '0'){
-                        if($car->getModel() != null and $model == $car->getModel()->getId()) {
-                            $add_ticket = $tck;
-                        }
-                    }
-                    elseif($brand != null and $brand != '' and $brand != '0'){
-                        if($car->getBrand() != null and $brand == $car->getBrand()->getId()) {
-                            $add_ticket = $tck;
-                        }
-                    }else{
-                        if($subsystem != null and $subsystem != '' and $subsystem != '0' and $plateNumber != null and $plateNumber != '' and $plateNumber != '0')
-                        {
-                            if($car->getSubsystem() != null and $subsystem == $car->getSubsystem()->getId()
-                              and $car->getPlateNumber() != null and $plateNumber == $car->getPlateNumber()->getId()) {
-                                $add_ticket = $tck;
-                            }
-                        }elseif($subsystem != null and $subsystem != '' and $subsystem != '0')
-                        {
-                            if($car->getSubsystem() != null and $subsystem == $car->getSubsystem()->getId())
-                                $add_ticket = $tck;
-
-                        }elseif($plateNumber != null and $plateNumber != '' and $plateNumber != '0')
-                        {
-                            if ($car->getPlateNumber() != null and $plateNumber == $car->getPlateNumber())
-                                $add_ticket = $tck;
-
-                        }
-                    }
-                }
-
-                if($add_ticket != null)
-                {
-                    $id_stat = $tck->getStatus()->getId();
-
-                    switch ($id_stat) {
-                        case '1': // OPEN
-                            $arr_open[] = $add_ticket;
-                            break;
-                        case '2': // CLOSED
-                            $arr_closed[] = $add_ticket;
-                            break;
-                        case '3': // INACTIVE
-                            $arr_inactive[] = $add_ticket;
-                            break;
-                        case '4': // EXPIRATED
-                            $arr_expirated[] = $add_ticket;
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-
-            $tickets = array();
-            foreach ($arr_inactive  as $t) { $tickets[] = $t; }
-            foreach ($arr_expirated as $t) { $tickets[] = $t; }
-            foreach ($arr_open      as $t) { $tickets[] = $t; }
-            foreach ($arr_closed    as $t) { $tickets[] = $t; }
         }
 
+        $pagination = new Pagination($page);
+        $num_rows = ($request->request->get('slct_numRows') > 0 ) ? $request->request->get('slct_numRows') : 10;
+        $pagination->setMaxRows($num_rows);
+
+        $ordered = array('e.modified_at', 'DESC');
+        
+        $conditions[] =  "ca.id = e.car ";
+        $params = array();
+        if($plateNumber != null){
+            $conditions[] = "ca.plateNumber = '". $plateNumber."'";
+        }
+        if($version != null){
+            $conditions[] = "ca.version = " . $version;
+        }
+        elseif($model != null){
+            $conditions[] = 'ca.model = ' . $model;
+        }
+        elseif($brand != null){
+            $conditions[] = 'ca.brand = ' . $brand;
+        }
+        
+        $joins[] = array('e.car ca ', implode(" AND ",$conditions)); 
+         
+        if(!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') AND $user->getCategoryService() != NULL) {
+            $catserv = $user->getCategoryService()->getId();
+        }
+        else{
+            $catserv = null;
+        }
+        if (isset($subsystem) and $subsystem != null){
+            $params[] = array('subsystem', ' = ' . $subsystem);
+        } 
+        if(isset($catserv) && $catserv != null){
+            $params[] = array('category_service', ' = ' . $catserv);
+        }
+        if($workshop->getId() != null) {
+            $params[] = array('workshop', ' = ' . $workshop->getId());
+        }
+        $tickets = $pagination->getRows($em, 'TicketBundle', 'Ticket', $params, $pagination, $ordered, $joins);
+        $length = $pagination->getRowsLength($em, 'TicketBundle', 'Ticket', $params, $ordered, $joins);
+        $pagination->setTotalPagByLength($length);
+        
         $b_query = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
         $brands = $b_query->getResult();
         $countries = $em->getRepository('UtilBundle:Country')->findAll();
@@ -2499,57 +2322,19 @@ class TicketController extends Controller {
             $model = $em->getRepository('CarBundle:Model')->find($model);
         }
 
-        if (isset($version) and $version != '' and $version != null)
+        if (isset($version) and $version != '' and $version != null){
             $version = $em->getRepository('CarBundle:Version')->findOneById($version);
-
-        if (isset($subsystem) and $subsystem != '0' and $subsystem != '')
+        }
+        if (isset($subsystem) and $subsystem != '0' and $subsystem != ''){
             $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($subsystem);
-
+        }
         if (sizeof($tickets) == 0)
             $pagination = new Pagination(0);
 
-
-        if ($plateNumber != '') {
-
-
-            if (!isset($cars)) {
-                $cars[0] = $em->getRepository('CarBundle:Car')->findOneByPlateNumber($plateNumber);
-            }
-
-            if (isset($cars) and $cars != null and $cars[0] != null) {
-                $brand = $cars[0]->getBrand()->getId();
-                $model = $cars[0]->getModel();
-                $vin = $cars[0]->getVin();
-                $year = $cars[0]->getYear();
-                $motor = $cars[0]->getMotor();
-                $kw = $cars[0]->getKw();
-                $displacement = $cars[0]->getDisplacement();
-                if($cars[0]->getVersion() != null){
-                    if($cars[0]->getVersion()->getId() > 0){
-                        $version = $em->getRepository('CarBundle:Version')->findOneById($cars[0]->getVersion());
-                    }
-                    else
-                        $version = null;
-                }
-            }
+        if($brand == '') {
+            $brand = null;
         }
-        if($brand == '') $brand = null;
-
         //Al llamar a esta funcion se pierde la version del coche, aqui la volvemos a asignar
-        if(sizeOf($tickets) > 0)
-        {
-            if($tickets[0]->getCar()->getVersion() != null) {
-            $ver = $em->getRepository('CarBundle:Version')->findOneById($tickets[0]->getCar()->getVersion()->getId());
-
-                if($ver != null){
-                    foreach ($tickets as $ticket) {
-
-                        $ticket->getCar()->setVersion($ver);
-                    }
-                }
-            }
-        }
-
         $array = array('workshop' => $workshop,
             'pagination' => $pagination,
             'codepartner' => $codepartner,
@@ -2581,7 +2366,6 @@ class TicketController extends Controller {
             'option' => 'all',
             'page' => $page,
             'num_rows' => $num_rows,
-            'more_results' => $more_results,
             'country' => 0,
             'inactive' => 0,
             'disablePag' => 0,
@@ -2655,19 +2439,19 @@ class TicketController extends Controller {
     }
 
     private function deleteSessionCar(){
-        $_SESSION['marca'] = null;
-        $_SESSION['modelo'] = null;
-        $_SESSION['version'] = null;
-        $_SESSION['description'] = null;
-        $_SESSION['plateNumber'] = null;
-        $_SESSION['vin'] = null;
-        $_SESSION['displacement'] = null;
-        $_SESSION['kW'] = null;
-        $_SESSION['importance'] = null;
-        $_SESSION['subsystem'] = null;
-        $_SESSION['system'] = null;
-        $_SESSION['autologin'] = null;
-        $_SESSION['error'] = null;
+        $this->get('session')->set('marca', null);
+        $this->get('session')->set('modelo', null);
+        $this->get('session')->set('description', null);
+        $this->get('session')->set('plateNumber', null);
+        $this->get('session')->set('vin', null);
+        $this->get('session')->set('displacement', null);
+        $this->get('session')->set('kW', null);
+        $this->get('session')->set('importance', null);
+        $this->get('session')->set('subsystem', null);
+        $this->get('session')->set('system', null);
+        $this->get('session')->set('autologin', null);
+                
+        
         
     }
     

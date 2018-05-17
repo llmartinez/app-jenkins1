@@ -282,12 +282,8 @@
                                         <a title="{{ workshopOrder.rejectionReason }}" href="#"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tag_red.png') }}"></a>
                                 {% endif %}
                             </td>
-                            {% if is_granted('ROLE_ADMIN') %}
-                                <td>
-                                    <a title="{{ 'accept'|trans }}"  href="{{ path("workshopOrder_accept", { 'id': workshopOrder.id, 'status': 'accepted' }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick_.png') }}"> </a>
-                                    <a title="{{ 'reject'|trans }}" href="{{ path("workshopOrder_reject", { 'id': workshopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/close.png') }}"> </a>
-                                
-                            {% elseif is_granted('ROLE_TOP_AD') and id_catserv == 3 %}
+                            {% if is_granted('ROLE_ADMIN')
+                                or (is_granted('ROLE_TOP_AD') and id_catserv == 3) %}
                                 <td>
                                     <a title="{{ 'accept'|trans }}"  href="{{ path("workshopOrder_accept", { 'id': workshopOrder.id, 'status': 'accepted' }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/tick_.png') }}"> </a>
                                     <a title="{{ 'reject'|trans }}" href="{{ path("workshopOrder_reject", { 'id': workshopOrder.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/close.png') }}"> </a>
