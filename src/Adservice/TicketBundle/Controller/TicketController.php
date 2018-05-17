@@ -454,17 +454,28 @@ class TicketController extends Controller {
         // Ha aparecido un error en el formulario que no recoge los datos de Marca, Modelo, Gama, Subsistema y Importancia.
         // Al no encontrar solucion aparente cargaremos los datos desde $request
         //
+        $open_newTicket = $request->request->get('open_newTicket');
+        if($this->get('session')->get('version') == null) {
+            $id_vin = $request->request->get('new_car_form')['vin'];
+            $id_plateNumber = $request->request->get('new_car_form')['plateNumber'];
+        }
         $id_brand = $request->request->get('new_car_form_brand');
         $id_model = $request->request->get('new_car_form_model');
         $id_version = $request->request->get('new_car_form_version');
-        
-        if(isset($request->request->get('ticket_form')['subsystem'])){
-            $id_subsystem = $request->request->get('ticket_form')['subsystem'];
+        $id_year = $request->request->get('new_car_form')['year'];
+        $id_motor = $request->request->get('new_car_form')['motor'];
+        $id_kw = $request->request->get('new_car_form')['kW'];
+        $id_displacement = $request->request->get('new_car_form')['displacement'];
+        $id_importance = $request->request->get('ticket_form')['importance'];
+        $id_subsystem = $request->request->get('ticket_form')['subsystem'];
+
+        if (isset($id_vin) and $id_vin != '' and $id_vin != '0') {
+            $id_vin = strtoupper($id_vin);
+            $car->setVin($id_vin);
         }
-        if(isset($request->request->get('ticket_form')['importance'])){
-            $id_importance = $request->request->get('ticket_form')['importance'];
-            $importance= $em->getRepository('TicketBundle:Ticket')->find($id_importance);
-            $ticket->setImportance($importance);
+        if (isset($id_plateNumber) and $id_plateNumber != '' and $id_plateNumber != '0') {
+            $id_plateNumber = strtoupper($id_plateNumber);
+            $car->setPlateNumber($id_plateNumber);
         }
         if (isset($id_brand) and $id_brand != '') {
             $brand = $em->getRepository('CarBundle:Brand')->find($id_brand);
@@ -475,55 +486,20 @@ class TicketController extends Controller {
             $car->setModel($model);
         }
         if (isset($id_version) and $id_version != '') {
-
             $version = $em->getRepository('CarBundle:Version')->findOneById($id_version);
-            $car->setVersion($version);
-        }
-        if (isset($id_subsystem) and $id_subsystem != '' and $id_subsystem != '0') {
-            $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem);
-            $ticket->setSubsystem($subsystem);
-        }
-        
-        $open_newTicket = $request->request->get('open_newTicket');
-        $id_brand = $request->request->get('n_id_brand');
-        $id_model = $request->request->get('n_id_model');
-        $id_version = $request->request->get('n_id_version');
-        $id_year = $request->request->get('n_id_year');
-        $id_motor = $request->request->get('n_id_motor');
-        $id_kw = $request->request->get('n_id_kw');
-        $id_subsystem = $request->request->get('n_id_subsystem');
-        $id_importance = $request->request->get('n_id_importance');
-        $id_displacement = $request->request->get('n_id_displacement');
-        
-        if($this->get('session')->get('version') == null) {
-            $id_vin = $request->request->get('n_id_vin');
-            $id_plateNumber = $request->request->get('n_id_plateNumber');
-        }
-        if (isset($id_brand) and $id_brand != '' and $id_brand != '0') {
-            $brand = $em->getRepository('CarBundle:Brand')->find($id_brand);
-            $car->setBrand($brand);
-        }
-        if (isset($id_model) and $id_model != '' and $id_model != '0') {
-            $model = $em->getRepository('CarBundle:Model')->find($id_model);
-            
-            $car->setModel($model);
-        }
-        if (isset($id_version) and $id_version != '' and $id_version != '0') {
-            $version = $em->getRepository('CarBundle:Version')->findOneById($id_version);
-            if(sizeof($version)>1){ 
+            if(sizeof($version)>1){
                 if(isset($id_motor) && $id_motor != '' && $id_motor != '0'){
                     $v_query   = $em->createQuery("SELECT v FROM CarBundle:Version v, CarBundle:Motor m WHERE v.id= ".$id_version." AND m.name = '".$id_motor."' AND m.id = v.motor");
-                   
+
                     $version = $v_query->getSingleResult();
                 }
                 else{
                     $version = $em->getRepository('CarBundle:Version')->findOneById($id_version);
                 }
-                
+
             }
             $car->setVersion($version);
         }
-        
         if (isset($id_year) and $id_year != '' and $id_year != '0') {
             $car->setYear($id_year);
         }
@@ -533,34 +509,29 @@ class TicketController extends Controller {
         if (isset($id_kw) and $id_kw != '' and $id_kw != '0') {
             $car->setKw($id_kw);
         }
+        if (isset($id_displacement) and $id_displacement != '' and $id_displacement != '0') {
+            $car->setDisplacement($id_displacement);
+        }
+        if(isset($request->request->get('ticket_form')['importance'])){
+            $importance = $em->getRepository('TicketBundle:Importance')->find($id_importance);
+            $ticket->setImportance($importance);
+        }
         if (isset($id_subsystem) and $id_subsystem != '' and $id_subsystem != '0') {
             $subsystem = $em->getRepository('TicketBundle:Subsystem')->find($id_subsystem);
             $ticket->setSubsystem($subsystem);
         }
-        if (isset($id_importance) and $id_importance != '' and $id_importance != '0') {
-            $importance = $em->getRepository('TicketBundle:Importance')->find($id_importance);
-            $ticket->setImportance($importance);
-        }
-        if (isset($id_displacement) and $id_displacement != '' and $id_displacement != '0') {
-            $car->setDisplacement($id_displacement);
-        }
-        if (isset($id_vin) and $id_vin != '' and $id_vin != '0') {
-            $id_vin = strtoupper($id_vin);
-            $car->setVin($id_vin);
-        }
-        if (isset($id_plateNumber) and $id_plateNumber != '' and $id_plateNumber != '0') {
-            $id_plateNumber = strtoupper($id_plateNumber);
-            $car->setPlateNumber($id_plateNumber);
-        }
+
+//        dump($car,$ticket);
+//        die;
 
         $systems = $em->getRepository('TicketBundle:System')->findAll();
-        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN') || $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')){
-            $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
+        $brandQuery = 'SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand';
+        if(!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN') && !$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')){
+            $brandQuery   = $brandQuery.' AND b.id <> 0 ';
         }
-        else{
-            $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand AND b.id <> 0 ORDER BY b.name');
-        }
-        $brands = $b_query->getResult();
+        $brandQuery = $brandQuery.'ORDER BY b.name';
+        $brands = $em->createQuery($brandQuery)->getResult();
+
         $adsplus = $em->getRepository('WorkshopBundle:ADSPlus')->findOneBy(array('idTallerADS' => $workshop->getId()));
 
         //Define Forms
@@ -570,7 +541,7 @@ class TicketController extends Controller {
         $textarea_content = "";
         if($einatech == 1){
              $textarea_content = $this->get('translator')->trans('einatech_textarea_default');
-         }
+        }
         if (isset($open_newTicket) and $open_newTicket == '1' and $request->getMethod() == 'POST') {
             //campos comunes
             $user = $em->getRepository('UserBundle:User')->find($this->getUser()->getId());
