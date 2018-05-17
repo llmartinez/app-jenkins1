@@ -401,20 +401,15 @@ class AjaxController extends Controller
     public function carDataAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
 
-        $version = $em->getRepository('CarBundle:Version')->findOneBy(
-            array(
-                'id' => $request->get('id_version'),
-                'motor' => $request->get('id_motor')
-            )
+        $version = $em->getRepository('CarBundle:Version')->findVersionByIdAndMotorName(
+            $request->get('id_version'), $request->get('motor')
         );
 
         if ($version instanceof Version) {
-            $json = $version->to_json();
+            return new JsonResponse($version->to_json());
         } else {
-            $json = array( 'error' => 'No hay coincidencias');
+            return new JsonResponse(array( 'error' => 'No hay coincidencias'));
         }
-
-        return new JsonResponse($json);
     }
 
     /**
@@ -525,14 +520,16 @@ class AjaxController extends Controller
 
         $car = $em->getRepository('CarBundle:Car')->findOneBy(array('plateNumber' => $idPlateNumber));
 
-        if ($car instanceof Car AND $car->getStatus() == "validado"){
-
-            $json = $car->to_json();
-            return new JsonResponse($json);
+        if ($car instanceof Car && ($car->getStatus() == "verified" || $car->getStatus() == "invented")){
+            return new JsonResponse(array('error' => false, 'cars' => array($car->to_json())));
         }
 
         $results = $this->get('dgt_webservice')->getData($idPlateNumber);
         $json = $this->get('dgt_webservice')->transformData($results);
+
+        if ($json['error'] != false && empty($json['cars']) && $car instanceof Car){
+            return new JsonResponse(array('error' => $json['error'], 'cars' => array($car->to_json())));
+        }
 
         return new JsonResponse($json);
     }

@@ -23,13 +23,9 @@ class CarController extends Controller {
         $em        = $this->getDoctrine()->getManager();
 
         $car = $ticket->getCar();
-        $formC = $this->createForm(CarType::class, $car);
-        // MAGIC: por algun motivo sin esto no carga nombre de Version en edit_car
-        // mas info: http://imgur.com/gallery/YsbKHg1
-        if($car->getVersion() != null) $version_name = $ticket->getCar()->getVersion()->getName();
-        if ($request->getMethod() == 'POST') {
+        $formC = $this->createForm(CarType::class, $car, array('status' => $car->getStatus(), 'origin' => $car->getOrigin()));
 
-            $user = $em->getRepository('UserBundle:User')->find($this->getUser()->getId());
+        if ($request->getMethod() == 'POST') {
 
             $formC->handleRequest($request);
 
@@ -68,7 +64,7 @@ class CarController extends Controller {
                     }
                     $car->setVin(strtoupper($car->getVin()));
                     $car->setPlateNumber(strtoupper($car->getPlateNumber()));
-                    UtilController::saveEntity($em, $car, $user);
+                    UtilController::saveEntity($em, $car, $this->getUser());
 
                     return $this->redirect($this->generateUrl('showTicket', array('id' => $id)));
                 }
@@ -91,9 +87,27 @@ class CarController extends Controller {
         return $this->render('TicketBundle:Layout:edit_car_layout.html.twig', array(
                     'formC'       => $formC->createView(),
                     'ticket'      => $ticket,
+                    'car'         => $car,
                     'brands'      => $brands,
                     'models'      => $models,
                     'versions'    => $versions
                 ));
+    }
+    
+    /**
+     * Cambia el estado de un vehiculo por el valor pasado por parametro
+     * @Route("/car/edit/{id}")
+     * @ParamConverter("ticket", class="TicketBundle:Ticket")
+     * @return url
+     */
+    public function changeStatusCarAction($id, $status, $ticket_id){
+        $em = $this->getDoctrine()->getManager();
+        $car = $em->getRepository('CarBundle:Car')->find($id);
+        $car->setStatus($status);
+        if ($status == 'invented'){
+            $car->setOrigin('custom');
+        }
+        UtilController::saveEntity($em, $car, $this->getUser());
+        return $this->redirect($this->generateUrl('editCar', array('id' => $ticket_id)));
     }
 }

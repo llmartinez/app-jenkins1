@@ -42,7 +42,7 @@ class Car
      * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Version")
      * @ORM\JoinColumns({
      *          @ORM\JoinColumn(name="version_id", referencedColumnName="Version"),
-     *          @ORM\JoinColumn(name="Motor", referencedColumnName="Motor")
+     *          @ORM\JoinColumn(name="motor_id", referencedColumnName="Motor")
      *     })
 
      */
@@ -56,11 +56,18 @@ class Car
     private $year;
 
     /**
-     * @var integer $motor
-     * @ORM\ManyToOne(targetEntity="Adservice\CarBundle\Entity\Motor")
-     * @ORM\JoinColumn(name="Motor", referencedColumnName="Motor")
+     * @var string $motor
+     * @ORM\Column(name="motor", type="string", length=255)
      */
     private $motor;
+
+    /**
+     * @var integer $motorId
+     *
+     * @ORM\ManyToOne(targetEntity="\Adservice\CarBundle\Entity\Motor")
+     * @ORM\JoinColumn(name="motor_id", referencedColumnName="Motor")
+     */
+    private $motorId;
 
     /**
      * @var integer $kW
@@ -262,6 +269,22 @@ class Car
     public function getMotor()
     {
         return $this->motor;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMotorId()
+    {
+        return $this->motorId;
+    }
+
+    /**
+     * @param int $motorId
+     */
+    public function setMotorId($motorId)
+    {
+        $this->motorId = $motorId;
     }
 
     /**
@@ -509,7 +532,7 @@ class Car
                       'modelId'             => $this->getModel()->getId(),
                       'versionId'           => $version,
                       'year'                => $this->getYear(),
-                      'motor'               => $this->getMotor()->getName(),
+                      'motor'               => $this->getMotor(),
                       'kw'                  => $this->getKw(),
                       'cm3'                 => $this->getDisplacement(),
                       'vin'                 => $this->getVin(),

@@ -73,6 +73,44 @@ legend {
     max-height: 40px;
     margin-right: 5px;
 }
+.img_icon_car{
+    max-height: 40px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+.invented_car img {
+    display:none;
+}
+.invented_car {
+    width:40px;
+    height:40px;
+    box-sizing:border-box;
+    cursor: pointer;   
+    margin-right: 10px;
+    background: url('../images/icon/invented.png')  no-repeat;
+}
+.undefined_car img {
+    display:none;
+}
+.undefined_car {
+    width:40px;
+    height:40px;
+    box-sizing:border-box;
+    cursor: pointer;    
+    margin-right: 10px;
+    background: url('../images/icon/undefined.png')  no-repeat;
+}
+.verified_car img {
+    display:none;
+}
+.verified_car {
+    width:40px;
+    height:40px;
+    box-sizing:border-box;
+    cursor: pointer;
+    margin-right: 10px;
+    background: url('../images/icon/verified.png')  no-repeat;
+}
 .margined {
     margin-right: 40px;
 }

@@ -31,7 +31,7 @@
         <div class="grid-33">
             <label for="new_car_form_plateNumber">{{ 'plate_number'|trans }} *<a id="txt_plateNumber"></a></label>
             <a class="pull-right" id="filter_plate_number" title="{{ 'filter_by_plate_number'|trans }}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>
-            {{ form_widget(formC.plateNumber, { 'attr': { 'onkeypress': 'return checkEnterInFilterFields(event, this.id);', 'class': 'form-control asr_form-control', 'required': 'required', 'placeholder': 'plate_number'} }) }}
+            {{ form_widget(formC.plateNumber, { 'attr': { 'onkeypress': 'return checkEnterInFilterFields(event, this.id);', 'class': 'form-control asr_form-control', 'placeholder': 'plate_number'} }) }}
         </div>
         
         <div class="grid-33">
@@ -58,23 +58,25 @@
                     <option value={{ brand.id }}>{{ brand.name }}</option>
                 {% endfor %}
             </select>
+            <input style="display: none;" id="new_car_form_brand_read_only" name="new_car_form_brand_read_only" class="form-control asr_form-control" value="" disabled="disabled">
         </div>
 
         <div class="grid-33">
             <label for="new_car_form_model">{{ 'model'|trans }} *</label>
             <select id="new_car_form_model" name="new_car_form_model" class="form-control asr_form-control" required></select>
+            <input style="display: none;" id="new_car_form_model_read_only" name="new_car_form_model_read_only" class="form-control asr_form-control" value="" disabled="disabled">
         </div>
 
         <div class="grid-33">
             <label for="new_car_form_version">{{ 'version'|trans }}</label>
-            <select id="new_car_form_version" name="new_car_form_version" class="form-control asr_form-control">
-            </select>
+            <select id="new_car_form_version" name="new_car_form_version" class="form-control asr_form-control"></select>
+            <input style="display: none;" id="new_car_form_version_read_only" name="new_car_form_version_read_only" class="form-control asr_form-control" value="" disabled="disabled">
         </div>
     </div>
     <div class="grid-full w100">
         <div class="grid-33">
             <label for="new_car_form_year">{{ 'year'|trans }} *</label>
-            <a class="pull-right" id="filter_year" title="{{ 'filter_by_year'|trans }}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>
+            {#<a class="pull-right" id="filter_year" title="{{ 'filter_by_year'|trans }}"><label style="color:#000;cursor:pointer;">{{'filter'|trans}}<img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></label></a>#}
             {{ form_widget(formC.year, { 'attr': { 'onkeypress': 'return checkEnterInFilterFields(event, this.id);', 'class': 'form-control asr_form-control', 'required': 'required', 'placeholder': 'year'} }) }}
             <input type="hidden" id="year_assessor" value="assessor">
         </div>
