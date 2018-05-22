@@ -13,27 +13,9 @@
     <input type="hidden" id="totalpag" value="{{ totalpag }}">
     <input type="hidden" id="country" value="{{ country }}">
     {% if not is_granted('ROLE_ASSESSOR') %} {% set option = 'all' %}{% endif %}
-    {# <input type="hidden" id="order_by" value="{{ order_by }}"> #}
-    {# <input type="hidden" id="trend"    value="{{ trend    }}"> #}
-    {# <input type="hidden" id="mail"     value="{{ mail     }}"> #}
-  {#
-    {% if brand         is not defined %} {% set brand          = null %}{% endif %}
-    {% if model.id      is not defined %} {% set model          = null %}{% endif %}
-    {% if version.id    is not defined %} {% set version        = null %}{% endif %}
-    {% if year          is not defined %} {% set year           = null %}{% endif %}
-    {% if motor         is not defined %} {% set motor          = null %}{% endif %}
-    {% if kw            is not defined %} {% set kw             = null %}{% endif %}
-    {% if system        is not defined %} {% set system         = null %}{% endif %}
-    {% if importance    is not defined %} {% set importance     = null %}{% endif %}
-    {% if subsystem.id  is not defined %} {% set id             = null %}{% endif %}
-    {% if displacement  is not defined %} {% set displacement   = null %}{% endif %}
-    {% if vin           is not defined %} {% set vin            = null %}{% endif %}
-    {% if plateNumber   is not defined %} {% set plateNumber    = null %}{% endif %}
-  #}
-
-    {% if brand is defined or model.id is defined or version.id is defined or year is defined or motor is defined or kw is defined or system is defined or importance is defined or subsystem.id is defined or displacement is defined or vin is defined or plateNumber is defined %}
+   
+    {% if brand is not null or (model is defined and model is not null) or (version  is defined and version is not null) or year is defined or motor is defined or kw is defined or system is defined or importance is defined or subsystem.id is defined or displacement is defined or vin is defined or plateNumber is defined %}
         {% set findByBMV = 1 %}{% endif %}
-
     <div id="pagination"  class="pagination_content">
 
 	    {# FLECHAS PAGINAS ANTERIORES #}
