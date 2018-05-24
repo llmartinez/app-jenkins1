@@ -198,15 +198,16 @@ function fillBrandSelect(selected)
         },
         success: function(data) {
 
+            resetSelect('#filter_car_form_brand');
+            resetSelect('#filter_car_form_model');
+            resetSelect('#filter_car_form_version');
+
             if (data['error'] != "No hay coincidencias") {
 
                 if (data['error'] == "msg_bad_filter") {
                     msg_bad_filter = $('#msg_bad_filter').val();
                     alert(msg_bad_filter);
                 } else {
-                    resetSelect('#filter_car_form_brand');
-                    resetSelect('#filter_car_form_model');
-                    resetSelect('#filter_car_form_version');
 
                     for (var i = 0, len = data.length; i < len; i++) {
 
@@ -253,10 +254,10 @@ function fillModelSelect(brand, selected)
         },
         success: function(data) {
 
-            if (data['error'] != "No hay coincidencias") {
+            resetSelect('#filter_car_form_model');
+            resetSelect('#filter_car_form_version');
 
-                resetSelect('#filter_car_form_model');
-                resetSelect('#filter_car_form_version');
+            if (data['error'] != "No hay coincidencias") {
 
                 for (var i = 0, len = data.length; i < len; i++) {
 
@@ -295,9 +296,9 @@ function fillVersionSelect(model, selected)
         complete: function(){ $("body").css("cursor", "default"); },
         success: function(data) {
 
-            if (data['error'] != "No hay coincidencias") {
+            resetSelect('#filter_car_form_version');
 
-                resetSelect('#filter_car_form_version');
+            if (data['error'] != "No hay coincidencias") {
 
                 for (var i = 0, len = data.length; i < len; i++) {
 
