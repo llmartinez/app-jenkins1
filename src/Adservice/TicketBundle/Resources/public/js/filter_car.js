@@ -380,7 +380,9 @@ function fillCar(car)
     $("#filter_car_form_kW").val(car.kw);
     $("#filter_car_form_displacement").val(car.cm3);
 
-    setReadOnlyInputs();
+    if(car.origin == 'DGT' || car.status == 'verified') {
+        setReadOnlyInputs(car.status);
+    }
 
     return true;
 }
@@ -404,7 +406,7 @@ function clearInputs()
     $("#filter_motor").show();
 }
 
-function setReadOnlyInputs()
+function setReadOnlyInputs(status)
 {
     $("#filter_car_form_vin").prop('readOnly', true);
     $("#filter_car_form_motor").prop('readOnly', true);
@@ -416,7 +418,10 @@ function setReadOnlyInputs()
     $("#filter_car_form_version_read_only").show();
     $("#filter_car_form_kW").prop('readOnly', true);
     $("#filter_car_form_displacement").prop('readOnly', true);
-    $("#new_car_form_year").prop('readOnly', true);
 
     $("#filter_motor").hide();
+
+    if(status == 'verified') {
+        $("#filter_car_form_year").prop('readOnly', true);
+    }
 }

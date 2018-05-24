@@ -252,26 +252,13 @@ function search_by_bmv() {
 
             var id           = $(this).find(".ticket_id").val();
             var id_brand     = $(this).find(".ticket_id_brand").val();
-            var brand        = $(this).find(".ticket_brand").val();
             var id_model     = $(this).find(".ticket_id_model").val();
             var model        = $(this).find(".ticket_model").val();
             var id_version   = $(this).find(".ticket_id_version").val();
             var version      = $(this).find(".ticket_version").val();
             var id_system    = $(this).find(".ticket_id_system").val();
-            var system       = $(this).find(".ticket_system").val();
             var id_subsystem = $(this).find(".ticket_id_subsystem").val();
             var subsystem    = $(this).find(".ticket_subsystem").val();
-            var id_importance= $(this).find(".ticket_id_importance").val();
-            var importance   = $(this).find(".ticket_importance").val();
-            var year         = $(this).find(".ticket_year").val();
-            var motor        = $(this).find(".ticket_motor").val();
-            var kw           = $(this).find(".ticket_kw").val();
-            var displacement = $(this).find(".ticket_displacement").val();
-            var vin          = $(this).find(".ticket_vin").val();
-            var plateNumber  = $(this).find(".ticket_plateNumber").val();
-            var origin = $(this).find(".ticket_origin").val();
-            var status = $(this).find(".ticket_status").val();
-            var variants = $(this).find(".ticket_variants").val();
             var desc         = $(this).find(".ticket_description").val();
             var date         = $(this).find(".ticket_date").val();
             var sol          = $(this).find(".ticket_solution").val();
@@ -289,13 +276,6 @@ function search_by_bmv() {
             $('#w_email'    ).val(mail);
             $('#w_contact'  ).val(contact);
 
-            if(id_brand == 0){
-                $('#filter_car_form_brand'     ).empty();
-                $('#filter_car_form_brand'     ).append('<option value="0" selected>OTHER</option>');
-            }
-            else {
-                $('#filter_car_form_brand'     ).val(id_brand);
-            }
             $('#filter_car_form_model'     ).empty();
             $('#filter_car_form_model'     ).append('<option value="'+id_model     +'" selected>'+model+'</option>');
             $('#filter_car_form_version'   ).empty();
@@ -304,23 +284,29 @@ function search_by_bmv() {
             $('#filter_car_form_subsystem' ).empty();
             $('#filter_car_form_subsystem' ).append('<option value="'+id_subsystem +'" selected>'+subsystem+'</option>');
 
-            $('#filter_car_form_importance').val(id_importance);
-            $('#filter_car_form_year').val(year);
-            $('#filter_car_form_motor').val(motor);
-            $('#filter_car_form_kW').val(kw);
-            $('#filter_car_form_displacement').val(displacement);
-            $('#filter_car_form_vin').val(vin);
-            $('#filter_car_form_plateNumber').val(plateNumber);
-            $('#filter_car_form_origin').val(origin);
-            $('#filter_car_form_status').val(status);
-            $('#filter_car_form_variants').val(variants);
-
             $('#list_date').text('');
             $('#list_date').text(date);
             $('#list_description').text('');
             $('#list_description').text(desc);
             $('#list_solution').text('');
             $('#list_solution').text(sol);
+
+            var car = {
+                'brandId': $(this).find('.ticket_id_brand').val(),
+                'modelId': $(this).find('.ticket_id_model').val(),
+                'versionId': $(this).find('.ticket_id_version').val(),
+                'plateNumber': $(this).find('.ticket_plateNumber').val(),
+                'vin': $(this).find('.ticket_vin').val(),
+                'motor': $(this).find('.ticket_motor').val(),
+                'cm3': $(this).find('.ticket_displacement').val(),
+                'kw': $(this).find('.ticket_kw').val(),
+                'year': $(this).find('.ticket_year').val(),
+                'origin': $(this).find('.ticket_origin').val(),
+                'status': $(this).find('.ticket_status').val(),
+                'variants': $(this).find('.ticket_variants').val()
+            };
+
+            fillCar(car);
 
             if(id_version == '0'){
                 $( "#dis" ).attr("href", dis_url+'/model-'+id_model);
