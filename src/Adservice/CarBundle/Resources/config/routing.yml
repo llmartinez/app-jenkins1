@@ -9,3 +9,11 @@ editCar:
 changeStatusCar:
     path: /car/changeStatus/{id}/{status}/{ticket_id}
     defaults: { _controller: CarBundle:Car:changeStatusCar }
+
+# Car routes
+
+car_list:
+    path:  /car/list/{page}/{matricula}
+    defaults: { _controller: CarBundle:Car:list, page: 1, matricula: null }
+    options:
+        expose: true

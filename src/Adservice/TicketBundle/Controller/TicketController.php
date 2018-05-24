@@ -527,9 +527,9 @@ class TicketController extends Controller {
         $systems = $em->getRepository('TicketBundle:System')->findAll();
         $brandQuery = 'SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand';
         if(!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN') && !$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')){
-            $brandQuery   = $brandQuery.' AND b.id <> 0 ';
+            $brandQuery  = $brandQuery.' AND b.id <> 0';
         }
-        $brandQuery = $brandQuery.'ORDER BY b.name';
+        $brandQuery = $brandQuery.' ORDER BY b.name';
         $brands = $em->createQuery($brandQuery)->getResult();
 
         $adsplus = $em->getRepository('WorkshopBundle:ADSPlus')->findOneBy(array('idTallerADS' => $workshop->getId()));

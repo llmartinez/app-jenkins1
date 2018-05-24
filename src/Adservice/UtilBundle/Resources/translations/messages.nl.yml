@@ -27,6 +27,7 @@ menu.list_popups:             "Popups"
 menu.list_orders: 			  "Openstaande verzoeken"
 menu.list_sentences:		  "Zinnen"
 menu.list_categories:               "Diensten categorie"
+menu.list_cars:                      "Voertuigen"
 
 menu.asign_user_to_ticket:           "Tickets toewijzen aan gebruikers"
 menu.asign_shop_to_workshop:		 "Garages toewijzen aan verkoopspunt"
@@ -277,6 +278,7 @@ any.order.rejected: 	 "¡¡Geen verworpen aanvragen!!"
 any.incidence: 			 "¡¡Geen incident!!"
 any.sentence:			 "Geen zinnen"
 any.category_service:		 "Geen categorie!!"
+any.car:		 "Geen voertuigen!!"
 
 #BOTONES
 btn.send:			 	 "Verzenden"
