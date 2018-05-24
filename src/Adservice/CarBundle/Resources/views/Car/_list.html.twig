@@ -1,0 +1,59 @@
+{% if cars|length > 0  %}
+    <table class="table table-hover table-list-search" style="width: 90%; margin-left: 5%;">
+        <thead>
+        <tr>
+            <th>{{ 'plate_number'|trans }}</th>
+            <th>{{ 'vin'|trans }}</th>
+            <th>{{ 'brand'|trans }}</th>
+            <th>{{ 'model'|trans }}</th>
+            <th>{{ 'version'|trans }}</th>
+            <th>{{ 'motor'|trans }}</th>
+            <th>{{ 'actions'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for car in cars %}
+            <tr>
+                <td>{{ car.plateNumber }}</td>
+                <td>{{ car.vin  }}</td>
+                <td>
+                {% if car.brand is not null %}
+                    {{ car.brand.name }}
+                {% endif %}
+                </td>
+                <td>
+                {% if car.model is not null %}
+                    {{ car.model.name }}
+                {% endif %}
+                </td>
+                <td>
+                {% if car.version is not null %}
+                    {{ car.version.name }}
+                {% endif %}
+                </td>
+                <td>
+                {% if car.motor is not empty %}
+                    {{ car.motor }}
+                {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path("editCar", { 'id':car.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% include 'UtilBundle:Pagination:pagination_car.html.twig' %}
+{% else %}
+    <div class="col-xs-12 col-md-12 form-group">
+        <p class="alert">{{ 'any.car'|trans }}</p>
+    </div>
+{% endif %}
+
+
+{% block javascripts %}
+
+    <script src="{{ asset('bundles/car/js/car.js') }}"></script>
+    <script src="{{ asset('bundles/util/js/util.js') }}"></script>
+
+{% endblock %}

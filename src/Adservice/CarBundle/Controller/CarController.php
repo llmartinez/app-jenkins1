@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Adservice\UtilBundle\Controller\UtilController as UtilController;
 use Adservice\CarBundle\Form\CarType;
+use Adservice\UtilBundle\Entity\Pagination;
 
 class CarController extends Controller {
 
@@ -133,5 +134,31 @@ class CarController extends Controller {
 
         UtilController::saveEntity($em, $car, $this->getUser());
         return $this->redirectToRoute('editCar', array('id' => $id, 'ticketId' => $ticketId));
+    }
+
+    /**
+     * Listado de vehiculos
+     */
+    public function listAction(Request $request, $page=1, $matricula=null)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $params = array();
+        if($matricula !== null){
+            $params[] = array('plateNumber', " = '".$matricula."'");
+        }
+
+        $pagination = new Pagination($page);
+        $cars = $pagination->getRows($em, 'CarBundle', 'Car', $params, $pagination);
+        $length   = $pagination->getRowsLength($em, 'CarBundle', 'Car', $params);
+
+        $pagination->setTotalPagByLength($length);
+
+        return $this->render('CarBundle:Car:list.html.twig', array(
+            'cars' => $cars,
+            'pagination'   => $pagination,
+            'matricula' => $matricula,
+            'length' => $length
+        ));
     }
 }

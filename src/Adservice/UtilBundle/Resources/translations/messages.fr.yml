@@ -27,6 +27,7 @@ menu.list_popups:             "Pop-ups"
 menu.list_orders: 			  "Demandes en attente"
 menu.list_sentences:		  "Requêtes"
 menu.list_categories:               "Catégories de service"
+menu.list_cars:                      "Véhicules"
 
 menu.asign_user_to_ticket:    "Assigner un ticket à un utilisateur"
 menu.asign_shop_to_workshop:  "Assigner un atelier à un Boutique"
@@ -277,6 +278,7 @@ any.order.rejected: 	 "Aucune demande rejetée!! "
 any.incidence: 			 "Aucune occurrence!! "
 any.sentence:			 "Aucune requête"
 any.category_service:		 "Il n'y a pas de catégories!!"
+any.car:		         "Véhicule non trouvé!!"
 
 #BOTONES
 btn.send:			 	 "Envoyer"
