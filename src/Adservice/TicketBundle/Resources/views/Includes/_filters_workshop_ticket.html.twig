@@ -17,6 +17,7 @@
                         <option value={{ _brand.id }} {% if brand is defined and brand != ""  and brand == _brand.id %}selected{% endif %}>{{ _brand.name }}</option>
                     {% endfor %}
                 </select>
+                <input style="display: none;" id="filter_car_form_brand_read_only" name="filter_car_form_brand_read_only" class="form-control asr_form-control" value="" disabled="disabled">
             </div>
 
             <div class="grid w15">
@@ -24,6 +25,7 @@
                 <select id="filter_car_form_model" name="filter_car_form_model" class="form-control asr_form-control" {# required #}>
                     {% if model.id is defined %}<option value="{{model.id}}">{{model.name}}</option>{% endif %}
                 </select>
+                <input style="display: none;" id="filter_car_form_model_read_only" name="filter_car_form_model_read_only" class="form-control asr_form-control" value="" disabled="disabled">
             </div>
 
             <div class="grid w15">
@@ -31,6 +33,7 @@
                 <select id="filter_car_form_version" name="filter_car_form_version" class="form-control asr_form-control" >
                     {% if version.id is defined %}<option value="{{version.id}}">{{version.name}}</option>{% endif %}
                 </select>
+                <input style="display: none;" id="filter_car_form_version_read_only" name="filter_car_form_version_read_only" class="form-control asr_form-control" value="" disabled="disabled">
             </div>
             <div class="grid w15">
                 <label for="filter_car_form_plateNumber">{{ 'plate_number'|trans }}</label>

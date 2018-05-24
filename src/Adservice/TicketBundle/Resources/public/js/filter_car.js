@@ -19,6 +19,10 @@ $("#filter_car_form_plateNumber").focusout(function () {
     if (validatePlateNumber($("#filter_car_form_plateNumber").val())) {
         findCarByPlateNumber();
     }
+}).focusin(function() {
+    if (!$("#filter_car_form_plateNumber").prop('readonly')){
+        clearInputs()
+    }
 });
 
 //CLICK SAVE BUTTONS
@@ -210,6 +214,7 @@ function fillBrandSelect(selected)
                     }
 
                     $("#filter_car_form_brand").val(selected);
+                    $("#filter_car_form_brand_read_only").val($("#filter_car_form_brand option[value='"+selected+"']").text());
                 }
             } else {
                 msg_motor_not_found = $('#msg_motor_not_found').val();
@@ -259,6 +264,7 @@ function fillModelSelect(brand, selected)
                 }
 
                 $("#filter_car_form_model").val(selected);
+                $("#filter_car_form_model_read_only").val($("#filter_car_form_model option[value='"+selected+"']").text());
             }
         },
         error: function() {
@@ -303,6 +309,7 @@ function fillVersionSelect(model, selected)
                 }
 
                 $("#filter_car_form_version").val(selected);
+                $("#filter_car_form_version_read_only").val($("#filter_car_form_version option[value='"+selected+"']").first().text());
             }
         },
         error: function() {
@@ -335,8 +342,8 @@ function fillVersionCarData()
 //Fill inputs
 function fillCar(car)
 {
+    clearInputs();
 
-    console.log(car);
     $("#filter_car_form_motor").val('');
     $("#filter_car_form_plateNumber").val(car.plateNumber);
     $("#filter_car_form_vin").val(car.vin);
@@ -349,6 +356,7 @@ function fillCar(car)
         fillBrandSelect(car.brandId);
     } else {
         $("#filter_car_form_brand").val(car.brandId);
+        $("#filter_car_form_brand_read_only").val($("#filter_car_form_brand option:selected").text());
     }
 
     if ($("#filter_car_form_model option[value='"+car.modelId+"']").length < 1) {
@@ -356,6 +364,7 @@ function fillCar(car)
         fillModelSelect(car.brandId, car.modelId);
     } else {
         $("#filter_car_form_model").val(car.modelId);
+        $("#filter_car_form_model_read_only").val($("#filter_car_form_model option:selected").text());
     }
 
     if ($("#filter_car_form_version option[value='"+car.versionId+"']").length < 1) {
@@ -363,6 +372,7 @@ function fillCar(car)
         fillVersionSelect(car.modelId, car.versionId);
     } else {
         $("#filter_car_form_version").val(car.versionId);
+        $("#filter_car_form_version_read_only").val($("#filter_car_form_version option:selected").first().text());
     }
 
     $("#filter_car_form_motor").val(car.motor);
@@ -370,5 +380,43 @@ function fillCar(car)
     $("#filter_car_form_kW").val(car.kw);
     $("#filter_car_form_displacement").val(car.cm3);
 
+    setReadOnlyInputs();
+
     return true;
+}
+
+//FORM INPUTS
+function clearInputs()
+{
+    $("#filter_car_form_vin").val('').prop('readOnly', false);
+    $("#filter_car_form_motor").val('').prop('readOnly', false);
+    $("#filter_car_form_brand").val('').show();
+    $("#filter_car_form_model").val('').show();
+    $("#filter_car_form_version").val('').show();
+    $("#filter_car_form_kW").val('').prop('readOnly', false);
+    $("#filter_car_form_displacement").val('').prop('readOnly', false);
+    $("#filter_car_form_year").val('').prop('readOnly', false);
+
+    $("#filter_car_form_brand_read_only").hide();
+    $("#filter_car_form_model_read_only").hide();
+    $("#filter_car_form_version_read_only").hide();
+
+    $("#filter_motor").show();
+}
+
+function setReadOnlyInputs()
+{
+    $("#filter_car_form_vin").prop('readOnly', true);
+    $("#filter_car_form_motor").prop('readOnly', true);
+    $("#filter_car_form_brand").hide();
+    $("#filter_car_form_brand_read_only").show();
+    $("#filter_car_form_model").hide();
+    $("#filter_car_form_model_read_only").show();
+    $("#filter_car_form_version").hide();
+    $("#filter_car_form_version_read_only").show();
+    $("#filter_car_form_kW").prop('readOnly', true);
+    $("#filter_car_form_displacement").prop('readOnly', true);
+    $("#new_car_form_year").prop('readOnly', true);
+
+    $("#filter_motor").hide();
 }
