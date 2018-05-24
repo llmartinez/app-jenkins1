@@ -662,7 +662,6 @@ class TicketController extends Controller {
                     }
                     $select .= ')';
                     $query = $em->createQuery($select);
-                    dump($query->getDQL());
                     $existTicket = $query->getResult();
 
                     if ($existTicket == null) {
