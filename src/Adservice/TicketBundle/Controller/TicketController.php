@@ -840,6 +840,11 @@ class TicketController extends Controller {
 
                                                 $originalCar = clone $car;
                                             }
+
+                                            if ($car->getVersion()) {
+                                                $car->setMotorId($car->getVersion()->getMotor());
+                                            }
+
                                             $car->setVin(strtoupper($car->getVin()));
 
                                             $this->get('car.helper')->updateCar($originalCar, $car);

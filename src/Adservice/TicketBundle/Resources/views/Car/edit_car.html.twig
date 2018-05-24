@@ -85,7 +85,7 @@
         </select>
         <input {% if car.status != 'verified' and car.origin == 'custom' %}style="display: none;"{% endif %} id="new_car_form_version_read_only"
                name="new_car_form_version_read_only" class="form-control asr_form-control"
-               value="{{ car.version.name|default('') ~ ' [' ~ car.version.motor.name ~ '] [' ~ car.version.kw ~ ']' }}" disabled="disabled">
+               value="{{ car.version.name|default('') ~ ' [' ~ car.version.motor.name|default() ~ '] [' ~ car.version.kw|default('') ~ ']' }}" disabled="disabled">
     </div>
 </div>
 <div class="grid-full w100">

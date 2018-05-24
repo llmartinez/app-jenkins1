@@ -272,7 +272,7 @@ class Car
     }
 
     /**
-     * @return int
+     * @return Motor
      */
     public function getMotorId()
     {
@@ -280,7 +280,7 @@ class Car
     }
 
     /**
-     * @param int $motorId
+     * @param Motor $motorId
      */
     public function setMotorId($motorId)
     {

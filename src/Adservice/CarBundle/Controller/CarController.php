@@ -76,6 +76,12 @@ class CarController extends Controller {
                         $car->setBrand($brand);
                         $car->setModel($model);
 
+                        if ($car->getVersion()) {
+                            $car->setMotorId($car->getVersion()->getMotor());
+                        }
+
+                        $this->get('car.helper')->updateCar($originalCar, $car);
+
                         if ($ticketId) {
                             return $this->redirect($this->generateUrl('showTicket', array('id' => $ticketId)));
                         } else {
