@@ -60,6 +60,10 @@
             <a class="btn-menu" id="sentence_list"          href="{{ path("sentence_list"          ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_sentences.png') }}">
                                                                                                             {{ 'menu.list_sentences'|trans }}</a>
+            <a class="btn-menu" id="car_list" href="{{ path("car_list") }}">
+                <img class="img_icon" src="{{ asset('bundles/util/images/icon/car_.png') }}">
+                {{ 'menu.list_cars'|trans }}
+            </a>
             {% if is_granted('ROLE_SUPER_ADMIN') %}
             <a class="btn-menu" id="category_service_list"     href="{{ path("category_service_list"     ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/location_.png') }}">
@@ -80,6 +84,10 @@
 {#             <a class="btn-menu" id="workshop_list"          href="{{ path("workshop_list"           ) }}">
                                                                                                             <img class="img_icon" src="{{ asset('bundles/util/images/icon/menu_workshop.png') }}">
                                                                                                             {{ 'menu.list_workshops'|trans }}</a> #}
+             <a class="btn-menu" id="car_list" href="{{ path("car_list") }}">
+                 <img class="img_icon" src="{{ asset('bundles/util/images/icon/car_.png') }}">
+                 {{ 'menu.list_cars'|trans }}
+             </a>
         </div>
 {#    {% endif %}#}
 

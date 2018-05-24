@@ -27,6 +27,7 @@ menu.list_popups:             "Pop-ups"
 menu.list_orders: 			  "Pedidos pendentes"
 menu.list_sentences:		  "Frases"
 menu.list_categories:               "Categorias de serviços"
+menu.list_cars:                      "Veiculos"
 
 menu.asign_user_to_ticket:           "Atribuir Talões a Utilizadores"
 menu.asign_shop_to_workshop:		 "Atribuir Oficinas a Lojas"
@@ -277,6 +278,7 @@ any.order.rejected: 	 "Não existem pedidos rejeitados!"
 any.incidence: 			 "Não existem incidências!"
 any.sentence:			 "Não existem Frases!"
 any.category_service:		 "Não há categorias!!"
+any.car:		         "Não existem veiculos!!"
 
 #BOTONES
 btn.send:			 	 "Enviar"
