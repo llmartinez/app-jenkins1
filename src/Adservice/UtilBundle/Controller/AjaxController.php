@@ -313,6 +313,7 @@ class AjaxController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function carVersionAction(Request $request, $id_model, $filter='') {
+
         $em = $this->getDoctrine()->getManager();
         $filter_value = $request->request->get('filter_value');
         // $id_mts = '';
@@ -532,6 +533,22 @@ class AjaxController extends Controller
         }
 
         return new JsonResponse($json);
+    }
+
+    /**
+     * @param $plateNumber
+     *
+     * @return JsonResponse
+     */
+    public function getCarFromPlateNumberDbAction($plateNumber)
+    {
+        $car = $this->getDoctrine()->getRepository('CarBundle:Car')->findOneBy(array('plateNumber' => $plateNumber));
+
+        if ($car instanceof Car){
+            return new JsonResponse(array('error' => false, 'cars' => array($car->to_json())));
+        }
+
+        return new JsonResponse(array('error' => 'Not found', 'cars' => array()));
     }
     
     public function getCarFromVinAction(Request $request, $vin){

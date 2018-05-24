@@ -172,6 +172,13 @@ class Ticket {
     //private $cars;
 
     /**
+     * @var string $log
+     *
+     * @ORM\Column(name="log", type="text", nullable=true)
+     */
+    private $log;
+
+    /**
      * Get id
      *
      * @return integer
@@ -563,6 +570,22 @@ class Ticket {
      */
     public function setIsPhoneCall($is_phone_call) {
         $this->is_phone_call = $is_phone_call;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLog()
+    {
+        return $this->log;
+    }
+
+    /**
+     * @param string $log
+     */
+    public function setLog($log)
+    {
+        $this->log = $log;
     }
 
     public function __toString() {
