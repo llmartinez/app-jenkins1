@@ -4,7 +4,7 @@
         {# editar Ticket #}
         {% if is_granted('ROLE_ASSESSOR') %}
             <img class="img_icon" src="{{ asset('bundles/util/images/icon/' ~ car.status|default('undefined') ~ '.png') }}" title="{{ car.status | trans }}">
-			{% if ticket.log == "" or ticket.log == null %}
+			{% if ticket.log == "" or ticket.log == null or is_granted('ROLE_ADMIN') %}
 				<a href="{{ path('editCar', { 'id': car.id, 'ticketId': ticket.id }) }}">
 					<img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}" title="{{ 'edit.car'|trans }}"></span>
 				</a>
@@ -28,6 +28,8 @@
 		{% if car.vin          != "" %}<tr><td><b>{{ 'vin'|trans }}</b><td>{{ car.vin          }}</td></tr>{% endif %}
 
 		{% if car.plateNumber  != "" %}<tr><td><b>{{ 'plate_number'|trans }}: </b><td>{{ car.plateNumber  }}</td></tr>{% endif %}
+		<tr><td><b>{{ 'Origin'|trans }}: </b><td>{{ car.origin  }}</td></tr>
+		<tr><td><b>{{ 'Variants'|trans }}: </b><td>{{ car.variants|default('1')  }}</td></tr>
 	</table>
 
     {% include 'TicketBundle:Includes:_ged_btns.html.twig' %}

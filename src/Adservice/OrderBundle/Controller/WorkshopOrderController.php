@@ -59,10 +59,11 @@ class WorkshopOrderController extends Controller {
                 case 'typology':
                     $joins[] = array('e.typology ty ', "ty.id = e.typology AND ty.name LIKE '%". $field."%'");
                     break;
-                case 'name':
-                    $field = str_replace("'","''",$field);
                 case 'code_workshop':
                     $params[] = array($term, " = '" . $field . "'");
+                    break;
+                case 'name':
+                    $field = str_replace("'","''",$field);
                 default:
                     $params[] = array($term, " LIKE '%" . $field . "%'");
                     break;
