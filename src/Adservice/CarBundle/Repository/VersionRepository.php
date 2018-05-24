@@ -13,6 +13,6 @@ class VersionRepository extends EntityRepository
             ->andWhere('m.name = :motorName')
             ->setParameter('versionId', $versionId)
             ->setParameter('motorName', $motorName)
-            ->getQuery()->getSingleResult();
+            ->getQuery()->getOneOrNullResult();
     }
 }

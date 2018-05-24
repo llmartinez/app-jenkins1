@@ -7,5 +7,9 @@ services:
         arguments: ["@mailer","@swiftmailer.transport.real","@templating"]
 
     instant_mailer:
-        class: %swiftmailer.class%
+        class: "%swiftmailer.class%"
         arguments: ["@?swiftmailer.transport.real"]
+
+    car.helper:
+            class: Adservice\CarBundle\Service\CarHelper
+            arguments: ["@doctrine.orm.default_entity_manager", "@security.token_storage", "@templating"]
