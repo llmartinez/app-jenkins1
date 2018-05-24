@@ -2,11 +2,13 @@
     	{{ 'car'|trans }}
         
         {# editar Ticket #}
-        {% if is_granted('ROLE_ASSESSOR') %}                         
+        {% if is_granted('ROLE_ASSESSOR') %}
             <img class="img_icon" src="{{ asset('bundles/util/images/icon/' ~ car.status|default('undefined') ~ '.png') }}" title="{{ car.status | trans }}">
-            <a href="{{ path('editCar', { 'id': ticket.id}) }}">
-                <img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}" title="{{ 'edit.car'|trans }}"></span>
-            </a>
+			{% if ticket.log == "" or ticket.log == null %}
+				<a href="{{ path('editCar', { 'id': car.id, 'ticketId': ticket.id }) }}">
+					<img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}" title="{{ 'edit.car'|trans }}"></span>
+				</a>
+			{% endif %}
         {% endif %}    
     </legend>
 
@@ -29,5 +31,14 @@
 	</table>
 
     {% include 'TicketBundle:Includes:_ged_btns.html.twig' %}
+
+	{% if ticket.log != '' %}
+		<div>
+			<legend>{{ 'Log'|trans }}</legend>
+			<div style="max-height: 200px; overflow: auto;">
+				{{ ticket.log|raw }}
+			</div>
+		</div>
+	{% endif %}
 
 </div>

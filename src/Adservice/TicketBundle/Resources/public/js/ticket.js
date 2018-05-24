@@ -13,41 +13,33 @@ $(document).ready(function() {
         if(new_einatech == 1) {
             popUpEinatech();
         }
-        var ticket_brand = $('#ticket_brand').val();
-        var ticket_model = $('#ticket_model').val();
-        var ticket_version = $('#ticket_version').val();
-        var ticket_vin = $('#ticket_vin').val();
         var ticket_system  = $('#ticket_system').val();
         var ticket_subsystem  = $('#ticket_subsystem').val();
         var ticket_importance = $('#ticket_importance').val();
         var ticket_description  = $('#ticket_description').val();
-        var ticket_plateNumber = $('#ticket_plateNumber').val();
 
-        if(ticket_brand != ''){
-            $('#new_car_form_brand').val(ticket_brand);
-            if(ticket_model == ''){            
-                fill_model(0);
-            }
-        }
+        var car = {
+            'brandId': $('#ticket_brand').val(),
+            'modelId': $('#ticket_model').val(),
+            'versionId': $('#ticket_version').val(),
+            'plateNumber': $('#ticket_plateNumber').val(),
+            'vin': $('#ticket_vin').val(),
+            'motor': $('#ticket_motor').val(),
+            'cm3': $('#ticket_displacement').val(),
+            'kw': $('#ticket_kw').val(),
+            'year': $('#ticket_year').val(),
+            'origin': $('#ticket_origin').val(),
+            'status': $('#ticket_status').val(),
+            'variants': $('#ticket_variants').val()
+        };
 
-        if(ticket_model != ''){            
-            fill_model(ticket_model);
-            if(ticket_version == ''){            
-                fill_version(0);
-            }
-        }
+        fillCar(car);
 
         if(ticket_importance != '')
             $('#ticket_form_importance').val(ticket_importance);
         
         if(ticket_description != '')
             $('#ticket_form_description').val(ticket_description);
-        
-        if(ticket_vin != '')
-            $('#new_car_form_vin').val(ticket_vin);
-        
-        if(ticket_plateNumber != '')
-            $('#new_car_form_plateNumber').val(ticket_plateNumber);
         
         if(ticket_system != '')
             $('#id_system').val(ticket_system);
@@ -79,17 +71,20 @@ function normalizeForm(str) {
 
     $('#newTicket').click(function() {
 
-        $('#n_id_brand').val( $('#new_car_form_brand').val());
-        $('#n_id_model').val( $('#new_car_form_model').val());
-        $('#n_id_version').val( $('#new_car_form_version').val());
-        $('#n_id_year').val( $('#new_car_form_year').val());
-        $('#n_id_motor').val( $('#new_car_form_motor').val());
-        $('#n_id_kw').val( $('#new_car_form_kw').val());
-        $('#n_id_displacement').val( $('#new_car_form_displacement').val());
-        $('#n_id_vin').val( $('#new_car_form_vin').val());
-        $('#n_id_plateNumber').val( $('#new_car_form_plateNumber').val());
-        $('#n_id_subsystem').val( $('#new_car_form_subsystem').val());
-        $('#n_id_importance').val( $('#new_car_form_importance').val());
+        $('#n_id_brand').val( $('#filter_car_form_brand').val());
+        $('#n_id_model').val( $('#filter_car_form_model').val());
+        $('#n_id_version').val( $('#filter_car_form_version').val());
+        $('#n_id_year').val( $('#filter_car_form_year').val());
+        $('#n_id_motor').val( $('#filter_car_form_motor').val());
+        $('#n_id_kw').val( $('#filter_car_form_kW').val());
+        $('#n_id_displacement').val( $('#filter_car_form_displacement').val());
+        $('#n_id_vin').val( $('#filter_car_form_vin').val());
+        $('#n_id_plateNumber').val( $('#filter_car_form_plateNumber').val());
+        $('#n_id_subsystem').val( $('#filter_car_form_subsystem').val());
+        $('#n_id_importance').val( $('#filter_car_form_importance').val());
+        $('#n_id_origin').val( $('#filter_car_form_origin').val());
+        $('#n_id_status').val( $('#filter_car_form_status').val());
+        $('#n_id_variants').val( $('#filter_car_form_variants').val());
     });
 
 // $('.sendTicket').click(function() {
@@ -274,6 +269,9 @@ function search_by_bmv() {
             var displacement = $(this).find(".ticket_displacement").val();
             var vin          = $(this).find(".ticket_vin").val();
             var plateNumber  = $(this).find(".ticket_plateNumber").val();
+            var origin = $(this).find(".ticket_origin").val();
+            var status = $(this).find(".ticket_status").val();
+            var variants = $(this).find(".ticket_variants").val();
             var desc         = $(this).find(".ticket_description").val();
             var date         = $(this).find(".ticket_date").val();
             var sol          = $(this).find(".ticket_solution").val();
@@ -292,27 +290,30 @@ function search_by_bmv() {
             $('#w_contact'  ).val(contact);
 
             if(id_brand == 0){
-                $('#new_car_form_brand'     ).empty();
-                $('#new_car_form_brand'     ).append('<option value="0" selected>OTHER</option>');
+                $('#filter_car_form_brand'     ).empty();
+                $('#filter_car_form_brand'     ).append('<option value="0" selected>OTHER</option>');
             }
             else {
-                $('#new_car_form_brand'     ).val(id_brand);
+                $('#filter_car_form_brand'     ).val(id_brand);
             }
-            $('#new_car_form_model'     ).empty();
-            $('#new_car_form_model'     ).append('<option value="'+id_model     +'" selected>'+model+'</option>');
-            $('#new_car_form_version'   ).empty();
-            $('#new_car_form_version'   ).append('<option value="'+id_version   +'" selected>'+version+'</option>');
+            $('#filter_car_form_model'     ).empty();
+            $('#filter_car_form_model'     ).append('<option value="'+id_model     +'" selected>'+model+'</option>');
+            $('#filter_car_form_version'   ).empty();
+            $('#filter_car_form_version'   ).append('<option value="'+id_version   +'" selected>'+version+'</option>');
             $('#id_system').val(id_system);
-            $('#new_car_form_subsystem' ).empty();
-            $('#new_car_form_subsystem' ).append('<option value="'+id_subsystem +'" selected>'+subsystem+'</option>');
+            $('#filter_car_form_subsystem' ).empty();
+            $('#filter_car_form_subsystem' ).append('<option value="'+id_subsystem +'" selected>'+subsystem+'</option>');
 
-            $('#new_car_form_importance').val(id_importance);
-            $('#new_car_form_year').val(year);
-            $('#new_car_form_motor').val(motor);
-            $('#new_car_form_kW').val(kw);
-            $('#new_car_form_displacement').val(displacement);
-            $('#new_car_form_vin').val(vin);
-            $('#new_car_form_plateNumber').val(plateNumber);
+            $('#filter_car_form_importance').val(id_importance);
+            $('#filter_car_form_year').val(year);
+            $('#filter_car_form_motor').val(motor);
+            $('#filter_car_form_kW').val(kw);
+            $('#filter_car_form_displacement').val(displacement);
+            $('#filter_car_form_vin').val(vin);
+            $('#filter_car_form_plateNumber').val(plateNumber);
+            $('#filter_car_form_origin').val(origin);
+            $('#filter_car_form_status').val(status);
+            $('#filter_car_form_variants').val(variants);
 
             $('#list_date').text('');
             $('#list_date').text(date);

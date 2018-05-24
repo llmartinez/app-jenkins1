@@ -102,6 +102,12 @@ get_car_from_plate_number:
     options:
         expose: true
 
+get_car_from_plate_number_db:
+    path: /getCarFromPlateNumberDb/{plateNumber}
+    defaults: {_controller: UtilBundle:Ajax:getCarFromPlateNumberDb, plateNumber: null }
+    options:
+        expose: true
+
 get_car_from_vin:
     path: /getCarFromVin/{vin}
     defaults: {_controller: UtilBundle:Ajax:getCarFromVin, vin: 0}

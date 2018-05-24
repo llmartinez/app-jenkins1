@@ -688,14 +688,14 @@ class WorkshopOrder {
     /**
      * @var string $commercial_name
      *
-     * @ORM\Column(name="commercial_name", type="string", length=255)
+     * @ORM\Column(name="commercial_name", type="string", length=255, nullable=true)
      */
     private $commercial_name;
 
     /**
      * @var string $commercial_phone
      *
-     * @ORM\Column(name="commercial_phone", type="string", length=15)
+     * @ORM\Column(name="commercial_phone", type="string", length=15, nullable=true)
      */
     private $commercial_phone;
 

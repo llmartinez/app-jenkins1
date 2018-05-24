@@ -45,7 +45,7 @@ class Version {
     /**
      * @var string $motor
      *
-     * @ORM\ManyToOne(targetEntity="Adservice\CarBundle\Entity\Motor", inversedBy="id")
+     * @ORM\ManyToOne(targetEntity="Motor")
      * @ORM\JoinColumn(name="Motor", referencedColumnName="Motor")
      * @ORM\Id()
      */

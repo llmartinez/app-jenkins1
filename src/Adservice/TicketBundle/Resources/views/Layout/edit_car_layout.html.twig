@@ -3,20 +3,39 @@
 {% block breadcrumb %}
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
-      <li><a href="{% if is_granted('ROLE_ASSESSOR') and not is_granted('ROLE_ADMIN') %}{{ path("listTicket", { 'option': 'assessor_pending'}) }}
-                   {% else %}{{ path('listTicket') }}{% endif %}">{{ 'menu.list_tickets'|trans }}</a></li>
-      <li class="active"><a href="{{ path('showTicket', {'id': ticket.id}) }}">#{{ ticket.id }}</a> {{ 'edit.car'|trans }}</li>
+        <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
+
+        {% if ticket != null %}
+            <li>
+                <a href="{{ path('listTicket') }}">{{ 'menu.list_tickets'|trans }}</a>
+            </li>
+            <li class="active">
+                <a href="{{ path('showTicket', {'id': ticket.id }) }}">#{{ ticket.id }}</a> {{ 'edit.car'|trans }}
+            </li>
+        {% else %}
+            <li>
+                <a href="{{ path('listTicket') }}">{{ 'menu.list_tickets'|trans }}</a>
+            </li>
+        {% endif %}
     </ol>
 
 {% endblock  %}
 
 {% block info %}
 
-    {% if is_granted('ROLE_ASSESSOR') %}
+    {% if is_granted('ROLE_ASSESSOR') and ticket != null %}
 
         {% set workshop = ticket.workshop %}
         {% include 'TicketBundle:Workshop:show_workshop.html.twig'  %}
+
+        {% if ticket.log != '' and ticket.status.name == 'closed' %}
+            <div>
+                <legend>{{ 'Log'|trans }}</legend>
+                <div style="max-height: 200px; overflow: auto;">
+                    {{ ticket.log|raw }}
+                </div>
+            </div>
+        {% endif %}
 
     {% endif %}
 
@@ -26,14 +45,14 @@
     <input type="hidden" id="msg_bad_cif_length" name="msg_bad_cif_length" value=" {{ 'ticket_vin_error_length'|trans }}">
     <input type="hidden" id="msg_bad_cif_o" name="msg_bad_cif_o" value="{{ 'ticket_vin_error_o'|trans }}">
     <div class="form-group">
-        <form action="{{ path('editCar', { 'id': ticket.id }) }}" id="contact" class="form" role="form" method="post">
-            <a href="{{ path('changeStatusCar', { 'id': car.id, 'status': 'invented', 'ticket_id': ticket.id }) }}" class="pull-right {% if car.status == 'invented' %} invented_car {%endif%}">
+        <form action="{{ path('editCar', { 'id': car.id, 'ticketId': ticket.id|default(null) }) }}" id="contact" class="form" role="form" method="post">
+            <a href="{{ path('changeStatusCar', { 'id': car.id, 'status': 'invented', 'ticketId': ticket.id|default(null) }) }}" class="pull-right {% if car.status == 'invented' %} invented_car {%endif%}">
                 <img class="img_icon_car" src="{{ asset('bundles/util/images/icon/invented-md.png') }}" title="{{ 'invented'|trans }}">
             </a>
-            <a href="{{ path('changeStatusCar', { 'id': car.id, 'status': 'undefined', 'ticket_id': ticket.id }) }}" class="pull-right {% if car.status == 'undefined' %} undefined_car {%endif%}">
+            <a href="{{ path('changeStatusCar', { 'id': car.id, 'status': 'undefined', 'ticketId': ticket.id|default(null) }) }}" class="pull-right {% if car.status == 'undefined' %} undefined_car {%endif%}">
                 <img class="img_icon_car" src="{{ asset('bundles/util/images/icon/undefined-md.png') }}" title="{{ 'undefined'|trans }}">
             </a>
-            <a href="{{ path('changeStatusCar', { 'id': car.id, 'status': 'verified', 'ticket_id': ticket.id }) }}" class="pull-right {% if car.status == 'verified' %} verified_car {%endif%}">
+            <a href="{{ path('changeStatusCar', { 'id': car.id, 'status': 'verified', 'ticketId': ticket.id|default(null) }) }}" class="pull-right {% if car.status == 'verified' %} verified_car {%endif%}">
                 <img class="img_icon_car" src="{{ asset('bundles/util/images/icon/verified-md.png') }}" title="{{ 'verified'|trans }}">
             </a>
             
@@ -45,3 +64,8 @@
     </div>
 
 {% endblock  %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/ticket/js/ticket_car.js') }}"></script>
+{% endblock %}

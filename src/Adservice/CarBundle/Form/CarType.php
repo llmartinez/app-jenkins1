@@ -42,9 +42,9 @@ class CarType extends AbstractType
                     'read_only' => ($options['status'] == 'verified'),
                     'attr' => array('class' => 'form-control asr_form-control', 'placeholder' => 'plate_number')
                 ))
-                ->add('origin', HiddenType::class, array('required' => false))
-                ->add('variants', HiddenType::class, array('required' => false))
-                ->add('status', HiddenType::class, array('required' => false))
+                ->add('origin', HiddenType::class, array('required' => false, 'empty_data' => 'custom'))
+                ->add('variants', HiddenType::class, array('required' => false, 'empty_data' => 1))
+                ->add('status', HiddenType::class, array('required' => false, 'empty_data' => 'undefined'))
                 ;
     }
 

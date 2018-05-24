@@ -2,112 +2,130 @@
 
 namespace Adservice\CarBundle\Controller;
 
+use Adservice\CarBundle\Entity\Brand;
+use Adservice\CarBundle\Entity\Car;
+use Adservice\CarBundle\Entity\Model;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Adservice\UtilBundle\Controller\UtilController as UtilController;
 use Adservice\CarBundle\Form\CarType;
 
 class CarController extends Controller {
 
     /**
-     * Edita el car asignado a partir de su id
-     * @Route("/car/edit/{id}")
-     * @ParamConverter("ticket", class="TicketBundle:Ticket")
-     * @return url
+     * Edita el car
+     *
+     * @return Response
      */
-    public function editCarAction(Request $request, $id, $ticket) {
-        $em        = $this->getDoctrine()->getManager();
+    public function editCarAction(Request $request, $id, $ticketId = null)
+    {
+        $em = $this->getDoctrine()->getManager();
 
-        $car = $ticket->getCar();
-        $formC = $this->createForm(CarType::class, $car, array('status' => $car->getStatus(), 'origin' => $car->getOrigin()));
+        $car = $em->getRepository('CarBundle:Car')->find($id);
+        $originalCar = clone $car;
 
-        if ($request->getMethod() == 'POST') {
+        $ticket = $ticketId ? $em->getRepository('TicketBundle:Ticket')->find($ticketId) : null;
 
-            $formC->handleRequest($request);
+        //Comprobamos si el coche ha cambiado de matrícula
+        if ($request->get('new_car_form')['plateNumber'] && $request->get('new_car_form')['plateNumber'] != $car->getPlateNumber()) {
 
-            //Define CAR
-            if ($formC->isValid()) {
+            $carPlateNumber = $em->getRepository('CarBundle:Car')->findOneBy(array('plateNumber' => $request->get('new_car_form')['plateNumber']));
 
-                // if ($car->getVersion() != "") {
+            if ($carPlateNumber instanceof Car) {
 
-                $id_brand = $request->request->get('new_car_form_brand');
-                $brand = $em->getRepository('CarBundle:Brand')->find($id_brand);
-                $id_model = $request->request->get('new_car_form_model');
-                $model = $em->getRepository('CarBundle:Model')->find($id_model);
-                if(empty($model)){
-                    $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('error.bad_introduction'));
+                $car = $carPlateNumber;
+            }
+        }
+
+        if ($car instanceof Car) {
+
+            $formC = $this->createForm(CarType::class, $car, array(
+                'status' => $car->getStatus(),
+                'origin' => $car->getOrigin()
+            ));
+
+            if ($request->getMethod() == 'POST') {
+
+                $formC->handleRequest($request);
+
+                if ($formC->isValid()) {
+
+                    $brand = $em->getRepository('CarBundle:Brand')->find($request->get('new_car_form_brand'));
+                    $model = $em->getRepository('CarBundle:Model')->find($request->get('new_car_form_model'));
+
+
+                    if($brand instanceof Brand && $model instanceof Model) {
+
+                        $versions = $em->getRepository('CarBundle:Version')->findBy(
+                            array('id' => $request->get('new_car_form_version'))
+                        );
+
+                        if (count($versions)>0) {
+                            $car->setMotorId($versions[0]->getMotor());
+
+                            foreach($versions as $version) {
+                                if( $version->getMotor()->getName() == $car->getMotor()) {
+                                    $car->setMotorId($version->getMotor());
+                                }
+                            }
+                            $car->setVersion($versions[0]);
+                        }
+
+                        $car->setBrand($brand);
+                        $car->setModel($model);
+
+                        if ($ticketId) {
+                            return $this->redirect($this->generateUrl('showTicket', array('id' => $ticketId)));
+                        } else {
+                            return $this->redirect($this->generateUrl('car_list'));
+                        }
+
+                    }
                 }
-                else {
-                    $car->setBrand($brand);
-                    $car->setModel($model);
 
-                    //SI NO HA ESCOGIDO VERSION DE DEJA NULL
-                    $id_version = $request->request->get('new_car_form_version');
-                    if($id_version == 0 && $id_brand != 0){
-                        $id_version = null;
-                    }
-                    if (isset($id_version)){
-                        $version = $em->getRepository('CarBundle:Version')->findById($id_version);
-                    }
-                    else{
-                        $id_version = null;
-                    }
-                    if (isset($version) and isset($version[0])){
-                        $car->setVersion($version[0]);
-                    }
-                    else{
-                        $car->setVersion(null);
-                    }
-                    $car->setVin(strtoupper($car->getVin()));
-                    $car->setPlateNumber(strtoupper($car->getPlateNumber()));
-                    UtilController::saveEntity($em, $car, $this->getUser());
+                $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('error.bad_introduction'));
+            }
 
-                    return $this->redirect($this->generateUrl('showTicket', array('id' => $id)));
-                }
+            if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+                $brands = $em->getRepository('CarBundle:Brand')->findAll();
+            } else {
+                $brands = $em->getRepository('CarBundle:Brand')->findAllBrandsWithoutOther();
+            }
 
+            $models = $em->getRepository('CarBundle:Model')->findByBrand($car->getBrand()->getId());
+            $versions = $em->getRepository('CarBundle:Version')->findByModel($car->getModel()->getId());
 
-            }else{ $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('error.bad_introduction')); }
+            return $this->render('TicketBundle:Layout:edit_car_layout.html.twig', array(
+                'formC' => $formC->createView(),
+                'car' => $car,
+                'brands' => $brands,
+                'models' => $models,
+                'versions' => $versions,
+                'ticket' => $ticket
+            ));
         }
-        if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN') ||
-            $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')){
-           $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand ORDER BY b.name');
-        }
-        else{
-           $b_query   = $em->createQuery('SELECT b FROM CarBundle:Brand b, CarBundle:Model m WHERE b.id = m.brand AND b.id <> 0 ORDER BY b.name');
-        }
-        $brands    = $b_query->getResult();
-        //$brands      = $em->getRepository('CarBundle:Brand'        )->findBy(array(), array('name' => 'ASC'));
-        $models      = $em->getRepository('CarBundle:Model'        )->findByBrand($car->getBrand()->getId());
-        $versions    = $em->getRepository('CarBundle:Version'      )->findByModel($car->getModel()->getId());
 
-        return $this->render('TicketBundle:Layout:edit_car_layout.html.twig', array(
-                    'formC'       => $formC->createView(),
-                    'ticket'      => $ticket,
-                    'car'         => $car,
-                    'brands'      => $brands,
-                    'models'      => $models,
-                    'versions'    => $versions
-                ));
+        throw $this->createNotFoundException();
     }
     
     /**
      * Cambia el estado de un vehiculo por el valor pasado por parametro
-     * @Route("/car/edit/{id}")
-     * @ParamConverter("ticket", class="TicketBundle:Ticket")
-     * @return url
+     *
+     * @return RedirectResponse
      */
-    public function changeStatusCarAction($id, $status, $ticket_id){
+    public function changeStatusCarAction($id, $status, $ticketId = null)
+    {
         $em = $this->getDoctrine()->getManager();
         $car = $em->getRepository('CarBundle:Car')->find($id);
         $car->setStatus($status);
-        if ($status == 'invented'){
+
+        if ($status == 'invented') {
             $car->setOrigin('custom');
         }
+
         UtilController::saveEntity($em, $car, $this->getUser());
-        return $this->redirect($this->generateUrl('editCar', array('id' => $ticket_id)));
+        return $this->redirectToRoute('editCar', array('id' => $id, 'ticketId' => $ticketId));
     }
 }

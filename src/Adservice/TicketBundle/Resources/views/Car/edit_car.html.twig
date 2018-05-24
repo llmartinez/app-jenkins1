@@ -71,9 +71,10 @@
         <label for="new_car_form_version">{{ 'version'|trans }}</label>
         <select {% if car.status == 'verified' or car.origin != 'custom' %}style="display: none;" {% endif %} id="new_car_form_version" name="new_car_form_version" class="form-control asr_form-control" >
             <option></option>
+
             {% for version in versions %}
                 <option value={{ version.id }}
-                {% if car.version.name == version.name %} selected {% endif %}
+                {% if car.version and car.version.name == version.name %} selected {% endif %}
                         data-motor="{{ version.motor.name|default('') }}"
                         data-inicio="{{ version.inicio|default('') }}"
                         data-fin="{{ version.fin|default('') }}"
@@ -82,7 +83,9 @@
                 >{{ version.name ~ ' [' ~ version.motor.name ~ '] [' ~ version.kw ~ ']' }}</option>
             {% endfor %}
         </select>
-        <input {% if car.status != 'verified' and car.origin == 'custom' %}style="display: none;"{% endif %} id="new_car_form_version_read_only" name="new_car_form_version_read_only" class="form-control asr_form-control" value="{{ car.version.name|default('') }}" disabled="disabled">
+        <input {% if car.status != 'verified' and car.origin == 'custom' %}style="display: none;"{% endif %} id="new_car_form_version_read_only"
+               name="new_car_form_version_read_only" class="form-control asr_form-control"
+               value="{{ car.version.name|default('') ~ ' [' ~ car.version.motor.name ~ '] [' ~ car.version.kw ~ ']' }}" disabled="disabled">
     </div>
 </div>
 <div class="grid-full w100">
