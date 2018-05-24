@@ -6,6 +6,7 @@ use Adservice\CarBundle\Entity\Brand;
 use Adservice\CarBundle\Entity\Model;
 use Adservice\CarBundle\Entity\Version;
 use Adservice\WorkshopBundle\Entity\Historical;
+use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,7 +29,7 @@ class UtilController extends Controller
     /**
      * Asigna el usuario que ha modificado la clase y la fecha de la modificación.
      * @param EntityManager $em
-     * @param Class $entity
+     * @param $entity
      * @param Bool $auto_flush true: aplica cambios en BBDD
      * @return Bool
      */

@@ -3,14 +3,12 @@
 ###########################
 
 editCar:
-    path:  /car/edit/{id}
-    defaults: { _controller: CarBundle:Car:editCar }
+    path:  /car/edit/{id}/{ticketId}
+    defaults: { _controller: CarBundle:Car:editCar, ticketId: null }
     
 changeStatusCar:
-    path: /car/changeStatus/{id}/{status}/{ticket_id}
-    defaults: { _controller: CarBundle:Car:changeStatusCar }
-
-# Car routes
+    path: /car/changeStatus/{id}/{status}/{ticketId}
+    defaults: { _controller: CarBundle:Car:changeStatusCar, ticketId: null }
 
 car_list:
     path:  /car/list/{page}/{matricula}

@@ -12,6 +12,10 @@
             <input type="hidden" id='ticket_brand' name='ticket_brand' value="">
             <input type="hidden" id='ticket_model' name='ticket_model' value="">
             <input type="hidden" id='ticket_version' name='ticket_version' value="">
+
+            <input type="hidden" id='filter_car_form_origin' name='ticket_origin' value="custom">
+            <input type="hidden" id='filter_car_form_status' name='ticket_status' value="undefined">
+            <input type="hidden" id='filter_car_form_variants' name='ticket_variants' value="1">
             {% if workshop is defined and workshop != null and workshop.id != "" %}
                 <input type='hidden' id='ftbmv_codepartner' name='ftbmv_codepartner' value="{{workshop.codepartner}}">
                 <input type='hidden' id='ftbmv_codeworkshop' name='ftbmv_codeworkshop' value="{{workshop.codeworkshop}}">
@@ -20,45 +24,48 @@
             {% endif %}
 
             <div class="grid w20">
-                <label for="new_car_form_brand">{{ 'brand'|trans }}</label>
-                <select id="new_car_form_brand" name="new_car_form_brand" class="form-control asr_form-control" {# required #}>
+                <label for="filter_car_form_brand">{{ 'brand'|trans }}</label>
+                <select id="filter_car_form_brand" name="filter_car_form_brand" class="form-control asr_form-control" {# required #}>
                         <option></option>
                     {% for _brand in brands %}
                         <option value={{ _brand.id }} {% if brand is defined and brand != "" and brand == _brand.id %}selected{% endif %}>{{ _brand.name }}</option>
                     {% endfor %}
                 </select>
+                <input style="display: none;" id="filter_car_form_brand_read_only" name="filter_car_form_brand_read_only" class="form-control asr_form-control" value="" disabled="disabled">
             </div>
 
             <div class="grid w20">
-                <label for="new_car_form_model">{{ 'model'|trans }}</label>
-                <select id="new_car_form_model" name="new_car_form_model" class="form-control asr_form-control" {# required #}>
+                <label for="filter_car_form_model">{{ 'model'|trans }}</label>
+                <select id="filter_car_form_model" name="filter_car_form_model" class="form-control asr_form-control" {# required #}>
                     {% if model.id is defined %}<option value="{{model.id}}">{{model.name}}</option>{% endif %}
                 </select>
+                <input style="display: none;" id="filter_car_form_model_read_only" name="filter_car_form_model_read_only" class="form-control asr_form-control" value="" disabled="disabled">
             </div>
 
             <div class="grid w20">
-                <label for="new_car_form_version">{{ 'version'|trans }}</label>
-                <select id="new_car_form_version" name="new_car_form_version" class="form-control asr_form-control" >
-                    {% if version.id is defined %}<option value="{{version.id}}">{{version.name}}</option>{% endif %}
+                <label for="filter_car_form_version">{{ 'version'|trans }}</label>
+                <select id="filter_car_form_version" name="filter_car_form_version" class="form-control asr_form-control" >
+                    {% if version.id is defined %}<option value="{{version.id}}">{{version.name ~ ' [' ~ version.motor.name ~ '] [' ~ version.kw ~ ']'}}</option>{% endif %}
                 </select>
+                <input style="display: none;" id="filter_car_form_version_read_only" name="filter_car_form_version_read_only" class="form-control asr_form-control" value="" disabled="disabled">
             </div>
 
             <div class="grid w10">
-                <label class="lbl_lgray" for="new_car_form_year">{{ 'year'|trans }}</label>
-                <a class="pull-right" id="filter_year" title="{{ 'filter_by_year'|trans }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></a>
-                <input type="text" id="new_car_form_year" name="new_car_form_year" class="form-control asr_form-control"
+                <label class="lbl_lgray" for="filter_car_form_year">{{ 'year'|trans }}</label>
+                {#<a class="pull-right" id="filter_year" title="{{ 'filter_by_year'|trans }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></a>#}
+                <input type="text" id="filter_car_form_year" name="filter_car_form_year" class="form-control asr_form-control"
                     {% if year is defined %}value="{{year}}"{% endif %}>
                 </input>
             </div>
 
             <div class="grid w10">
 
-                <label class="lbl_lgray" for="new_car_form_motor">{{ 'motor'|trans }}</label>
+                <label class="lbl_lgray" for="filter_car_form_motor">{{ 'motor'|trans }}</label>
                 <a class="pull-right" id="filter_motor" title="{{ 'filter_by_motor'|trans }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/funnel.png') }}"></a>
 
                 {# <a class="pull-right" id="list_motor" title="{{ 'motor'|trans }}" href="{{ path('listMotors') }}" target="_blank"><img class="img_icon" src="{{ asset('bundles/util/images/icon/search_btn_.png') }}"></a> #}
 
-                <input type="text" id="new_car_form_motor" name="new_car_form_motor" class="form-control asr_form-control"
+                <input type="text" id="filter_car_form_motor" name="filter_car_form_motor" class="form-control asr_form-control"
                     {% if motor is defined %}value="{{motor}}"{% endif %}>
                 </input>
 
@@ -67,8 +74,8 @@
             </div>
 
             <div class="grid w10">
-                <label class="lbl_lgray" for="new_car_form_kW">{{ 'kw'|trans }}</label>
-                <input type="text" id="new_car_form_kW" name="new_car_form_kW" class="form-control asr_form-control"
+                <label class="lbl_lgray" for="filter_car_form_kW">{{ 'kw'|trans }}</label>
+                <input type="text" id="filter_car_form_kW" name="filter_car_form_kW" class="form-control asr_form-control"
                     {% if kw is defined %}value="{{kw}}"{% endif %}>
                 </input>
             </div>
@@ -77,29 +84,29 @@
         <div class="grid-full w100">
 
             <div class="grid w10">
-                <label class="lbl_lgray" for="new_car_form_displacement">{{ 'displacement'|trans }}</label>
-                <input type="text" id="new_car_form_displacement" name="new_car_form_displacement" class="form-control asr_form-control"
+                <label class="lbl_lgray" for="filter_car_form_displacement">{{ 'displacement'|trans }}</label>
+                <input type="text" id="filter_car_form_displacement" name="filter_car_form_displacement" class="form-control asr_form-control"
                     {% if displacement is defined %}value="{{displacement}}"{% endif %} >
                 </input>
             </div>
 
             <div class="grid w10">
-                <label class="lbl_lgray" for="new_car_form_vin">{{ 'vin'|trans }}</label>
-                <input type="text" id="new_car_form_vin" name="new_car_form_vin" class="form-control asr_form-control"
+                <label class="lbl_lgray" for="filter_car_form_vin">{{ 'vin'|trans }}</label>
+                <input type="text" id="filter_car_form_vin" name="filter_car_form_vin" class="form-control asr_form-control"
                     {% if vin is defined %}value="{{vin}}"{% endif %} >
                 </input>
             </div>
 
             <div class="grid w10">
-                <label for="new_car_form_plateNumber">{{ 'plate_number'|trans }}</label>
-                <input type="text" id="new_car_form_plateNumber" name="new_car_form_plateNumber" class="form-control asr_form-control"
+                <label for="filter_car_form_plateNumber">{{ 'plate_number'|trans }}</label>
+                <input type="text" id="filter_car_form_plateNumber" name="filter_car_form_plateNumber" class="form-control asr_form-control"
                     {% if plateNumber is defined %}value="{{plateNumber}}"{% endif %} >
                 </input>
             </div>
 
             <div class="grid w15">
-                <label class="lbl_lgray" for="new_car_form_importance">{{ 'importance'|trans }}</label>
-                <select id="new_car_form_importance" name="new_car_form_importance" class="form-control asr_form-control" >
+                <label class="lbl_lgray" for="filter_car_form_importance">{{ 'importance'|trans }}</label>
+                <select id="filter_car_form_importance" name="filter_car_form_importance" class="form-control asr_form-control" >
                     <option value="0"></option>
                     {% for _importance in importances %}
                         <option value={{ _importance.id }} {% if importance is defined and importance == _importance.id %}selected{% endif %}>{{ _importance.importance|trans }}</option>
@@ -118,8 +125,8 @@
             </div>
 
             <div class="grid w15">
-                <label for="new_car_form_subsystem">{{ 'subsystem'|trans }}</label>
-                <select id="new_car_form_subsystem" name="new_car_form_subsystem" class="form-control asr_form-control" >
+                <label for="filter_car_form_subsystem">{{ 'subsystem'|trans }}</label>
+                <select id="filter_car_form_subsystem" name="filter_car_form_subsystem" class="form-control asr_form-control" >
                     {% if subsystem.id is defined %}<option value="{{subsystem.id}}">{{subsystem.name|trans}}{% endif %}</option>
                 </select>
             </div>

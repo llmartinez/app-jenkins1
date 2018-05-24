@@ -272,7 +272,7 @@ class Car
     }
 
     /**
-     * @return int
+     * @return Motor
      */
     public function getMotorId()
     {
@@ -280,7 +280,7 @@ class Car
     }
 
     /**
-     * @param int $motorId
+     * @param Motor $motorId
      */
     public function setMotorId($motorId)
     {
@@ -514,6 +514,15 @@ class Car
         $this->status = $status;
     }
 
+    public function isSameCar(Car $otherCar)
+    {
+        return ($otherCar->getPlateNumber() == $this->getPlateNumber() &&
+                $otherCar->getBrand() == $this->getBrand() &&
+                $otherCar->getModel() == $this->getMotor() &&
+                $otherCar->getVersion() == $this->getVersion() &&
+                $otherCar->getMotor() == $this->getMotor());
+    }
+
     public function __toString() {
 
         $model   = $this->getModel()->getName();
@@ -539,7 +548,9 @@ class Car
                       'plateNumber'         => $this->getPlateNumber(),
             'carDescription'        => $this->toStringExtended(),
             'origin'                => $this->getOrigin(),
-            'variants'              => $this->getVariants());
+            'variants'              => $this->getVariants(),
+            'status'                => $this->getStatus()
+            );
 
         return $json;
     }

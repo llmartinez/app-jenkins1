@@ -148,11 +148,12 @@ function clearInputs()
     $("#filter_vin").show();
     $("#filter_motor").show();
 
-    $("#new_car_form_origin").val('CUSTOM');
+    $("#new_car_form_origin").val('custom');
     $("#new_car_form_variants").val(1);
+    $("#new_car_form_year").val('').prop('readOnly', false);
 }
 
-function setReadOnlyInputs()
+function setReadOnlyInputs(status)
 {
     $("#new_car_form_vin").prop('readOnly', true);
     $("#new_car_form_motor").prop('readOnly', true);
@@ -167,6 +168,10 @@ function setReadOnlyInputs()
 
     $("#filter_vin").hide();
     $("#filter_motor").hide();
+
+    if(status == 'verified') {
+        $("#new_car_form_year").prop('readOnly', true);
+    }
 }
 
 function resetSelect(id)
@@ -261,19 +266,21 @@ function fillBrandSelect(selected)
         url: Routing.generate('car_by_motor', {_locale: $("#data_locale").val(), motor: $('#new_car_form_motor').val()}),
         data: {motor: $('#new_car_form_motor').val()},
         dataType: "json",
+        async: false,
         beforeSend: function(){ $("body").css("cursor", "progress"); },
         complete: function(){ $("body").css("cursor", "default"); },
         success: function(data) {
-            console.log(data);
+            resetSelect('#new_car_form_brand');
+            resetSelect('#new_car_form_model');
+            resetSelect('#new_car_form_version');
+
             if (data['error'] != "No hay coincidencias") {
 
                 if (data['error'] == "msg_bad_filter") {
                     msg_bad_filter = $('#msg_bad_filter').val();
                     alert(msg_bad_filter);
                 } else {
-                    resetSelect('#new_car_form_brand');
-                    resetSelect('#new_car_form_model');
-                    resetSelect('#new_car_form_version');
+
 
                     for (var i = 0, len = data.length; i < len; i++) {
 
@@ -312,14 +319,15 @@ function fillModelSelect(brand, selected)
         url: Routing.generate('car_model', {_locale: $("#data_locale").val(), id_brand: brand, filter: filter, filter_value: filter_value}),
         data: {id_brand: brand, filter: filter, filter_value: filter_value},
         dataType: "json",
+        async: false,
         beforeSend: function(){ $("body").css("cursor", "progress"); },
         complete: function(){ $("body").css("cursor", "default"); },
         success: function(data) {
 
-            if (data['error'] != "No hay coincidencias") {
+            resetSelect('#new_car_form_model');
+            resetSelect('#new_car_form_version');
 
-                resetSelect('#new_car_form_model');
-                resetSelect('#new_car_form_version');
+            if (data['error'] != "No hay coincidencias") {
 
                 for (var i = 0, len = data.length; i < len; i++) {
 
@@ -354,13 +362,14 @@ function fillVersionSelect(model, selected)
         url: Routing.generate('car_version', {_locale: $("#data_locale").val(), id_model: model, filter: filter, filter_value: filter_value}),
         data: {id_model: model, filter: filter, filter_value: filter_value},
         dataType: "json",
+        async: false,
         beforeSend: function(){ $("body").css("cursor", "progress"); },
         complete: function(){ $("body").css("cursor", "default"); },
         success: function(data) {
 
-            if (data['error'] != "No hay coincidencias") {
+            resetSelect('#new_car_form_version');
 
-                resetSelect('#new_car_form_version');
+            if (data['error'] != "No hay coincidencias") {
 
                 for (var i = 0, len = data.length; i < len; i++) {
 
@@ -372,7 +381,7 @@ function fillVersionSelect(model, selected)
                 }
 
                 $("#new_car_form_version").val(selected);
-                $("#new_car_form_version_read_only").val($("#new_car_form_version option[value='"+selected+"']").text());
+                $("#new_car_form_version_read_only").val($("#new_car_form_version option[value='"+selected+"']").first().text());
                 updateTextCar();
             }
         },
@@ -413,7 +422,7 @@ function fillCar(car)
     $("#new_car_form_origin").val(car.origin);
     $("#new_car_form_variants").val(car.variants);
 
-    if ($("#new_car_form_brand option[value='"+car.brandId+"']").length < 1) {
+    if (car.brandId != '' && $("#new_car_form_brand option[value='"+car.brandId+"']").length < 1) {
 
         fillBrandSelect(car.brandId);
     } else {
@@ -421,7 +430,7 @@ function fillCar(car)
         $("#new_car_form_brand_read_only").val($("#new_car_form_brand option:selected").text());
     }
 
-    if ($("#new_car_form_model option[value='"+car.modelId+"']").length < 1) {
+    if (car.modelId != '' && $("#new_car_form_model option[value='"+car.modelId+"']").length < 1) {
 
         fillModelSelect(car.brandId, car.modelId);
     } else {
@@ -429,12 +438,12 @@ function fillCar(car)
         $("#new_car_form_model_read_only").val($("#new_car_form_model option:selected").text());
     }
 
-    if ($("#new_car_form_version option[value='"+car.versionId+"']").length < 1) {
+    if (car.versionId != '' && $("#new_car_form_version option[value='"+car.versionId+"']").length < 1) {
 
         fillVersionSelect(car.modelId, car.versionId);
     } else {
         $("#new_car_form_version").val(car.versionId);
-        $("#new_car_form_version_read_only").val($("#new_car_form_version  option:selected").text());
+        $("#new_car_form_version_read_only").val($("#new_car_form_version option:selected").first().text());
     }
 
     $("#new_car_form_motor").val(car.motor);
@@ -444,9 +453,8 @@ function fillCar(car)
 
     $( "#dis" ).attr("href", $( "#dis-url" ).val()+'/'+car.versionId);
 
-    console.log(car);
-    if(car.origin != 'custom') {
-        setReadOnlyInputs();
+    if(car.origin == 'DGT' || car.status == 'verified') {
+        setReadOnlyInputs(car.status);
     }
 
     return true;
