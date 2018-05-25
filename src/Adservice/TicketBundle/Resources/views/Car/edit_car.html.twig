@@ -47,7 +47,7 @@
             <option></option>
             {% for brand in brands %}
                 <option value={{ brand.id }}
-                {% if ticket.car is defined and ticket.car.brand == brand.name %} selected {% endif %}
+                {% if car is defined and car.brand == brand.name %} selected {% endif %}
                 >{{ brand.name }}</option>
             {% endfor %}
         </select>
@@ -60,7 +60,7 @@
             <option></option>
             {% for model in models %}
                 <option value={{ model.id }}
-                {% if ticket.car is defined and ticket.car.model == model.name %} selected {% endif %}
+                {% if car is defined and car.model == model.name %} selected {% endif %}
                 >{{ model.name }}</option>
             {% endfor %}
         </select>
