@@ -39,15 +39,15 @@
                 </td>
                 <td>
                     {% if car.status == 'invented' %}
-                        <div align="center"><img class="img_icon" src="{{ asset('bundles/util/images/icon/invented.png') }}" title="{{ 'invented'|trans }}"></div>
+                        <div class="text-center"><img class="img_icon" src="{{ asset('bundles/util/images/icon/invented.png') }}" title="{{ 'invented'|trans }}"></div>
                     {% elseif car.status == 'verified' %}
-                        <div align="center"><img class="img_icon" src="{{ asset('bundles/util/images/icon/verified.png') }}" title="{{ 'verified'|trans }}"></div>
+                        <div class="text-center"><img class="img_icon" src="{{ asset('bundles/util/images/icon/verified.png') }}" title="{{ 'verified'|trans }}"></div>
                     {% else %}
-                        <div align="center"><img class="img_icon" src="{{ asset('bundles/util/images/icon/undefined.png') }}" title="{{ 'undefined'|trans }}"></div>
+                        <div class="text-center"><img class="img_icon" src="{{ asset('bundles/util/images/icon/undefined.png') }}" title="{{ 'undefined'|trans }}"></div>
                     {% endif %}
                 </td>
                 <td>
-                    <div align="center"><a href="{{ path("editCar", { 'id':car.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a></div>
+                    <div class="text-center"><a href="{{ path("editCar", { 'id':car.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a></div>
                 </td>
             </tr>
         {% endfor %}
