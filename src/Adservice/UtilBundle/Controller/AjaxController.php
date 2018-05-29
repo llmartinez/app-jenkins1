@@ -528,7 +528,7 @@ class AjaxController extends Controller
         $results = $this->get('dgt_webservice')->getData($idPlateNumber);
         $json = $this->get('dgt_webservice')->transformData($results);
 
-        if ($json['error'] != false && empty($json['cars']) && $car instanceof Car){
+        if ($json['error'] == false && empty($json['cars']) && $car instanceof Car){
             return new JsonResponse(array('error' => $json['error'], 'cars' => array($car->to_json())));
         }
 

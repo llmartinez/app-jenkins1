@@ -26,16 +26,17 @@ class CarHelper
      *
      * @param Car $originalCar
      * @param Car $updatedCar
+     * @param integer $ticketId
      *
      * @return boolean
      */
-    public function updateCar(Car $originalCar, Car $updatedCar)
+    public function updateCar(Car $originalCar, Car $updatedCar, $ticketId)
     {
         UtilController::saveEntity($this->em, $updatedCar, $this->user);
 
         //Si la matrícula/marca/modelo/version son diferentes
         if($originalCar->isSameCar($updatedCar) == false) {
-            $this->lockAndUpdateTickets($originalCar, $updatedCar);
+            $this->lockAndUpdateTickets($originalCar, $updatedCar, $ticketId);
         }
 
         return true;
@@ -46,8 +47,9 @@ class CarHelper
      *
      * @param Car $originalCar
      * @param Car $updatedCar
+     * @param integer $ticketId
      */
-    public function lockAndUpdateTickets(Car $originalCar, Car $updatedCar)
+    public function lockAndUpdateTickets(Car $originalCar, Car $updatedCar, $ticketId)
     {
         //$lockStatus = $this->em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'closed'));
 
@@ -55,7 +57,7 @@ class CarHelper
 
         foreach($tickets as $ticket) {
             //$ticket->setStatus($lockStatus);
-            $ticket->setLog($this->generateLog($originalCar, $updatedCar, $ticket->getLog(), $this->user));
+            $ticket->setLog($this->generateLog($originalCar, $updatedCar, $ticket->getLog(), $this->user, $ticketId));
             $ticket->setCar($updatedCar);
         }
 
@@ -70,16 +72,19 @@ class CarHelper
      * @param Car $originalCar
      * @param Car $updatedCar
      * @param string $log
+     * @param User $user
+     * @param integer $ticketId
      *
      * @return string
      */
-    public function generateLog(Car $originalCar, Car $updatedCar, $log, $user)
+    public function generateLog(Car $originalCar, Car $updatedCar, $log, $user, $ticketId)
     {
         return $this->twig->render('@Ticket/Car/log_car.html.twig', array(
             'date' => date('d-m-Y H:i:s'),
             'userId' => $user->getId(),
-            'oldCar' => $originalCar->toStringExtended(),
-            'updatedCar' => $updatedCar->toStringExtended(),
+            'ticketId' => $ticketId,
+            'oldCar' => $originalCar->toStringLog(),
+            'updatedCar' => $updatedCar->toStringLog(),
             'log' => $log
         ));
     }

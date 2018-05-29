@@ -1,6 +1,7 @@
 <div>
-    <b>{{ date }}</b> (User: {{ userId }})
+    <b>{{ date }}</b> ({{ 'user'|trans }}: {{ userId }}{% if ticketId != null %}, {{ 'ticket'|trans }}: {{ ticketId }} {%  endif %})
     <div class="text-danger">{{ oldCar }}</div>
     <div class="text-success">{{ updatedCar }}</div>
+    <div ></div>
 </div>
 {{ log|raw }}

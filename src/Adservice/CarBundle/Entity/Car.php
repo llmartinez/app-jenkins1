@@ -527,7 +527,8 @@ class Car
 
         $model   = $this->getModel()->getName();
         $brand   = $this->getBrand()->getName();
-        if (isset($version)) $version = $this->getVersion()->getName();
+        $version = $this->getVersion();
+        if (isset($version)) $version = $version->getName();
         else $version = '';
         return $brand.' '.$model.' '.$version;
     }
@@ -558,5 +559,10 @@ class Car
     public function toStringExtended(){
 
         return $this->__toString().' '.$this->getYear().' '.$this->getMotor().' '.$this->getKw().'kw '.$this->getDisplacement().'cm3';
+    }
+
+    public function toStringLog(){
+
+        return $this->__toString().' '.$this->getPlateNumber().' '.$this->getVin().' '.$this->getYear().' '.$this->getMotor().' '.$this->getKw().'kw '.$this->getDisplacement().'cm3';
     }
 }
