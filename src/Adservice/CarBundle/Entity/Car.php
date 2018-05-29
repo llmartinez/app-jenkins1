@@ -518,7 +518,7 @@ class Car
     {
         return ($otherCar->getPlateNumber() == $this->getPlateNumber() &&
                 $otherCar->getBrand() == $this->getBrand() &&
-                $otherCar->getModel() == $this->getMotor() &&
+                $otherCar->getModel() == $this->getModel() &&
                 $otherCar->getVersion() == $this->getVersion() &&
                 $otherCar->getMotor() == $this->getMotor());
     }
