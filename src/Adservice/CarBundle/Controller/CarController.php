@@ -32,11 +32,11 @@ class CarController extends Controller {
         //Comprobamos si el coche ha cambiado de matrícula
         if ($request->get('new_car_form')['plateNumber'] && $request->get('new_car_form')['plateNumber'] != $car->getPlateNumber()) {
 
-            $plateNumberCar = $em->getRepository('CarBundle:Car')->findOneBy(array('plateNumber' => $request->get('new_car_form')['plateNumber']));
+            $carPlateNumber = $em->getRepository('CarBundle:Car')->findOneBy(array('plateNumber' => $request->get('new_car_form')['plateNumber']));
 
-            if ($plateNumberCar instanceof Car) {
+            if ($carPlateNumber instanceof Car) {
 
-                $car = $plateNumberCar;
+                $car = $carPlateNumber;
             }
         }
 
@@ -55,6 +55,7 @@ class CarController extends Controller {
 
                     $brand = $em->getRepository('CarBundle:Brand')->find($request->get('new_car_form_brand'));
                     $model = $em->getRepository('CarBundle:Model')->find($request->get('new_car_form_model'));
+
 
                     if($brand instanceof Brand && $model instanceof Model) {
 
@@ -80,6 +81,7 @@ class CarController extends Controller {
                             $car->setMotorId($car->getVersion()->getMotor());
                         }
 
+                        $this->get('car.helper')->updateCar($originalCar, $car, $ticketId);
                         //Comprobamos si existe un vehículo con el mismo número de bastidor
                         $vinCar = $em->getRepository('CarBundle:Car')->findOneBy(array('vin' => $car->getVin()));
                         if ($vinCar instanceof Car && $vinCar->getId() != $car->getId()) {

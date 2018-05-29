@@ -804,7 +804,7 @@ class TicketController extends Controller {
 
                                             $car->setVin(strtoupper($car->getVin()));
 
-                                            $this->get('car.helper')->updateCar($originalCar, $car);
+                                            $this->get('car.helper')->updateCar($originalCar, $car, $ticket->getId());
 
                                             //Define TICKET
                                             $ticket = UtilController::newEntity($ticket, $user);

@@ -918,20 +918,24 @@ class UserController extends Controller {
             $locale = $request->getLocale();
             $lang_u = $user->getCountry()->getLang();
             $lang   = $em->getRepository('UtilBundle:Language')->findOneByLanguage($lang_u);
-            $request->setLocale($lang->getShortName());
-
+            $this->get('translator')->setLocale($lang->getShortName());
             /* MAILING */
             $mailerUser = $this->get('cms.mailer');
             $mailerUser->setTo($mail);
             $mailerUser->setSubject($this->get('translator')->trans('mail.changePassword.subject').$user->getUsername());
             $mailerUser->setFrom('noreply@adserviceticketing.com');
-            $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password, '__locale' => $locale)));
+            $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password)));
             $mailerUser->sendMailToSpool();
             //echo $this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password));die;
 
             /* MAILING */
+
+            $this->get('translator')->setLocale($locale);
             $mail = $this->container->getParameter('mail_db');
             $mailerUser->setTo($mail);
+            $mailerUser->setSubject($this->get('translator')->trans('mail.changePassword.subject').$user->getUsername());
+            $mailerUser->setFrom('noreply@adserviceticketing.com');
+            $mailerUser->setBody($this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password)));
             $mailerUser->sendMailToSpool();
             //echo $this->renderView('UtilBundle:Mailing:user_change_password_mail.html.twig', array('user' => $user, 'password' => $password));die;
 
