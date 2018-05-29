@@ -700,7 +700,7 @@ return self::$trustedProxies;
 public static function setTrustedHosts(array $hostPatterns)
 {
 self::$trustedHostPatterns = array_map(function ($hostPattern) {
-return sprintf('#%s#i', $hostPattern);
+return sprintf('{%s}i', $hostPattern);
 }, $hostPatterns);
 self::$trustedHosts = array();
 }
@@ -2494,11 +2494,11 @@ protected $booted = false;
 protected $name;
 protected $startTime;
 protected $loadClassCache;
-const VERSION ='2.8.39';
-const VERSION_ID = 20839;
+const VERSION ='2.8.41';
+const VERSION_ID = 20841;
 const MAJOR_VERSION = 2;
 const MINOR_VERSION = 8;
-const RELEASE_VERSION = 39;
+const RELEASE_VERSION = 41;
 const EXTRA_VERSION ='';
 const END_OF_MAINTENANCE ='11/2018';
 const END_OF_LIFE ='11/2019';
