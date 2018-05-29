@@ -13,9 +13,9 @@
             <input type="hidden" id='ticket_model' name='ticket_model' value="">
             <input type="hidden" id='ticket_version' name='ticket_version' value="">
 
-            <input type="hidden" id='filter_car_form_origin' name='ticket_origin' value="custom">
-            <input type="hidden" id='filter_car_form_status' name='ticket_status' value="undefined">
-            <input type="hidden" id='filter_car_form_variants' name='ticket_variants' value="1">
+            <input type="hidden" id='filter_car_form_origin' name='filter_car_form_origin' value="{{ origin|default('custom') }}">
+            <input type="hidden" id='filter_car_form_status' name='filter_car_form_status' value="{{ status|default('undefined') }}">
+            <input type="hidden" id='filter_car_form_variants' name='filter_car_form_variants' value="{{ variants|default(1) }}">
             {% if workshop is defined and workshop != null and workshop.id != "" %}
                 <input type='hidden' id='ftbmv_codepartner' name='ftbmv_codepartner' value="{{workshop.codepartner}}">
                 <input type='hidden' id='ftbmv_codeworkshop' name='ftbmv_codeworkshop' value="{{workshop.codeworkshop}}">
