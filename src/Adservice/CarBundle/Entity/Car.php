@@ -57,7 +57,7 @@ class Car
 
     /**
      * @var string $motor
-     * @ORM\Column(name="motor", type="string", length=255)
+     * @ORM\Column(name="motor", type="string", length=255, nullable=true)
      */
     private $motor;
 
@@ -136,7 +136,7 @@ class Car
     /**
      * @var string $origin
      *
-     * @ORM\Column(name="origin", type="string", length=50, nullable=true)
+     * @ORM\Column(name="origin", type="string", length=50, nullable=true, options={"default": "custom"})
      */
     private $origin;
 
@@ -144,14 +144,14 @@ class Car
      /**
       * @var integer $variants
       *
-      * @ORM\Column(name="variants", type="integer", nullable=true)
+      * @ORM\Column(name="variants", type="integer", nullable=true, options={"default": 1})
       */
     private $variants;
 
     /**
      * @var string $status
      *
-     * @ORM\Column(name="status", type="string", length=50, nullable=true)
+     * @ORM\Column(name="status", type="string", length=50, nullable=true, options={"default": "undefined"})
      */
     private $status;
 

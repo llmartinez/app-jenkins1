@@ -30,7 +30,7 @@ class CarHelper
      *
      * @return boolean
      */
-    public function updateCar(Car $originalCar, Car $updatedCar, $ticketId)
+    public function updateCar(Car $originalCar, Car $updatedCar, $ticketId=null)
     {
         UtilController::saveEntity($this->em, $updatedCar, $this->user);
 
@@ -49,7 +49,7 @@ class CarHelper
      * @param Car $updatedCar
      * @param integer $ticketId
      */
-    public function lockAndUpdateTickets(Car $originalCar, Car $updatedCar, $ticketId)
+    public function lockAndUpdateTickets(Car $originalCar, Car $updatedCar, $ticketId=null)
     {
         //$lockStatus = $this->em->getRepository('TicketBundle:Status')->findOneBy(array('name' => 'closed'));
 
