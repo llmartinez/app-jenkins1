@@ -97,7 +97,7 @@ class CarController extends Controller {
                             $this->get('session')->getFlashBag()->add('error', $error);
 
                         } else {
-                            $this->get('car.helper')->updateCar($originalCar, $car);
+                            $this->get('car.helper')->updateCar($originalCar, $car, $ticketId);
 
                             if ($ticketId) {
                                 return $this->redirect($this->generateUrl('showTicket', array('id' => $ticketId)));
