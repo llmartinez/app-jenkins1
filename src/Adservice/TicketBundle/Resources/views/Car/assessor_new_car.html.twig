@@ -16,15 +16,33 @@
     <input type="hidden" id="msg_bad_year"    value="{{ 'error.bad_introduction.ticket'|trans }} ({{ 'year'|trans }}: 4 {{ 'values'|trans }})">
     <input type="hidden" id="msg_plate_number_not_found"  value="{{ 'error.plate_number_not_found'|trans }}">
     <input type="hidden" id="msg_vin_not_found"  value="{{ 'error.vin_not_found'|trans }}">
-    
-    <input type="hidden" id="ticket_brand"   value="{{marca_session}}">
-    <input type="hidden" id="ticket_model"   value="{{modelo_session}}">
-    <input type="hidden" id="ticket_version"   value="{{version_session}}">
-    <input type="hidden" id="ticket_description"   value="{{description_session}}">
-    <input type="hidden" id="ticket_plateNumber"   value="{{plateNumber_session}}">
-    <input type="hidden" id="ticket_vin"   value="{{vin_session}}">
+
+    {% if marca_session != null %}
+        <input type="hidden" id="ticket_brand"   value="{{marca_session}}">
+        <input type="hidden" id="ticket_model"   value="{{modelo_session}}">
+        <input type="hidden" id="ticket_version"   value="{{version_session}}">
+    {% else %}
+        <input type="hidden" id="ticket_brand"   value="{{car.brand.id|default('')}}">
+        <input type="hidden" id="ticket_model"   value="{{car.model.id|default('')}}">
+        <input type="hidden" id="ticket_version" value="{{car.version.id|default('')}}">
+    {% endif %}
+
+    <input type="hidden" id="ticket_plateNumber" value="{{car.plateNumber|default('')}}">
+    <input type="hidden" id="ticket_vin" value="{{car.vin|default('')}}">
+    <input type="hidden" id="ticket_motor" value="{{car.motor|default('')}}">
+    <input type="hidden" id="ticket_kw" value="{{car.kw|default('')}}">
+    <input type="hidden" id="ticket_displacement" value="{{car.displacement|default('')}}">
+    <input type="hidden" id="ticket_year" value="{{car.year|default('')}}">
+    <input type="hidden" id="ticket_origin" value="{{car.origin|default('')}}">
+    <input type="hidden" id="ticket_status" value="{{car.status|default('')}}">
+    <input type="hidden" id="ticket_variants" value="{{car.variants|default('')}}">
+    <input type="hidden" id="ticket_system"  value="{{ticket.subsystem.system.id|default('')}}">
+    <input type="hidden" id="ticket_subsystem" value="{{ticket.subsystem.id|default('')}}">
+    <input type="hidden" id="ticket_importance" value="{{ticket.importance.id|default('')}}">
+    <input type="hidden" id="ticket_description" value="{{ticket.description|default('')}}">
+
     {% for flashMessage in app.session.flashbag.get('error') %}
-        <p class="grid-full w100 error">{{ flashMessage }}</p>
+        {% include '@Util/Includes/alert.html.twig' with {'alertType': 'danger', 'flashMessage': flashMessage} %}
     {% endfor %}
     <div class="grid-full w100">
 

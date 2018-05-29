@@ -151,7 +151,7 @@ class WorkshopOrder {
     private $category_service;
 
     /**
-     * @ORM\OneToMany(targetEntity="Adservice\OrderBundle\Entity\WorkshopOrderDiagnosisMachine", mappedBy="workshop_order_id")
+     * @ORM\OneToMany(targetEntity="Adservice\OrderBundle\Entity\WorkshopOrderDiagnosisMachine", mappedBy="workshop_order")
      */
     private $diagnosis_machines;
 
