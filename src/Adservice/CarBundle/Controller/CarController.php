@@ -32,11 +32,11 @@ class CarController extends Controller {
         //Comprobamos si el coche ha cambiado de matrícula
         if ($request->get('new_car_form')['plateNumber'] && $request->get('new_car_form')['plateNumber'] != $car->getPlateNumber()) {
 
-            $carPlateNumber = $em->getRepository('CarBundle:Car')->findOneBy(array('plateNumber' => $request->get('new_car_form')['plateNumber']));
+            $plateNumberCar = $em->getRepository('CarBundle:Car')->findOneBy(array('plateNumber' => $request->get('new_car_form')['plateNumber']));
 
-            if ($carPlateNumber instanceof Car) {
+            if ($plateNumberCar instanceof Car) {
 
-                $car = $carPlateNumber;
+                $car = $plateNumberCar;
             }
         }
 
@@ -55,7 +55,6 @@ class CarController extends Controller {
 
                     $brand = $em->getRepository('CarBundle:Brand')->find($request->get('new_car_form_brand'));
                     $model = $em->getRepository('CarBundle:Model')->find($request->get('new_car_form_model'));
-
 
                     if($brand instanceof Brand && $model instanceof Model) {
 
@@ -81,18 +80,35 @@ class CarController extends Controller {
                             $car->setMotorId($car->getVersion()->getMotor());
                         }
 
-                        $this->get('car.helper')->updateCar($originalCar, $car);
+                        //Comprobamos si existe un vehículo con el mismo número de bastidor
+                        $vinCar = $em->getRepository('CarBundle:Car')->findOneBy(array('vin' => $car->getVin()));
+                        if ($vinCar instanceof Car && $vinCar->getId() != $car->getId()) {
 
-                        if ($ticketId) {
-                            return $this->redirect($this->generateUrl('showTicket', array('id' => $ticketId)));
+                            $error = $this->get('translator')->trans('error.vin_platenumber_not_match') . ': '.
+                                ' **' . $this->get('translator')->trans('vin') . '** ' . $vinCar->getVin() .
+                                ' -> ' . $this->get('translator')->trans('plate_number') . ' ' .
+                                $vinCar->getPlateNumber() . ': ' . $vinCar->__toString();
+                            if ($vinCar->getMotor() != null) {
+                                $error .= ' [' . $vinCar->getMotor() . '] ';
+                            }
+
+                            $this->get('session')->getFlashBag()->add('error', $error);
+
                         } else {
-                            return $this->redirect($this->generateUrl('car_list'));
+                            $this->get('car.helper')->updateCar($originalCar, $car);
+
+                            if ($ticketId) {
+                                return $this->redirect($this->generateUrl('showTicket', array('id' => $ticketId)));
+                            } else {
+                                return $this->redirect($this->generateUrl('car_list'));
+                            }
                         }
 
+                    } else {
+
+                        $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('error.bad_introduction'));
                     }
                 }
-
-                $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('error.bad_introduction'));
             }
 
             if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {

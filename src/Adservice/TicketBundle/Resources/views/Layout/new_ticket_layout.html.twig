@@ -47,16 +47,7 @@
 
           <input type="hidden" id="open_newTicket" name="open_newTicket" value="1">
 
-          {% if importance_session != null %}
-            <input type="hidden" id="ticket_importance"   value="{{importance_session}}">
-          {% endif %}
-          {% if is_granted('ROLE_ADMIN') and subsystem_session != null %}
-                <input type="hidden" id="ticket_system"   value="{{system_session}}">
-                <input type="hidden" id="ticket_subsystem"   value="{{subsystem_session}}">
-          {% endif %}
-          {% for flashMessage in app.session.flashbag.get('error') %}
-		<p class="grid-full w100 error">{{ flashMessage }}</p>
-	  {% endfor %}
+
           {% include 'TicketBundle:Car:new_car.html.twig'        %}
 
           {% include 'TicketBundle:Ticket:new_ticket.html.twig'  %}

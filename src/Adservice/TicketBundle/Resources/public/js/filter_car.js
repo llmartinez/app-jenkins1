@@ -1,3 +1,10 @@
+$(document).ready(function() {
+
+    if (validatePlateNumber($("#filter_car_form_plateNumber").val())) {
+        findCarByPlateNumber();
+    }
+});
+
 $("#filter_motor").on('click', function() {
     fillBrandSelect();
 });

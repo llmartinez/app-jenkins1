@@ -10,6 +10,10 @@
 <input type="hidden" id="msg_vin_not_found"  value="{{ 'error.vin_not_found'|trans }}">
 
 <div class="grid-full w100">
+
+    {% for flashMessage in app.session.flashbag.get('error') %}
+        {% include '@Util/Includes/alert.html.twig' with {'alertType': 'danger', 'flashMessage': flashMessage } %}
+    {% endfor %}
     
     <div class="grid-33">
         <label for="new_car_form_plateNumber">{{ 'plate_number'|trans }} *<a id="txt_plateNumber"></a></label>
