@@ -94,6 +94,7 @@ error.same_vin:					"El bastidor introducido coincide con otro vehículo registr
 error.same_platenumber:			"La matrícula introducida coincide con otro vehículo registrado en la aplicación"
 error.vin_platenumber_not_match: "La matrícula y el bastidor introducidos no pertenecen a un mismo vehículo"
 error.plate_number_not_found:  "No tenemos registrado ningun vehículo con esta matrícula. Inserta los datos manualmente."
+error.plate_number_ws_error: "¡Error! Ha ocurrido un error con el servicio, vuelva a intentarlo"
 error.vin_not_found:  "No tenemos registrado ningun vehículo con este bastidor. Inserta los datos manualmente."
 error.make_not_found: "No se ha encontrado la marca de vehículo proporcionada."
 error.model_not_found: "No se ha encontrado el modelo de vehículo proporcionado."
@@ -492,6 +493,10 @@ kw:						 "kW"
 displacement:	 "Cilindrada"
 vin:					 "Bastidor"
 plate_number:	 "Matrícula"
+origin: "Origen"
+variants: "Variantes"
+modal_car.title: "Información recuperada del servicio %ws_client%"
+modal_car.subtitle: "Por favor seleccione el vehículo correcto"
 
 #APP
 app:					 "Aplicaciones"

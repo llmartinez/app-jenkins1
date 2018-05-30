@@ -1,3 +1,5 @@
+var filter_motor_status = false;
+
 $(document).ready(function() {
 
     if (validatePlateNumber($("#filter_car_form_plateNumber").val())) {
@@ -7,6 +9,7 @@ $(document).ready(function() {
 
 $("#filter_motor").on('click', function() {
     fillBrandSelect();
+    filter_motor_status = !filter_motor_status;
 });
 
 //CHANGE INPUTS
@@ -43,7 +46,7 @@ $('#btn_create, #save_close').on('click', function(event) {
 //MODAL CLICK BUTTON
 $('#modal-btn-accept').click(function(){
     $('#modal_webservice_select').modal('toggle');
-    fillCar($('#modal_webservice_select_options > input:checked').data('car'));
+    fillCar($('#modal_webservice_select_options > label > input:checked').data('car'));
 });
 
 $(function() {
@@ -242,7 +245,7 @@ function fillModelSelect(brand, selected)
     var filter = '';
     var filter_value = '';
 
-    if ($('#filter_car_form_motor').val() != '') {
+    if (filter_motor_status && $('#filter_car_form_motor').val() != '') {
         filter = 'motor';
         filter_value = $('#filter_car_form_motor').val();
     }
@@ -286,7 +289,7 @@ function fillVersionSelect(model, selected)
     var filter = '';
     var filter_value = '';
 
-    if ($('#filter_car_form_motor').val() != '') {
+    if (filter_motor_status && $('#filter_car_form_motor').val() != '') {
         filter = 'motor';
         filter_value = $('#filter_car_form_motor').val();
     }

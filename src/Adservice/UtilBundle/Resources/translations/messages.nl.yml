@@ -94,6 +94,7 @@ error.same_vin:					"Het ingevoegde chassisnummer is hetzelfde als dat van een a
 error.same_platenumber:			"de ingevoerde nummerplaat is hetzelfde als dat van een andere auto geregistreerd in het ticketingsysteem"
 error.vin_platenumber_not_match: "Het ingevoerde kenteken- en chassisnummer behoren niet tot dezelfde auto"
 error.plate_number_not_found:  "We hebben geen enkele voertuig geregistreerd met deze nummerplaat, voeg de gegevens handmatig in."
+error.plate_number_ws_error: "Fout! Er is een fout opgetreden met de service. Probeer het opnieuw"
 error.vin_not_found:  "We hebben geen enkele voertuig geregistreerd met dit chassisnummer, voeg de gegevens handmatig in."
 error.make_not_found: "Het opgegeven merk is niet gevonden."
 error.model_not_found: "Het opgegeven model is niet gevonden."
@@ -492,6 +493,10 @@ kw:						 "kW"
 displacement:	 "Cylinderinhoud"
 vin:					 "VIN"
 plate_number:	 "Nummerplaat"
+origin: "Bron"
+variants: "Varianten"
+modal_car.title: "Informatie opgehaald uit de service %ws_client%"
+modal_car.subtitle: "Selecteer alstublieft het juiste voertuig"
 
 #APP
 app:					 "Apps"

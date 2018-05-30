@@ -792,6 +792,12 @@ class TicketController extends Controller {
                                                 $car->setKw($newCar->getKw());
                                                 //DISPLACEMENT
                                                 $car->setDisplacement($newCar->getDisplacement());
+                                                //ORIGIN
+                                                $car->setOrigin($newCar->getOrigin());
+                                                //STATUS
+                                                $car->setStatus($newCar->getStatus());
+                                                //VARIANTS
+                                                $car->setVariants($newCar->getVariants());
 
                                             } else {
 

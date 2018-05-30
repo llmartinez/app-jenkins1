@@ -1,8 +1,6 @@
 
 $(document).ready(function() {
 
-    
-     
     var new_ticket = $('#newTicket');
     if (typeof new_ticket != 'undefined') {
         new_ticket.focus();
