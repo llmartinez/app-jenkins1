@@ -162,7 +162,7 @@ class CarController extends Controller {
 
         $params = array();
         if($matricula !== null){
-            $params[] = array('plateNumber', " = '".$matricula."'");
+            $params[] = array('plateNumber', " LIKE '%".$matricula."%'");
         }
 
         $pagination = new Pagination($page);
