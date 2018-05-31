@@ -5,15 +5,15 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" aria-hidden="true">
                     &times;
                 </button>
-                <h5 class="modal-title" id="modal_webservice_title">Información recuperada de la DGT</h5>
+                <h5 class="modal-title" id="modal_webservice_title">{{ 'modal_car.title'|trans({"%ws_client%": "DGT"}) }}</h5>
             </div>
             <div class="modal-body">
-                <h5>Por favor seleccione el vehículo correcto</h5>
+                <h5>{{ 'modal_car.subtitle'|trans }}</h5>
                 <div id="modal_webservice_select_options">
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'action.cancel'|trans }}</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'user.cancel'|trans }}</button>
                 <button type="button" id="modal-btn-accept" class="btn btn-primary">{{ 'accept'|trans }}</button>
             </div>
         </div>

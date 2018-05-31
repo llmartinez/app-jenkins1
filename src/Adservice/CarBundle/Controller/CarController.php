@@ -81,7 +81,6 @@ class CarController extends Controller {
                             $car->setMotorId($car->getVersion()->getMotor());
                         }
 
-                        $this->get('car.helper')->updateCar($originalCar, $car, $ticketId);
                         //Comprobamos si existe un vehículo con el mismo número de bastidor
                         $vinCar = $em->getRepository('CarBundle:Car')->findOneBy(array('vin' => $car->getVin()));
                         if ($vinCar instanceof Car && $vinCar->getId() != $car->getId()) {
@@ -163,7 +162,7 @@ class CarController extends Controller {
 
         $params = array();
         if($matricula !== null){
-            $params[] = array('plateNumber', " = '".$matricula."'");
+            $params[] = array('plateNumber', " LIKE '%".$matricula."%'");
         }
 
         $pagination = new Pagination($page);

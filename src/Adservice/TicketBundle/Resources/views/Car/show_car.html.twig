@@ -28,8 +28,8 @@
 		{% if car.vin          != "" %}<tr><td><b>{{ 'vin'|trans }}</b><td>{{ car.vin          }}</td></tr>{% endif %}
 
 		{% if car.plateNumber  != "" %}<tr><td><b>{{ 'plate_number'|trans }}: </b><td>{{ car.plateNumber  }}</td></tr>{% endif %}
-		<tr><td><b>{{ 'Origin'|trans }}: </b><td>{{ car.origin  }}</td></tr>
-		<tr><td><b>{{ 'Variants'|trans }}: </b><td>{{ car.variants|default('1')  }}</td></tr>
+		<tr><td><b>{{ 'origin'|trans }}: </b><td>{{ car.origin|default('custom')  }}</td></tr>
+		<tr><td><b>{{ 'variants'|trans }}: </b><td>{{ car.variants|default('1')  }}</td></tr>
 	</table>
 
     {% include 'TicketBundle:Includes:_ged_btns.html.twig' %}

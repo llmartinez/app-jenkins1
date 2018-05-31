@@ -94,6 +94,7 @@ error.same_vin:					"O quadro introduzido coincide com outro veículo, registado
 error.same_platenumber:			"O registro introduzido coincide com outro veículo, registados na aplicação"
 error.vin_platenumber_not_match: "Registro e entrou quadro não pertencem ao mesmo veículo"
 error.plate_number_not_found:  "Você não tiver registado qualquer veículo com este registro. Inserir os dados manualmente."
+error.plate_number_ws_error: "Erro! Ocorreu um erro com o serviço, tente novamente"
 error.vin_not_found:  "Você não tiver registado qualquer veículo com este quadro. Inserir os dados manualmente."
 error.make_not_found: "A marca do veículo fornecida não foi encontrada."
 error.model_not_found: "O modelo de veículo fornecido não foi encontrado."
@@ -492,6 +493,10 @@ kw:						 "kW"
 displacement:			 "Cilindrada"
 vin:					 "Número de chassis"
 plate_number:			 "Matrícula"
+origin: "Origem"
+variants: "Variantes"
+modal_car.title: "Informações recuperadas do serviço %ws_client%"
+modal_car.subtitle: "Por favor, selecione o veículo correto"
 
 #APP
 app:					 "Aplicações"

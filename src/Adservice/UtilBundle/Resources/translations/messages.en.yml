@@ -94,6 +94,7 @@ error.same_vin:					"The introduced chassis number matches with another vehicle 
 error.same_platenumber:			"The introduced plate number matches with another vehicle registered in the application"
 error.vin_platenumber_not_match: "The introduced plate number and chassis number don't match with the same vehicle"
 error.plate_number_not_found:  "We don't have registered any vehicle with this plate number. Enter the data manually."
+error.plate_number_ws_error: "Error! Something went wrong with the service, try again"
 error.vin_not_found:  "We don't have registered any vehicle with this chassis. Enter the data manually."
 error.make_not_found: "The provided vehicle make has not been found."
 error.model_not_found: "The provided vehicle model has not been found."
@@ -492,6 +493,10 @@ kw:						 "kW"
 displacement:			 "Displacement"
 vin:					 "Vin"
 plate_number:			 "Plate Number"
+origin: "Origin"
+variants: "Variants"
+modal_car.title: "Information retrieved from the service %ws_client%"
+modal_car.subtitle: "Please select the correct vehicle"
 
 #APP
 app:					 "Applications"

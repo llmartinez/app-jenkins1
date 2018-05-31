@@ -1,8 +1,14 @@
 
 $(document).ready(function() {
 
-    //REDIRIGEN AL LISTADO DE COCHES
+    $('#flt_search_field').keyup(function(e){
+        if(e.keyCode == 13)
+        {
+            $('#btn_search_field').click();
+        }
+    });
 
+    //REDIRIGEN AL LISTADO DE COCHES
     $('#btn_search_field').click(function(){
 
         var matricula = $('#flt_search_field').val();

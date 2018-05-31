@@ -95,6 +95,7 @@ error.same_platenumber:			"Le numéro d'immatriculation introduit correspond à 
 error.vin_platenumber_not_match: "Le numéro d'immatriculation et le numéro de chassis introduits ne correspondent pas au même véhicule"
 error.plate_number_not_found:  "Nous n'avons enregistré aucun véhicule avec ce numéro de plaque. Entrez les données manuellement."
 error.vin_not_found:  "Nous n'avons enregistré aucun véhicule avec ce numéro de chassis. Entrez les données manuellement."
+error.plate_number_ws_error: "Erreur! Une erreur s'est produite avec le service, réessayez"
 error.make_not_found: "La marque de véhicule fournie n'a pas été trouvée."
 error.model_not_found: "Le modèle de véhicule fourni n'a pas été trouvé."
 error.version_not_found: "La gamme du véhicule fournie n'a pas été trouvée."
@@ -492,6 +493,10 @@ kw:						 "kW"
 displacement:			 "Cylindrée"
 vin:					 "Châssis"
 plate_number:			 "Immatriculation"
+origin: "Origine"
+variants: "Variantes"
+modal_car.title: "Informations récupérées du service %ws_client%"
+modal_car.subtitle: "Veuillez sélectionner le bon véhicule"
 
 #APP
 app:					 "Applications"
