@@ -49,6 +49,17 @@ function table_filter() {
     });
 }
 
+//Detect localStorage support
+var hasLocalStorage = (function() {
+    try {
+        localStorage.setItem('test', 'test');
+        localStorage.removeItem('test');
+        return true;
+    } catch (exception) {
+        return false;
+    }
+}());
+
 function string_to_slug(str) {
     str = str.replace(/^\s+|\s+$/g, ''); // trim
     str = str.toLowerCase();

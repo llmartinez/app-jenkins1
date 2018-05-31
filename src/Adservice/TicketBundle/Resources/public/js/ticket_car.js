@@ -55,22 +55,24 @@ $('#modal-btn-accept').click(function(){
 });
 
 $(function() {
-    $.ajax({
-        type: "POST",
-        url: Routing.generate('car_motors', {_locale: $(document).find("#data_locale").val()}),
-        dataType: "json",
-        success : function(data) {
-            $( "#new_car_form_motor" ).autocomplete({
-                source: data
-            });
-
-            $('#MainBody').append('<div id="autocomplete-hider" style="height:0;margin-left:11px;position:absolute;top:0;"></div>');
-            $('.ui-autocomplete').appendTo('#autocomplete-hider');
-        },
-        error : function(){
-            console.log("Error al cargar los motores...");
-        }
-    });
+    if (hasLocalStorage && localStorage.getItem('motors') != null) {
+        fillMotorsSelect(JSON.parse(localStorage.getItem('motors')));
+    } else {
+        $.ajax({
+            type: "POST",
+            url: Routing.generate('car_motors', {_locale: $(document).find("#data_locale").val()}),
+            dataType: "json",
+            success : function(data) {
+                fillMotorsSelect(data);
+                if (hasLocalStorage) {
+                    localStorage.setItem('motors', JSON.stringify(data));
+                }
+            },
+            error : function(){
+                console.log("Error al cargar los motores...");
+            }
+        });
+    }
 });
 
 //FILTERS FUNNEL NEW/EDIT TICKET
@@ -189,6 +191,16 @@ function updateTextCar()
         $('#new_car_form_model option:selected').text()+' '+
         $('#new_car_form_version option:selected').text()
     );
+}
+
+function fillMotorsSelect(data)
+{
+    $( "#new_car_form_motor" ).autocomplete({
+        source: data
+    });
+
+    $('#MainBody').append('<div id="autocomplete-hider" style="height:0;margin-left:11px;position:absolute;top:0;"></div>');
+    $('.ui-autocomplete').appendTo('#autocomplete-hider');
 }
 
 //AJAX FUNCTIONS
@@ -463,6 +475,15 @@ function fillCar(car)
 
     if(car.origin == 'DGT' || car.status == 'verified') {
         setReadOnlyInputs(car.status);
+    }
+
+    if($("#status_icon").length > 0) {
+
+        if(car.status) {
+            $("#status_icon").attr("src", "/bundles/util/images/icon/"+car.status+".png");
+        } else {
+            $("#status_icon").attr("src", "/bundles/util/images/icon/undefined.png");
+        }
     }
 
     return true;
