@@ -59,19 +59,24 @@ class CarController extends Controller {
 
                     if($brand instanceof Brand && $model instanceof Model) {
 
-                        $versions = $em->getRepository('CarBundle:Version')->findBy(
-                            array('id' => $request->get('new_car_form_version'))
-                        );
+                        if($request->get('new_car_form_version') != "") {
+                            $versions = $em->getRepository('CarBundle:Version')->findBy(
+                                array('id' => $request->get('new_car_form_version'))
+                            );
 
-                        if (count($versions)>0) {
-                            $car->setMotorId($versions[0]->getMotor());
+                            if (count($versions)>0) {
+                                $car->setMotorId($versions[0]->getMotor());
 
-                            foreach($versions as $version) {
-                                if( $version->getMotor()->getName() == $car->getMotor()) {
-                                    $car->setMotorId($version->getMotor());
+                                foreach($versions as $version) {
+                                    if( $version->getMotor()->getName() == $car->getMotor()) {
+                                        $car->setMotorId($version->getMotor());
+                                    }
                                 }
+                                $car->setVersion($versions[0]);
                             }
-                            $car->setVersion($versions[0]);
+                        } else {
+                            $car->setVersion(null);
+                            $car->setMotorId(null);
                         }
 
                         $car->setBrand($brand);

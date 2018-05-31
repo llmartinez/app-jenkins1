@@ -1,6 +1,8 @@
 
 <legend>
-   
+    {% if is_granted('ROLE_ASSESSOR') %}
+        <img id="status_icon" class="img_icon pull-right" src="{{ asset('bundles/util/images/icon/' ~ car.status|default('undefined') ~ '.png') }}" title="{{ car.status|default('undefined') | trans }}">
+    {% endif %}
     <a href="{{ path('newTicket', { 'id_workshop' : workshop.id, 'einatech' : 0, 'reset' : 1  }) }}" class="btn btn-primary asr_form-control asr_btn">
         <img class="img_icon" src="{{ asset('bundles/util/images/icon/update_.png') }}" title ="{{ 'btn.clear'|trans }}" alt="{{ 'btn.clear'|trans }}">
     </a>
