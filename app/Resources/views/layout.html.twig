@@ -29,7 +29,11 @@
 	<script>
 		$(document).on({
 			ajaxStart: function() { $("body").addClass("loading"); },
-			ajaxStop: function() { $("body").removeClass("loading"); }
+			ajaxStop: function() { $("body").removeClass("loading"); },
+			ajaxError: function() { $("body").removeClass("loading"); }
 		});
+		window.onerror = function() {
+			$("body").removeClass("loading");
+		};
 	</script>
 {% endblock %}
