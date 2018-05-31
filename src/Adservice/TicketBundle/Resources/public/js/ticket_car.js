@@ -1,3 +1,4 @@
+var filter_motor_status = false;
 
 //CLICK ON FILTER BUTTONS
 $("#filter_plate_number").on('click', function () {
@@ -13,6 +14,7 @@ $("#filter_vin").on('click', function () {
 
 $("#filter_motor").on('click', function() {
     fillBrandSelect();
+    filter_motor_status = !filter_motor_status;
 });
 
 //CHANGE INPUTS
@@ -49,7 +51,7 @@ $('#btn_create, #save_close').on('click', function(event) {
 //MODAL CLICK BUTTON
 $('#modal-btn-accept').click(function(){
     $('#modal_webservice_select').modal('toggle');
-    fillCar($('#modal_webservice_select_options > input:checked').data('car'));
+    fillCar($('#modal_webservice_select_options > label > input:checked').data('car'));
 });
 
 $(function() {
@@ -203,7 +205,7 @@ function findCarByPlateNumber()
             $("body").css("cursor", "default");
         },
         success: function (data) {
-            if (data['error'] !== "No hay coincidencias") {
+            if (data['error'] == false) {
 
                 var car = [];
 
@@ -221,16 +223,22 @@ function findCarByPlateNumber()
                         if(data['carInfo']) { car = $.extend(car, data['carInfo']); }
 
                         $('#modal_webservice_select_options').append(
-                            '<input type="radio" name="dgt_option"  data-car=\'' + JSON.stringify(car) + '\' id="' + i + '">' +
-                            '<label for="' + i + '">' + data['cars'][i].carDescription + '</label><hr>'
+                            '<label class="radio-inline font-weight-bold" for="' + i + '">' +
+                            '<input type="radio" name="dgt_option" ' +
+                            'data-car=\'' + JSON.stringify(car) + '\' id="' + i + '">' +
+                            '<strong>' + data['cars'][i].carDescription + '</strong></label><hr>'
                         );
                     }
                     $('#modal_webservice_select').modal();
                 }
+            } else {
+                alert($("#msg_plate_number_ws_error").val());
+                console.log(data['error']);
             }
         },
         error: function () {
             console.log("Error loading models...");
+            alert($("#msg_plate_number_ws_error").val());
         }
     });
 }
@@ -309,7 +317,7 @@ function fillModelSelect(brand, selected)
     var filter = '';
     var filter_value = '';
 
-    if ($('#new_car_form_motor').val() != '') {
+    if (filter_motor_status && $('#new_car_form_motor').val() != '') {
         filter = 'motor';
         filter_value = $('#new_car_form_motor').val();
     }
@@ -350,7 +358,7 @@ function fillVersionSelect(model, selected)
     var filter = '';
     var filter_value = '';
 
-    if ($('#new_car_form_motor').val() != '') {
+    if (filter_motor_status && $('#new_car_form_motor').val() != '') {
         filter = 'motor';
         filter_value = $('#new_car_form_motor').val();
     }
@@ -386,7 +394,7 @@ function fillVersionSelect(model, selected)
             }
         },
         error: function() {
-            console.log("Error al cargar versiones...");
+            console.log("Error al cargar versio      ");
         }
     });
 }
