@@ -211,7 +211,7 @@ class Workshop {
      * @ORM\ManyToMany(targetEntity="DiagnosisMachine")
      * @ORM\JoinTable(name="workshop_diagnosis_machine",
      *      joinColumns={@ORM\JoinColumn(name="workshop_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="diagnosis_machine_id", referencedColumnName="id", unique=true)}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="diagnosis_machine_id", referencedColumnName="id")}
      *      )
      */
     private $diagnosis_machines;
