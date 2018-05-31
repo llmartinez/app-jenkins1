@@ -4,12 +4,10 @@
         {# editar Ticket #}
         {% if is_granted('ROLE_ASSESSOR') %}
             <img class="img_icon" src="{{ asset('bundles/util/images/icon/' ~ car.status|default('undefined') ~ '.png') }}" title="{{ car.status | trans }}">
-			{% if ticket.log == "" or ticket.log == null or is_granted('ROLE_ADMIN') %}
-				<a href="{{ path('editCar', { 'id': car.id, 'ticketId': ticket.id }) }}">
-					<img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}" title="{{ 'edit.car'|trans }}"></span>
-				</a>
-			{% endif %}
-        {% endif %}    
+			<a href="{{ path('editCar', { 'id': car.id, 'ticketId': ticket.id }) }}">
+				<img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}" title="{{ 'edit.car'|trans }}"></span>
+			</a>
+        {% endif %}
     </legend>
 
 <input type="hidden" id="id_car" name="id_car" value="{{ car.id }}">
@@ -28,8 +26,10 @@
 		{% if car.vin          != "" %}<tr><td><b>{{ 'vin'|trans }}</b><td>{{ car.vin          }}</td></tr>{% endif %}
 
 		{% if car.plateNumber  != "" %}<tr><td><b>{{ 'plate_number'|trans }}: </b><td>{{ car.plateNumber  }}</td></tr>{% endif %}
-		<tr><td><b>{{ 'origin'|trans }}: </b><td>{{ car.origin|default('custom')  }}</td></tr>
-		<tr><td><b>{{ 'variants'|trans }}: </b><td>{{ car.variants|default('1')  }}</td></tr>
+		{% if is_granted('ROLE_ASSESSOR') %}
+			<tr><td><b>{{ 'origin'|trans }}: </b><td>{{ car.origin|default('custom') }}</td></tr>
+			<tr><td><b>{{ 'variants'|trans }}: </b><td>{{ car.variants|default('1')  }}</td></tr>
+		{% endif %}
 	</table>
 
     {% include 'TicketBundle:Includes:_ged_btns.html.twig' %}
