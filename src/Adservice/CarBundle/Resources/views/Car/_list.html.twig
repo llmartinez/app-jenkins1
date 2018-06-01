@@ -38,13 +38,7 @@
                 {% endif %}
                 </td>
                 <td>
-                    {% if car.status == 'invented' %}
-                        <div class="text-center"><img class="img_icon" src="{{ asset('bundles/util/images/icon/invented.png') }}" title="{{ 'invented'|trans }}"></div>
-                    {% elseif car.status == 'verified' %}
-                        <div class="text-center"><img class="img_icon" src="{{ asset('bundles/util/images/icon/verified.png') }}" title="{{ 'verified'|trans }}"></div>
-                    {% else %}
-                        <div class="text-center"><img class="img_icon" src="{{ asset('bundles/util/images/icon/undefined.png') }}" title="{{ 'undefined'|trans }}"></div>
-                    {% endif %}
+                    <div class="text-center"><img class="img_icon" src="{{ asset('bundles/util/images/icon/' - car.status|default('undefined') - '.png') }}" title="{{ car.status|default('undefined')|trans }}"></div>
                 </td>
                 <td>
                     <div class="text-center"><a href="{{ path("editCar", { 'id':car.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a></div>
