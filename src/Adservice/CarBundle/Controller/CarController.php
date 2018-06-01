@@ -82,10 +82,6 @@ class CarController extends Controller {
                         $car->setBrand($brand);
                         $car->setModel($model);
 
-                        if ($car->getVersion()) {
-                            $car->setMotorId($car->getVersion()->getMotor());
-                        }
-
                         //Comprobamos si existe un vehículo con el mismo número de bastidor
                         $vinCar = $em->getRepository('CarBundle:Car')->findOneBy(array('vin' => $car->getVin()));
                         if ($vinCar instanceof Car && $vinCar->getId() != $car->getId()) {

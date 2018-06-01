@@ -141,12 +141,6 @@ function findCarByPlateNumber()
         type: "POST",
         url: Routing.generate('get_car_from_plate_number_db', {_locale: $(document).find("#data_locale").val(), plateNumber: $("#filter_car_form_plateNumber").val()}),
         dataType: "json",
-        beforeSend: function () {
-            $("body").css("cursor", "progress");
-        },
-        complete: function () {
-            $("body").css("cursor", "default");
-        },
         success: function (data) {
             if (data['error'] !== "No hay coincidencias") {
 
@@ -172,12 +166,6 @@ function findCarByVin()
         type: "POST",
         url: Routing.generate('get_car_from_vin', {_locale: $("#data_locale").val(), vin: $('#filter_car_form_vin').val()}),
         dataType: "json",
-        beforeSend: function () {
-            $("body").css("cursor", "progress");
-        },
-        complete: function () {
-            $("body").css("cursor", "default");
-        },
         success: function (data) {
             if (data['error'] !== "No hay coincidencias") {
                 fillCar(data);
@@ -212,12 +200,6 @@ function fillBrandSelect(selected)
         data: {motor: $('#filter_car_form_motor').val()},
         dataType: "json",
         async: false,
-        beforeSend: function(){
-            $("body").css("cursor", "progress");
-        },
-        complete: function(){
-            $("body").css("cursor", "default");
-        },
         success: function(data) {
 
             resetSelect('#filter_car_form_brand');
@@ -268,12 +250,6 @@ function fillModelSelect(brand, selected)
         data: {id_brand: brand, filter: filter, filter_value: filter_value},
         dataType: "json",
         async: false,
-        beforeSend: function(){
-            $("body").css("cursor", "progress");
-        },
-        complete: function(){
-            $("body").css("cursor", "default");
-        },
         success: function(data) {
 
             resetSelect('#filter_car_form_model');
@@ -296,7 +272,7 @@ function fillModelSelect(brand, selected)
     });
 }
 
-function fillVersionSelect(model, selected)
+function fillVersionSelect(model, selected, motor)
 {
     var filter = '';
     var filter_value = '';
@@ -307,6 +283,7 @@ function fillVersionSelect(model, selected)
     }
 
     selected = selected || '';
+    motor = motor || '';
 
     $.ajax({
         type: "POST",
@@ -314,8 +291,6 @@ function fillVersionSelect(model, selected)
         data: {id_model: model, filter: filter, filter_value: filter_value},
         dataType: "json",
         async: false,
-        beforeSend: function(){ $("body").css("cursor", "progress"); },
-        complete: function(){ $("body").css("cursor", "default"); },
         success: function(data) {
 
             resetSelect('#filter_car_form_version');
@@ -331,7 +306,11 @@ function fillVersionSelect(model, selected)
                     );
                 }
 
-                $("#filter_car_form_version").val(selected);
+                if ($("#filter_car_form_version option[value='"+selected+"'][data-motor='"+motor+"']").length > 0) {
+                    $("#filter_car_form_version option[value='"+selected+"'][data-motor='"+motor+"']").prop("selected", "selected");
+                } else {
+                    $("#filter_car_form_version").val(selected);
+                }
                 $("#filter_car_form_version_read_only").val($("#filter_car_form_version option[value='"+selected+"']").first().text());
             }
         },
@@ -392,9 +371,13 @@ function fillCar(car)
 
     if ($("#filter_car_form_version option[value='"+car.versionId+"']").length < 1) {
 
-        fillVersionSelect(car.modelId, car.versionId);
+        fillVersionSelect(car.modelId, car.versionId, car.motor);
     } else {
-        $("#filter_car_form_version").val(car.versionId);
+        if ($("#filter_car_form_version option[value='"+car.versionId+"'][data-motor='"+car.motor+"']").length > 0) {
+            $("#filter_car_form_version option[value='"+car.versionId+"'][data-motor='"+car.motor+"']").prop("selected", "selected");
+        } else {
+            $("#filter_car_form_version").val(car.versionId);
+        }
         $("#filter_car_form_version_read_only").val($("#filter_car_form_version option:selected").first().text());
     }
 
