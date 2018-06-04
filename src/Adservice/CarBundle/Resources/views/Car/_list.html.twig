@@ -38,7 +38,7 @@
                 {% endif %}
                 </td>
                 <td>
-                    <div class="text-center"><img class="img_icon" src="{{ asset('bundles/util/images/icon/' - car.status|default('undefined') - '.png') }}" title="{{ car.status|default('undefined')|trans }}"></div>
+                    <div class="text-center"><img class="img_icon" src="{{ asset('bundles/util/images/icon/' ~ car.status|default('undefined') ~ '.png') }}" title="{{ car.status|default('undefined')|trans }}"></div>
                 </td>
                 <td>
                     <div class="text-center"><a href="{{ path("editCar", { 'id':car.id }) }}"><img class="img_icon" src="{{ asset('bundles/util/images/icon/pencil.png') }}"> </a></div>
