@@ -1747,16 +1747,14 @@ class StatisticController extends Controller {
                               break;
                       }
                   }
-  
-                  // echo($qb->getQuery()->getDql());
+
                   $resultsDehydrated = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
-                  $workshopdiagnosismachine = $em->getRepository('WorkshopBundle:WorkshopDiagnosisMachine')->findAll();
 
                   $response->headers->set('Content-Disposition', 'attachment;filename="'.$informe.'_'.date("dmY").'.csv"');
 
                   // $this->exportarExcelAction($request, $resultsDehydrated);
-                  $excel = $this->createExcelStatistics($resultsDehydrated, $workshopdiagnosismachine);
+                  $excel = $this->createExcelStatistics($resultsDehydrated);
               }
           }
           else{
@@ -2254,44 +2252,32 @@ class StatisticController extends Controller {
         return($excel);
     }
 
-    public function createExcelStatistics($results, $workshopdiagnosismachine=null)
+    public function createExcelStatistics($results)
     {
         $excel = '';
         $firstKey = ''; // guardaremos la primera key para introducir el salto de linea
-
+        $trans = $this->get('translator');
         if (isset($results[0])) {
             //Bucle para las cabeceras
             foreach ($results[0] as $key => $value) {
                 if($firstKey == '') { $firstKey = $key; }
                 $excel.=$key.';';
             }
-
-            if($workshopdiagnosismachine != null) {
-                $em = $this->getDoctrine()->getManager();
-                $diagmachines = $em->getRepository('WorkshopBundle:DiagnosisMachine')->findAll();
-            }
+            $em = $this->getDoctrine()->getManager();
 
             foreach ($results as $res)
             {
-                if($workshopdiagnosismachine != null)
-                {
-                    $res['Outildediagnostic'] = '';
 
-                    foreach ($workshopdiagnosismachine as $wkdm)
-                    {
-                        if($wkdm->getWorkshopId() == $res['Id'])
-                        {
-                            foreach ($diagmachines as $dm)
-                            {
-                                if($dm->getId() == $wkdm->getDiagnosisMachineId())
-                                {
-                                    $res['Outildediagnostic'] .= $dm->getName().' - ';
-                                } 
-                            }
-                        }
-                    }
-                    $res['Outildediagnostic'] = substr($res['Outildediagnostic'], 0, -3);
+                $ndiagmachines   = UtilController::sinAcentos(str_ireplace(array(" ", "'"), array("", ""), $trans->trans('diagnosis_machine')));
+                $res[$ndiagmachines] = '';
+
+                $workshop = $em->getRepository('WorkshopBundle:Workshop')->find($res['Id']);
+                $dms = $workshop->getDiagnosisMachines();
+                foreach($dms as $dm) {
+                    $res[$ndiagmachines] .= $dm->getName() . ' - ';
                 }
+                $res[$ndiagmachines] = substr($res[$ndiagmachines], 0, -3);
+
 
                 foreach ($res as $key => $value)
                 {

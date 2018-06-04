@@ -7,6 +7,7 @@ use Adservice\PartnerBundle\Entity\Partner;
 use Adservice\WorkshopBundle\Entity\Typology;
 use Adservice\WorkshopBundle\Entity\DiagnosisMachine;
 
+
 /**
  * Adservice\OrderBundle\Entity\Workshop
  *
@@ -151,7 +152,11 @@ class WorkshopOrder {
     private $category_service;
 
     /**
-     * @ORM\OneToMany(targetEntity="Adservice\OrderBundle\Entity\WorkshopOrderDiagnosisMachine", mappedBy="workshop_order")
+     * @ORM\ManyToMany(targetEntity="Adservice\WorkshopBundle\Entity\DiagnosisMachine")
+     * @ORM\JoinTable(name="workshop_order_diagnosis_machine",
+     *      joinColumns={@ORM\JoinColumn(name="workshop_order_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="diagnosis_machine_id", referencedColumnName="id")}
+     *      )
      */
     private $diagnosis_machines;
 
@@ -706,7 +711,7 @@ class WorkshopOrder {
      *
      * @param Role $userRoles
      */
-    public function addDiagnosisMachine(\Adservice\WorkshopBundle\Entity\DiagnosisMachine $diagnosis_machine) {
+    public function addDiagnosisMachine(DiagnosisMachine $diagnosis_machine) {
         $this->diagnosis_machines[] = $diagnosis_machine;
     }
 

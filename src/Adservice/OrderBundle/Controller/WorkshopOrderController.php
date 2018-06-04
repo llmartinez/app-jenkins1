@@ -11,7 +11,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Adservice\UtilBundle\Controller\UtilController as UtilController;
 use Adservice\WorkshopBundle\Entity\ADSPlus;
 use Adservice\WorkshopBundle\Entity\Workshop;
-use Adservice\WorkshopBundle\Entity\WorkshopDiagnosisMachine;
 use Adservice\OrderBundle\Entity\WorkshopOrder;
 use Adservice\OrderBundle\Form\WorkshopOrderType;
 use Adservice\OrderBundle\Form\WorkshopNewOrderType;
@@ -399,7 +398,6 @@ class WorkshopOrderController extends Controller {
             //si no existe una workshopOrder previa la creamos por primera vez a partir del workshop original
              $workshopOrder = $this->workshop_to_workshopOrder($workshop);
         }
-       
         if($user->getCategoryService() != null) {
             if($user->getCategoryService()->getId() != $workshop->getCategoryService()->getId()) {
                 throw new AccessDeniedException();
@@ -473,20 +471,18 @@ class WorkshopOrderController extends Controller {
             unset($_SESSION['id_country']);
         }
 
-        $w_diagmachines = $em->getRepository("WorkshopBundle:WorkshopDiagnosisMachine")->findBy(array('workshop_id' => $workshop->getId()));
 
+/*
         foreach ($w_diagmachines as $wdm)
         {
-            $dm = $em->getRepository("WorkshopBundle:DiagnosisMachine")->findOneBy(array('id' => $wdm->getDiagnosisMachineId()));
-            $workshopOrder->addDiagnosisMachine($dm);
-        }
+            $workshopOrder->addDiagnosisMachine($wdm);
+        }*/
 
         $form = $this->createForm(WorkshopEditOrderType::class, $workshopOrder);
 
         if ($request->getMethod() == 'POST')
         {
             $form->handleRequest($request);
-
             if( $request->request->has('workshopOrder_editOrder')['shop'])
             {
                 $idShop = $request->request->get('workshopOrder_editOrder')['shop'];
@@ -547,7 +543,7 @@ class WorkshopOrderController extends Controller {
                         $workshopOrder->setNumChecks(5);
                     }
                     
-                    
+                    $em->detach($workshop);
                     UtilController::saveEntity($em, $workshopOrder, $workshop->getCreatedBy());
 
                     $mail = $workshopOrder->getCreatedBy()->getEmail1();
@@ -1160,24 +1156,16 @@ class WorkshopOrderController extends Controller {
             $workshop = $this->workshopOrder_to_workshop($workshop, $workshopOrder);
 
             // Borramos las DiagMachines asignadas a la soliciutd
+/*
+            $diagmachines = $workshopOrder->getDiagnosisMachines();
 
-            $diagmachines = $em->getRepository("OrderBundle:WorkshopOrderDiagnosisMachine")->findBy(array('workshop_order_id' => $workshopOrder->getId()));
+            foreach($diagmachines as $diagmachine){
+                $workshop->addDiagnosisMachine($diagmachine);
+            }*/
 
-            $consultaWO = $em->createQuery('DELETE FROM OrderBundle:WorkshopOrderDiagnosisMachine wod
-                                          WHERE wod.workshop_order_id = '.$workshopOrder->getId());
-            $consultaWO->getResult();
 
-            $consultaW = $em->createQuery('DELETE FROM WorkshopBundle:WorkshopDiagnosisMachine wd
-                                          WHERE wd.workshop_id = '.$workshop->getId());
-            $consultaW->getResult();
+            $workshop->setDiagnosisMachines($workshopOrder->getDiagnosisMachines());
 
-            foreach ($diagmachines as $diagmachine)
-            {
-                $w_diag = New WorkshopDiagnosisMachine();
-                $w_diag->setWorkshopId($workshop->getId());
-                $w_diag->setDiagnosisMachineId($diagmachine->getDiagnosisMachineId());
-                $em->persist($w_diag);
-            }
 
             $user_workshop = $em->getRepository('UserBundle:User')->findOneBy(array('workshop' => $workshop->getId()));
             $user_workshop = UtilController::saveUserFromWorkshop($workshop,$user_workshop);
@@ -1469,6 +1457,7 @@ class WorkshopOrderController extends Controller {
             $workshopOrder->setModifiedAt($workshop->getModifiedAt());
         }
         $workshopOrder->setActive($workshop->getActive());
+        $workshopOrder->setDiagnosisMachines($workshop->getDiagnosisMachines());
         // $workshopOrder->setActive(false);
 
 

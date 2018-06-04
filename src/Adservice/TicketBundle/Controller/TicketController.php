@@ -599,7 +599,7 @@ class TicketController extends Controller {
 
         //Define Forms
         $form = $this->createForm(NewTicketType::class, $ticket);
-        $formC = $this->createForm(CarType::class, $car);
+        $formC = $this->createForm(CarType::class, $car, array('status' => $car->getStatus(), 'origin' => $car->getOrigin()));
         $formD = $this->createForm(DocumentType::class, $document);
         $textarea_content = "";
         if($einatech == 1){
