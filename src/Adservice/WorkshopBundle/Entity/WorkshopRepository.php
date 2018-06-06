@@ -166,6 +166,18 @@ class WorkshopRepository extends EntityRepository
         return $consulta->getResult()[0];
     }
 
+    public function findPhoneNoCodePartner($number,$codePartner, $codeWorkshop) {
+        $em = $this->getEntityManager();
+        $query = 'SELECT COUNT(w) FROM WorkshopBundle:Workshop w '
+            .'WHERE (w.code_partner != '.$codePartner.' OR w.code_workshop != '. $codeWorkshop .') AND (w.phone_number_1 = '.$number
+            .' OR w.phone_number_2 = '.$number
+            .' OR w.mobile_number_1 = '.$number
+            .' OR w.mobile_number_1 = '.$number.')';
+        $consulta = $em-> createQuery($query);
+
+        return $consulta->getResult()[0];
+    }
+
     public function findPhoneNoIdGetCode($number,$id) {
         $em = $this->getEntityManager();
         $query = 'SELECT w.code_partner, w.code_workshop, w.name FROM WorkshopBundle:Workshop w '

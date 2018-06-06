@@ -2104,7 +2104,7 @@ class TicketController extends Controller {
         if ($kw != '0' and $kw != '')
             $params[] = array('kw', ' = ' . $kw);
         if($this->getUser()->getCategoryService() != NULL) {
-            $advisers = $em->getRepository("UserBundle:User")->findByRole($em, 0, $user->getCategoryService()->getId(), 'ROLE_ASSESSOR');
+            $advisers = $em->getRepository("UserBundle:User")->findByRole($em, 0, $this->getUser()->getCategoryService()->getId(), 'ROLE_ASSESSOR');
         }else{
             $advisers = $em->getRepository("UserBundle:User")->findByRole($em, 0, 0, 'ROLE_ASSESSOR');
         }
