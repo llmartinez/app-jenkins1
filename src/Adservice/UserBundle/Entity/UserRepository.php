@@ -116,4 +116,60 @@ class UserRepository extends EntityRepository
     	$result = $result[1];
         return $result;
     }
+
+    public function findPhone($number) {
+        $em = $this->getEntityManager();
+        $query = 'SELECT COUNT(u) FROM UserBundle:User u '
+            .'WHERE u.phone_number_1 = '.$number
+            .'OR u.phone_number_2 = '.$number
+            .'OR u.mobile_number_1 = '.$number
+            .'OR u.mobile_number_2 = '.$number;
+        $consulta = $em-> createQuery($query);
+
+        return $consulta->getResult()[0];
+
+    }
+
+    public function findPhoneGetCode($number) {
+
+        $em = $this->getEntityManager();
+        $query = 'SELECT u.id, u.username FROM UserBundle:User u '
+            .'WHERE u.phone_number_1 = '.$number
+            .'OR u.phone_number_2 = '.$number
+            .'OR u.mobile_number_1 = '.$number
+            .'OR u.mobile_number_2 = '.$number;
+        $consulta = $em-> createQuery($query);
+
+        $result = $consulta->getResult()[0];
+        $res = $result['id'].' '.$result['username'];
+
+        return $res;
+    }
+
+    public function findPhoneNoId($number,$id) {
+        $em = $this->getEntityManager();
+        $query = 'SELECT COUNT(u) FROM UserBundle:User u '
+            .'WHERE u.id != '.$id.' AND (u.phone_number_1 = '.$number
+            .' OR u.phone_number_2 = '.$number
+            .' OR u.mobile_number_1 = '.$number
+            .' OR u.mobile_number_2 = '.$number.')';
+        $consulta = $em-> createQuery($query);
+        return $consulta->getResult()[0];
+    }
+
+    public function findPhoneNoIdGetCode($number,$id) {
+        $em = $this->getEntityManager();
+        $query = 'SELECT u.id, u.username FROM UserBundle:User u '
+            .'WHERE u.id != '.$id.' AND (u.phone_number_1 = '.$number
+            .' OR u.phone_number_2 = '.$number
+            .' OR u.mobile_number_1 = '.$number
+            .' OR u.mobile_number_2 = '.$number.')';
+        $consulta = $em-> createQuery($query);
+
+        $result = $consulta->getResult()[0];
+        $res = $result['id'].' '.$result['username'];
+
+        return $res;
+
+    }
 }

@@ -28,6 +28,7 @@ parameters:
     mailer_password: ""
 
     locale: "es"
+    locale_routing: "es|en|fr|pt|pl|nl"
     secret: "secret"
     secret_iv: "secret_iv"
     mail_db: ""

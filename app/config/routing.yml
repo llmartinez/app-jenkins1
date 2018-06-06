@@ -14,42 +14,62 @@ autologin:
 LockBundle:
     resource: "@LockBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/lock/
+    requirements:
+          _locale: "%locale_routing%"
 
 OrderBundle:
     resource: "@OrderBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/order
+    requirements:
+          _locale: "%locale_routing%"
 
 StatisticBundle:
     resource: "@StatisticBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/statistic
+    requirements:
+          _locale: "%locale_routing%"
 
 CarBundle:
     resource: "@CarBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/
+    requirements:
+          _locale: "%locale_routing%"
 
 PopupBundle:
     resource: "@PopupBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/popup
+    requirements:
+          _locale: "%locale_routing%"
 
 WorkshopBundle:
     resource: "@WorkshopBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/workshop
+    requirements:
+          _locale: "%locale_routing%"
 
 PartnerBundle:
     resource: "@PartnerBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/partner
+    requirements:
+          _locale: "%locale_routing%"
 
 TicketBundle:
     resource: "@TicketBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/
+    requirements:
+          _locale: "%locale_routing%"
 
 UserBundle:
     resource: "@UserBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/
+    requirements:
+          _locale: "%locale_routing%"
 
 UtilBundle:
     resource: "@UtilBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/
+    requirements:
+          _locale: "%locale_routing%"
 
 _login:
     path:  /
