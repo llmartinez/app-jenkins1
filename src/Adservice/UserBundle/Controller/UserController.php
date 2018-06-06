@@ -531,6 +531,50 @@ class UserController extends Controller {
                 return $this->render('UserBundle:User:new_user.html.twig', $array);
             }
 
+            //Comprobar telefono
+            $findPhone = array(0, 0, 0, 0);
+
+            if ($user->getPhoneNumber1() != '0' and $user->getPhoneNumber1() != null) {
+                $findPhone[0] = $em->getRepository("UserBundle:User")->findPhone($user->getPhoneNumber1());
+            }
+            if ($user->getPhoneNumber2() != '0' and $user->getPhoneNumber2() != null) {
+                $findPhone[1] = $em->getRepository("UserBundle:User")->findPhone($user->getPhoneNumber2());
+            }
+            if ($user->getMobileNumber1() != '0' and $user->getMobileNumber1() != null) {
+                $findPhone[2] = $em->getRepository("UserBundle:User")->findPhone($user->getMobileNumber1());
+            }
+            if ($user->getMobileNumber2() != '0' and $user->getMobileNumber2() != null) {
+                $findPhone[3] = $em->getRepository("UserBundle:User")->findPhone($user->getMobileNumber2());
+            }
+
+            if ($findPhone[0]['1'] > 0) {
+                $flash = $this->get('translator')->trans('error.code_phone.used') . $user->getPhoneNumber1()
+                    . ' -> ' . $this->get('translator')->trans('user')
+                    . ' ' . $em->getRepository("UserBundle:User")->findPhoneGetCode($user->getPhoneNumber1());
+            } else if ($findPhone[1]['1'] > 0) {
+                $flash = $this->get('translator')->trans('error.code_phone.used') . $user->getPhoneNumber2()
+                    . ' - ' . $this->get('translator')->trans('user')
+                    . ' ' . $em->getRepository("UserBundle:User")->findPhoneGetCode($user->getPhoneNumber2());
+            } else if ($findPhone[2]['1'] > 0) {
+                $flash = $this->get('translator')->trans('error.code_phone.used') . $user->getMobileNumber1()
+                    . ' - ' . $this->get('translator')->trans('user')
+                    . ' ' . $em->getRepository("UserBundle:User")->findPhoneGetCode($user->getMobileNumber1());
+            } else if ($findPhone[3]['1'] > 0) {
+                $flash = $this->get('translator')->trans('error.code_phone.used') . $user->getMobileNumber2()
+                    . ' - ' . $this->get('translator')->trans('user')
+                    . ' ' . $em->getRepository("UserBundle:User")->findPhoneGetCode($user->getMobileNumber2());
+            }
+
+            if(isset($flash)) {
+                $this->get('session')->getFlashBag()->add('error', $flash);
+                return $this->render('UserBundle:User:new_user.html.twig', array(
+                    'user'       => $user,
+                    'user_type'  => $type,
+                    'form_name'  => $form->getName(),
+                    'catserv'    => $catserv,
+                    'form'       => $form->createView()));
+            }
+
             $user->setCreatedAt(new \DateTime(\date("Y-m-d H:i:s")));
             $user->setCreatedBy($this->getUser());
             if($user->getCategoryService() == null && !$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')){
@@ -700,11 +744,62 @@ class UserController extends Controller {
                     if ($username != $name) {
                         $error_username = $trans->trans('username_used').$username;
 
-                        return $this->render('UserBundle:User:edit_user.html.twig', array('user'           => $user,
-                                                                                          'form_name'      => $form->getName(),
-                                                                                          'form'           => $form->createView(),
-                                                                                          'error_username' => $error_username));
+                        return $this->render('UserBundle:User:edit_user.html.twig', array(
+                            'user'         => $user,
+                            'role'         => $role,
+                            'form_name'    => $form->getName(),
+                            'partner_id'   => $partner_id,
+                            'shop_name'    => $shop_name,
+                            'user_role_id' => $user_role_id,
+                            'form'         => $form->createView(),
+                            'error_username' => $error_username));
                     }
+                }
+
+                //Comprobar telefono
+                $findPhone = array(0, 0, 0, 0, 0);
+
+                if ($user->getPhoneNumber1() != '0' and $user->getPhoneNumber1() != null) {
+                    $findPhone[0] = $em->getRepository("UserBundle:User")->findPhoneNoId($user->getPhoneNumber1(), $user->getId());
+                }
+                if ($user->getPhoneNumber2() != '0' and $user->getPhoneNumber2() != null) {
+                    $findPhone[1] = $em->getRepository("UserBundle:User")->findPhoneNoId($user->getPhoneNumber2(), $user->getId());
+                }
+                if ($user->getMobileNumber1() != '0' and $user->getMobileNumber1() != null) {
+                    $findPhone[2] = $em->getRepository("UserBundle:User")->findPhoneNoId($user->getMobileNumber1(), $user->getId());
+                }
+                if ($user->getMobileNumber2() != '0' and $user->getMobileNumber2() != null) {
+                    $findPhone[3] = $em->getRepository("UserBundle:User")->findPhoneNoId($user->getMobileNumber2(), $user->getId());
+                }
+
+                if ($findPhone[0]['1'] > 0) {
+                    $flash = $this->get('translator')->trans('error.code_phone.used') . $user->getPhoneNumber1()
+                        . ' -> ' . $this->get('translator')->trans('user')
+                        . ' ' . $em->getRepository("UserBundle:User")->findPhoneNoIdGetCode($user->getPhoneNumber1(), $user->getId());
+                } else if ($findPhone[1]['1'] > 0) {
+                    $flash = $this->get('translator')->trans('error.code_phone.used') . $user->getPhoneNumber2()
+                        . ' - ' . $this->get('translator')->trans('user')
+                        . ' ' . $em->getRepository("UserBundle:User")->findPhoneGetCode($user->getPhoneNumber2());
+                } else if ($findPhone[2]['1'] > 0) {
+                    $flash = $this->get('translator')->trans('error.code_phone.used') . $user->getMobileNumber1()
+                        . ' - ' . $this->get('translator')->trans('user')
+                        . ' ' . $em->getRepository("UserBundle:User")->findPhoneGetCode($user->getMobileNumber1());
+                } else if ($findPhone[3]['1'] > 0) {
+                    $flash = $this->get('translator')->trans('error.code_phone.used') . $user->getMobileNumber2()
+                        . ' - ' . $this->get('translator')->trans('user')
+                        . ' ' . $em->getRepository("UserBundle:User")->findPhoneGetCode($user->getMobileNumber2());
+                }
+
+                if(isset($flash)) {
+                    $this->get('session')->getFlashBag()->add('error', $flash);
+                    return $this->render('UserBundle:User:edit_user.html.twig', array(
+                            'user'         => $user,
+                            'role'         => $role,
+                            'form_name'    => $form->getName(),
+                            'partner_id'   => $partner_id,
+                            'shop_name'    => $shop_name,
+                            'user_role_id' => $user_role_id,
+                            'form'         => $form->createView()));
                 }
 
                 $user = UtilController::settersContact($user, $user, $actual_region, $actual_city);

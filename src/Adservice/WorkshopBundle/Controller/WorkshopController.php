@@ -573,15 +573,15 @@ class WorkshopController extends Controller {
                     } else if ($findPhone[1]['1'] > 0) {
                         $flash = $this->get('translator')->trans('error.code_phone.used') . $workshop->getPhoneNumber2()
                                 . ' - ' . $this->get('translator')->trans('workshop')
-                                . ' ' . $em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getPhoneNumber2(), $workshop->getId());
+                                . ' ' . $em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getPhoneNumber2());
                     } else if ($findPhone[2]['1'] > 0) {
                         $flash = $this->get('translator')->trans('error.code_phone.used') . $workshop->getMobileNumber1()
                                 . ' - ' . $this->get('translator')->trans('workshop')
-                                . ' ' . $em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getMobileNumber1(), $workshop->getId());
+                                . ' ' . $em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getMobileNumber1());
                     } else if ($findPhone[3]['1'] > 0) {
                         $flash = $this->get('translator')->trans('error.code_phone.used') . $workshop->getMobileNumber2()
                                 . ' - ' . $this->get('translator')->trans('workshop')
-                                . ' ' . $em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getMobileNumber2(), $workshop->getId());
+                                . ' ' . $em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getMobileNumber2());
                     } else {
                         $code = UtilController::getCodeWorkshopUnused($em, $partner->getCodePartner());        /* OBTIENE EL PRIMER CODIGO DISPONIBLE */
                         $flash = $this->get('translator')->trans('error.code_workshop.used') . $code . ' (valor actual ' . $last_code . ').';

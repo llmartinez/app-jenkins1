@@ -132,7 +132,7 @@ class WorkshopRepository extends EntityRepository
                 .'WHERE w.phone_number_1 = '.$number
                    .'OR w.phone_number_2 = '.$number
                    .'OR w.mobile_number_1 = '.$number
-                   .'OR w.mobile_number_1 = '.$number;
+                   .'OR w.mobile_number_2 = '.$number;
         $consulta = $em-> createQuery($query);
 
         return $consulta->getResult()[0];
@@ -146,7 +146,7 @@ class WorkshopRepository extends EntityRepository
                 .'WHERE w.phone_number_1 = '.$number
                    .'OR w.phone_number_2 = '.$number
                    .'OR w.mobile_number_1 = '.$number
-                   .'OR w.mobile_number_1 = '.$number;
+                   .'OR w.mobile_number_2 = '.$number;
         $consulta = $em-> createQuery($query);
 
         $result = $consulta->getResult()[0];
@@ -161,7 +161,7 @@ class WorkshopRepository extends EntityRepository
                 .'WHERE w.id != '.$id.' AND (w.phone_number_1 = '.$number
                    .' OR w.phone_number_2 = '.$number
                    .' OR w.mobile_number_1 = '.$number
-                   .' OR w.mobile_number_1 = '.$number.')';
+                   .' OR w.mobile_number_2 = '.$number.')';
         $consulta = $em-> createQuery($query);
         return $consulta->getResult()[0];
     }
@@ -172,7 +172,7 @@ class WorkshopRepository extends EntityRepository
             .'WHERE (w.code_partner != '.$codePartner.' OR w.code_workshop != '. $codeWorkshop .') AND (w.phone_number_1 = '.$number
             .' OR w.phone_number_2 = '.$number
             .' OR w.mobile_number_1 = '.$number
-            .' OR w.mobile_number_1 = '.$number.')';
+            .' OR w.mobile_number_2 = '.$number.')';
         $consulta = $em-> createQuery($query);
 
         return $consulta->getResult()[0];
@@ -184,7 +184,7 @@ class WorkshopRepository extends EntityRepository
                 .'WHERE w.id != '.$id.' AND (w.phone_number_1 = '.$number
                    .' OR w.phone_number_2 = '.$number
                    .' OR w.mobile_number_1 = '.$number
-                   .' OR w.mobile_number_1 = '.$number.')';
+                   .' OR w.mobile_number_2 = '.$number.')';
         $consulta = $em-> createQuery($query);
 
         $result = $consulta->getResult()[0];
