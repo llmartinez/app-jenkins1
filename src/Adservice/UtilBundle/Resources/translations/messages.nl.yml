@@ -863,7 +863,7 @@ termsConditions:	" "
 _termsConditions: 	'Indien je gebruik maakt van het platform dan aanvaard je volgende <a href="">voorwaarden en termen</a>.'
 footerText: 	 	"© Grup Eina Digital · Centro de Innovación y Recursos"
 
-msg_einatech: "Procedure voor de reparatie van ECU's is NIET actief, Einatech. \n\r\t1. \n\t3. .\n\t4.\n\t5. \n\t  cliente.\n\t6. \n\t7. \n\t8.  \n\t9.  ."
+msg_einatech: "Procedure voor de reparatie van ECU's is NIET actief, Einatech. \n\r\t1. Maak een ticket voor het reparatieverzoek door te klikken op 'Reparatie van elektronische module'. \n\t2. Vul alle gevraagde velden in en druk op Aanmaken. \n\t3. Nadat het ticket is aangemaakt, neemt de Einatech-service contact op met de werkplaats om de verzameling te bevestigen. \n\t4. Het is belangrijk om een ​​afbeelding van het technische bestand bij het ticket of pakket te voegen.\n\t5. Na ontvangst van de beschadigde eenheid, zullen de Einatech-agents het computersysteem binnendringen en ze zullen sturen een e-mail / ticket naar de werkplaats met informatie over de ontvangst van de eenheid. \n\t6. Het budget wordt binnen 24-48 uur na ontvangst van het materiaal verzonden. Dit wordt via e-mail / ticket doorgegeven. \n\t7. Het budget wordt binnen 24-48 uur na ontvangst van het materiaal verzonden. Dit wordt via e-mail / ticket doorgegeven. \n\t8. Nadat het artikel is gerepareerd en gecontroleerd, wordt het door een transportbedrijf bij u thuis geretourneerd met een 24-uurs leveringstermijn. "
 einatech: "reparatie ECU's"
 einatech_textarea_default : "-Type elemento: \n-Refer: \n-beschrijving van het defect: \n-Gebruikt diagnose toestel: \n-DTC codes en beschrijving: \n-Km van het voertuig: "
 valoration: "Onderhoudsbeoordeling"
