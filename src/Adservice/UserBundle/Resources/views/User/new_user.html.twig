@@ -11,17 +11,26 @@
         {% set is_hidden = '' %}
     {% endif %}
     <ol class="breadcrumb">
-      <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
-      {% if is_granted('ROLE_ADMIN') %}
-        <li><a href="{{ path('user_list' ) }}">{{ 'menu.list_users'|trans }}</a></li>
-      {% else %}
-        <li><a href="{{ path('user_partner_list' ) }}">{{ 'menu.list_users'|trans }}</a></li>
-      {% endif %}
-
-      <li class="active">{{ 'new.user'|trans }}</li>
+        <li><a href="{{ path('user_index') }}">{{ 'home'|trans }}</a></li>
+        {% if is_granted('ROLE_ADMIN') %}
+            <li><a href="{{ path('user_list' ) }}">{{ 'menu.list_users'|trans }}</a></li>
+        {% else %}
+            <li><a href="{{ path('user_partner_list' ) }}">{{ 'menu.list_users'|trans }}</a></li>
+        {% endif %}
+        <li class="active">{{ 'new.user'|trans }}</li>
     </ol>
 
     {% if error_username is defined %}<p class="alert label-danger">{{ error_username }}</p>{% endif %}
+
+
+    <div class="col-xs-12 col-md-12 form-group">
+        {% for flashMessage in app.session.flashbag.get('password') %}
+            {{ flashMessage }}
+        {% endfor %}
+        {% for flashMessage in app.session.flashbag.get('error') %}
+            <a class="error">{{ flashMessage }}</a>
+        {% endfor %}
+    </div>
 
     {{ form_start(form, {'action': path('user_new',{ 'type':user_type})}) }}
         <div class="col-xs-12 col-md-12 form-group">

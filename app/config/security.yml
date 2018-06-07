@@ -33,28 +33,28 @@ security:
         ROLE_AD: ROLE_COMMERCIAL
 
     access_control:
-      - { path: ^/(es|en|fr|pt)/user/login,                 roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-      - { path: ^/(es|en|fr|pt)/help,                       roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-      - { path: ^/(es|en|fr|pt)/privacy,                    roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-      - { path: ^/(es|en|fr|pt)/partner/shop,               roles: [ROLE_AD], requires_channel: https }
-      - { path: ^/(es|en|fr|pt)/partner,                    roles: [ROLE_TOP_AD], requires_channel: https }
-      - { path: ^/(es|en|fr|pt)/shop,                       roles: [ROLE_ADMIN], requires_channel: https }
-      - { path: ^/(es|en|fr|pt)/order,                      roles: [ROLE_ADMIN, ROLE_COMMERCIAL], requires_channel: https }
-      - { path: ^/(es|en|fr|pt)/user/list,                  roles: [ROLE_ADMIN], requires_channel: https }
-      - { path: ^/(es|en|fr|pt)/user,                       roles: [ROLE_USER, ROLE_COMMERCIAL], requires_channel: https }
-      - { path: ^/(es|en|fr|pt)/popup,                      roles: [ROLE_USER], requires_channel: https }
-      - { path: ^/(es|en|fr|pt)/workshop/observation,       roles: [ROLE_ASSESSOR], requires_channel: https }
-      - { path: ^/(es|en|fr|pt)/workshop,                   roles: [ROLE_ADMIN], requires_channel: https }
-      - { path: ^/(es|en|fr|pt)/ticket/workshopList,        roles: [ROLE_ASSESSOR], requires_channel: https }
-      - { path: ^/(es|en|fr|pt)/ticket/assingAssesor,       roles: [ROLE_ASSESSOR], requires_channel: https }
-      - { path: ^/(es|en|fr|pt)/ticket/close,               roles: [ROLE_USER], requires_channel: https }
-      - { path: ^/(es|en|fr|pt)/ticket,                     roles: [ROLE_USER], requires_channel: https }
-      - { path: ^/(es|en|fr|pt)/car,                        roles: [ROLE_USER], requires_channel: https }
-      - { path: ^/(es|en|fr|pt)/statistic/list-top,         roles: [ROLE_AD], requires_channel: https }
-      - { path: ^/(es|en|fr|pt)/statistic,                  roles: [ROLE_AD], requires_channel: https }
-      # - { path: ^/(es|en|fr|pt)/lock,                     roles: [ROLE_USER]                  }
-      - { path: ^/(es|en|fr|pt)/import,                     roles: [ROLE_SUPER_ADMIN], requires_channel: https }
-      # - { path: ^/(es|en|fr|pt)/,                         roles: [ROLE_USER]                  }
+      - { path: ^/(es|en|fr|pt|pl|nl)/user/login,                 roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+      - { path: ^/(es|en|fr|pt|pl|nl)/help,                       roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+      - { path: ^/(es|en|fr|pt|pl|nl)/privacy,                    roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+      - { path: ^/(es|en|fr|pt|pl|nl)/partner/shop,               roles: [ROLE_AD], requires_channel: https }
+      - { path: ^/(es|en|fr|pt|pl|nl)/partner,                    roles: [ROLE_TOP_AD], requires_channel: https }
+      - { path: ^/(es|en|fr|pt|pl|nl)/shop,                       roles: [ROLE_ADMIN, ROLE_AD], requires_channel: https }
+      - { path: ^/(es|en|fr|pt|pl|nl)/order,                      roles: [ROLE_ADMIN, ROLE_COMMERCIAL], requires_channel: https }
+      - { path: ^/(es|en|fr|pt|pl|nl)/user/list,                  roles: [ROLE_ADMIN], requires_channel: https }
+      - { path: ^/(es|en|fr|pt|pl|nl)/user,                       roles: [ROLE_USER, ROLE_AD, ROLE_COMMERCIAL], requires_channel: https }
+      - { path: ^/(es|en|fr|pt|pl|nl)/popup,                      roles: [ROLE_USER, ROLE_AD], requires_channel: https }
+      - { path: ^/(es|en|fr|pt|pl|nl)/workshop/observation,       roles: [ROLE_ASSESSOR], requires_channel: https }
+      - { path: ^/(es|en|fr|pt|pl|nl)/workshop,                   roles: [ROLE_ADMIN, ROLE_AD], requires_channel: https }
+      - { path: ^/(es|en|fr|pt|pl|nl)/ticket/workshopList,        roles: [ROLE_ASSESSOR], requires_channel: https }
+      - { path: ^/(es|en|fr|pt|pl|nl)/ticket/assingAssesor,       roles: [ROLE_ASSESSOR], requires_channel: https }
+      - { path: ^/(es|en|fr|pt|pl|nl)/ticket/close,               roles: [ROLE_USER], requires_channel: https }
+      - { path: ^/(es|en|fr|pt|pl|nl)/ticket,                     roles: [ROLE_USER], requires_channel: https }
+      - { path: ^/(es|en|fr|pt|pl|nl)/car,                        roles: [ROLE_ASSESSOR], requires_channel: https }
+      - { path: ^/(es|en|fr|pt|pl|nl)/statistic/list-top,         roles: [ROLE_AD], requires_channel: https }
+      - { path: ^/(es|en|fr|pt|pl|nl)/statistic,                  roles: [ROLE_AD], requires_channel: https }
+      # - { path: ^/(es|en|fr|pt|pl|nl)/lock,                     roles: [ROLE_USER]                  }
+      - { path: ^/(es|en|fr|pt|pl|nl)/import,                     roles: [ROLE_SUPER_ADMIN], requires_channel: https }
+      # - { path: ^/(es|en|fr|pt|pl|nl)/,                         roles: [ROLE_USER]                  }
       - { path: ^/,                                         roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
 
     encoders:
