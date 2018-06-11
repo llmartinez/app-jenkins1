@@ -514,7 +514,7 @@ class WorkshopController extends Controller {
             }
             else {
                 /* CHECK CODE WORKSHOP NO SE REPITA */
-                $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('code_partner'  => $partner->getCodePartner(),
+                $find = $em->getRepository("WorkshopBundle:Workshop")->findOneBy(array('code_partner'  => $workshop->getPartner()->getCodePartner(),
                                                                                        'code_workshop' => $workshop->getCodeWorkshop()));
 
                 //Comprobar telefono
@@ -581,6 +581,7 @@ class WorkshopController extends Controller {
                     } else if ($findPhone[3]['1'] > 0) {
                         $flash = $this->get('translator')->trans('error.code_phone.used') . $workshop->getMobileNumber2()
                                 . ' - ' . $this->get('translator')->trans('workshop')
+
                                 . ' ' . $em->getRepository("WorkshopBundle:Workshop")->findPhoneGetCode($workshop->getMobileNumber2());
                     } else {
                         $code = UtilController::getCodeWorkshopUnused($em, $partner->getCodePartner());        /* OBTIENE EL PRIMER CODIGO DISPONIBLE */

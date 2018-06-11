@@ -478,7 +478,7 @@ class WorkshopOrderController extends Controller {
             $workshopOrder->addDiagnosisMachine($wdm);
         }*/
 
-        $form = $this->createForm(WorkshopEditOrderType::class, $workshopOrder);
+        $form = $this->createForm(WorkshopEditOrderType::class, $workshopOrder, array('active' => $workshopOrder->getActive()));
 
         if ($request->getMethod() == 'POST')
         {
@@ -960,20 +960,21 @@ class WorkshopOrderController extends Controller {
         $findPhone = array(0,0,0,0);
 
         if ($workshopOrder->getPhoneNumber1() != '0' and $workshopOrder->getPhoneNumber1() != null) {
-            $findPhone[0] = $em->getRepository("WorkshopBundle:Workshop")->findPhoneNoCodePartner($workshopOrder->getPhoneNumber1(), $workshopOrder->getCodePartner(), $workshopOrder->getCodeWorkshop());
+            $findPhone[0] = $em->getRepository("WorkshopBundle:Workshop")->findPhoneNoId($workshopOrder->getPhoneNumber1(), $workshopOrder->getIdWorkshop());
         }
         if ($workshopOrder->getPhoneNumber2() != '0' and $workshopOrder->getPhoneNumber2() != null) {
-            $findPhone[1] = $em->getRepository("WorkshopBundle:Workshop")->findPhoneNoCodePartner($workshopOrder->getPhoneNumber2(), $workshopOrder->getCodePartner(), $workshopOrder->getCodeWorkshop());
+            $findPhone[1] = $em->getRepository("WorkshopBundle:Workshop")->findPhoneNoId($workshopOrder->getPhoneNumber2(), $workshopOrder->getIdWorkshop());
         }
         if ($workshopOrder->getMobileNumber1() != '0' and $workshopOrder->getMobileNumber1() != null) {
-            $findPhone[2] = $em->getRepository("WorkshopBundle:Workshop")->findPhoneNoCodePartner($workshopOrder->getMobileNumber1(), $workshopOrder->getCodePartner(), $workshopOrder->getCodeWorkshop());
+            $findPhone[2] = $em->getRepository("WorkshopBundle:Workshop")->findPhoneNoId($workshopOrder->getMobileNumber1(), $workshopOrder->getIdWorkshop());
         }
         if ($workshopOrder->getMobileNumber2() != '0' and $workshopOrder->getMobileNumber2() != null) {
-            $findPhone[3] = $em->getRepository("WorkshopBundle:Workshop")->findPhoneNoCodePartner($workshopOrder->getMobileNumber2(), $workshopOrder->getCodePartner(), $workshopOrder->getCodeWorkshop());
+            $findPhone[3] = $em->getRepository("WorkshopBundle:Workshop")->findPhoneNoId($workshopOrder->getMobileNumber2(), $workshopOrder->getIdWorkshop());
         }
 
         if ($findPhone[0]['1'] < 1 and $findPhone[1]['1'] < 1 and $findPhone[2]['1'] < 1 and $findPhone[3]['1'] < 1) {
             if (strpos($workshopOrder->getWantedAction(), 'preorder_') !== false && $status == 'accepted') {
+
                 if ((strpos($workshopOrder->getWantedAction(), '_create') !== false && ($find == null or $workshopOrder->getCodeWorkshop() != $find->getCodeWorkshop())) || strpos($workshopOrder->getWantedAction(), '_create') !== true) {
                     $preorder = true;
                     $workshopOrder->setWantedAction(substr($workshopOrder->getWantedAction(), 9));
