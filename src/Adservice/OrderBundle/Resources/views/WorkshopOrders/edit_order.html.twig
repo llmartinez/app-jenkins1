@@ -90,12 +90,14 @@
                     {{ form_widget(form.ad_service_plus) }}
                 </div>
                 {% endif %}
-                <div class="w65 fl mb15">
-                    <label>{{ 'test'|trans }}</label>
-                </div>
-                <div class="w35 fr mb15">
-                    {{ form_widget(form.test) }}
-                </div>
+                {% if workshopOrder.active == 1 %}
+                    <div class="w65 fl mb15">
+                        <label>{{ 'test'|trans }}</label>
+                    </div>
+                    <div class="w35 fr mb15">
+                        {{ form_widget(form.test) }}
+                    </div>
+                {% endif %}
                 <div class="w65 fl ">
                     <label for="workshopOrder_newOrder_haschecks">{{ 'haschecks'|trans }}</label>
                 </div>

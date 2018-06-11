@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
 class WorkshopEditOrderType extends AbstractType
@@ -57,7 +58,6 @@ class WorkshopEditOrderType extends AbstractType
                                                           ->orWhere('s.id = 1')                                                          
                                                           ; }))
             ->add('contact', TextType::class, array('required' => true))
-            ->add('test', CheckboxType::class, array('required' => false))
             ->add('haschecks', CheckboxType::class, array('required' => false))
             ->add('numchecks', IntegerType::class, array('required' => false))
             ->add('internal_code', TextType::class, array('required' => false))
@@ -83,7 +83,11 @@ class WorkshopEditOrderType extends AbstractType
             ->add('email_1',EmailType::class)
             ->add('email_2',EmailType::class, array('required' => false))
         ;
-        
+
+        if($options['active'] == 1){
+            $builder->add('test', CheckboxType::class, array('required' => false));
+        }
+
         if($id_catserv != ' = 3'){
             $builder
                 ->add('ad_service_plus', CheckboxType::class, array('required' => false))
@@ -107,6 +111,12 @@ class WorkshopEditOrderType extends AbstractType
                 ->add('commercial_name', TextType::class, array('required' => false))
             ;
         }  
+    }
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'active' => 1
+        ));
     }
 
     public function getBlockPrefix()
