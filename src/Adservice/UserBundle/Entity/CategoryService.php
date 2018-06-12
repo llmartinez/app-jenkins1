@@ -2,6 +2,7 @@
 
 namespace Adservice\UserBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -55,7 +56,22 @@ class CategoryService
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
      */
     private $email;
-    
+
+    /**
+     * @ORM\ManyToMany(targetEntity="SearchService")
+     * @ORM\JoinTable(name="search_service_category_service",
+     *     joinColumns={@ORM\JoinColumn(name="category_service_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="search_service_id", referencedColumnName="id")}
+     * )
+     */
+    private $searchServices;
+
+    public function __construct()
+    {
+        $this->searchServices = new ArrayCollection();
+    }
+
+
     /**
      * Get id
      *
@@ -165,7 +181,31 @@ class CategoryService
     {
         return $this->email;
     }
-    
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getSearchServices()
+    {
+        return $this->searchServices;
+    }
+
+    /**
+     * @param ArrayCollection $searchServices
+     */
+    public function setSearchServices($searchServices)
+    {
+        $this->searchServices = $searchServices;
+    }
+
+    /**
+     * @param SearchService $searchService
+     */
+    public function addSearchService(SearchService $searchService)
+    {
+        $this->searchServices[] = $searchService;
+    }
+
     public function __toString() {
         return $this->getCategoryService();
     }
