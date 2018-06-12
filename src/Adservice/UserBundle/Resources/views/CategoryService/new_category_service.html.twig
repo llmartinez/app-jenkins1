@@ -8,6 +8,8 @@
         <li class="active">{{ 'new.category_service'|trans }}</li>
     </ol>
 
+    {% form_theme form 'bootstrap_3_layout.html.twig' %}
+
     {{ form_start(form, {'action': path("category_service_new")}) }}
         <div class="container">
             <legend>{{ 'category_service'|trans }}</legend>
@@ -21,25 +23,31 @@
             <div class="col-xs-12 col-md-12 form-group">
                 <div class="col-xs-6 col-md-6 form-group">
                     <label for="adservice_userbundle_categoryservicetype_category_service">{{ 'category_service'|trans }}</label>
-                    {{ form_widget(form.category_service, { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_widget(form.category_service) }}
                 </div>
                 <div class="col-xs-6 col-md-6 form-group">
                     <label for="adservice_userbundle_categoryservicetype_email">{{ 'email'|trans }}</label>
-                    {{ form_widget(form.email, { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_widget(form.email) }}
                 </div>
             </div>
             <div class="col-xs-12 col-md-12 form-group">
                 <div class="col-xs-4 col-md-4 form-group">
                     <label for="adservice_userbundle_categoryservicetype_dis">{{ 'dis'|trans }}</label>
-                    {{ form_widget(form.dis, { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_widget(form.dis) }}
                 </div>
                 <div class="col-xs-4 col-md-4 form-group">
                     <label for="adservice_userbundle_categoryservicetype_vts">{{ 'vts'|trans }}</label>
-                    {{ form_widget(form.vts, { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_widget(form.vts) }}
                 </div>
                 <div class="col-xs-4 col-md-4 form-group">
                     <label for="adservice_userbundle_categoryservicetype_slug"> Slug </label>
-                    {{ form_widget(form.slug, { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_widget(form.slug) }}
+                </div>
+                <div class="col-xs-12 col-md-12 form-group">
+                    <label for="adservice_userbundle_categoryservicetype_slug"> {{ 'search_service'|trans }} </label>
+                    <div>
+                        {{ form_widget(form.searchServices) }}
+                    </div>
                 </div>
             </div>
             {{ form_rest(form) }}

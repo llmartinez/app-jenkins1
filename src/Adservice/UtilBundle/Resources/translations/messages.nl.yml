@@ -141,6 +141,7 @@ incidence:				 "Case"
 info:				 	 "Informatie"
 charge:					 "Lading"
 category_service:		 "Dienstverlening categorie"
+search_category: "Zoekservice"
 btn.confirm_catservice:	 "de gebruiker wordt aangemaakt met het volgende dienstverleningspakket"
 
 #CONTACT

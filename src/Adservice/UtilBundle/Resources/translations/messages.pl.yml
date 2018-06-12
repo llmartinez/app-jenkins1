@@ -141,6 +141,7 @@ incidence:				 "Zlecenie"
 info:				 	 "Informacja"
 charge:					 "Opłata"
 category_service:		 "Kategoria usługi"
+search_category: "Usługa wyszukiwania"
 btn.confirm_catservice:	 "Użytkownik zostanie utworzony z następującą kategorią usługi:"
 
 #CONTACT

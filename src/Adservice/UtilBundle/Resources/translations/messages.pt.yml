@@ -141,6 +141,7 @@ incidence:				 "Incidência"
 info:				 	 "Informação"
 charge:					 "Carga"
 category_service:		 "Categoria de serviço"
+search_category: "Serviço de pesquisa"
 btn.confirm_catservice:	 "O usuário será criado com a seguinte categoria de serviço"
 
 #CONTACT
