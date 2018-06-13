@@ -49,7 +49,7 @@ security:
       - { path: ^/(es|en|fr|pt|pl|nl)/ticket/assingAssesor,       roles: [ROLE_ASSESSOR], requires_channel: https }
       - { path: ^/(es|en|fr|pt|pl|nl)/ticket/close,               roles: [ROLE_USER], requires_channel: https }
       - { path: ^/(es|en|fr|pt|pl|nl)/ticket,                     roles: [ROLE_USER], requires_channel: https }
-      - { path: ^/(es|en|fr|pt|pl|nl)/car,                        roles: [ROLE_ASSESSOR], requires_channel: https }
+      - { path: ^/(es|en|fr|pt|pl|nl)/car/,                       roles: [ROLE_ASSESSOR], requires_channel: https }
       - { path: ^/(es|en|fr|pt|pl|nl)/statistic/list-top,         roles: [ROLE_AD], requires_channel: https }
       - { path: ^/(es|en|fr|pt|pl|nl)/statistic,                  roles: [ROLE_AD], requires_channel: https }
       # - { path: ^/(es|en|fr|pt|pl|nl)/lock,                     roles: [ROLE_USER]                  }
